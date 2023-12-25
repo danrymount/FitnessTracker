@@ -1,18 +1,26 @@
-//
-//  DefaultTextFieldView.swift
-//  FitnessTracker
-//
-//  Created by Илья Хачатрян on 24.12.2023.
-//
+
 
 import SwiftUI
 
 struct DefaultTextFieldView: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
+    
+    var title: LocalizedStringKey
+    var text : Binding<String>
+    var isSecure: Bool
 
-#Preview {
-    DefaultTextFieldView()
+    public init(_ titleKey: LocalizedStringKey, text: Binding<String>, isSecure: Bool = false)
+    {
+        title = titleKey
+        self.text = text
+        self.isSecure = isSecure
+    }
+    
+    var body: some View {
+        {
+            !isSecure ? AnyView(TextField(title, text: text)) : AnyView(SecureField(title, text: text))
+        }()
+            .padding(.all)
+            .background(RoundedRectangle(cornerRadius: 10)
+                .fill(Constants.GRAY_COLOR()))
+    }
 }

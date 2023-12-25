@@ -1,20 +1,34 @@
-//
-//  FitnessTrackerApp.swift
-//  FitnessTracker
-//
-//  Created by Илья Хачатрян on 23.12.2023.
-//
 
 import SwiftUI
 
+final class RootViewManager: ObservableObject {
+    
+    // TODO store auth information
+    @Published var currentRoot: RootViewType = .welcome
+    
+    enum RootViewType {
+        case welcome
+        case main
+    }
+}
+
 @main
 struct FitnessTrackerApp: App {
-    let persistenceController = PersistenceController.shared
 
+    @StateObject private var rootViewManager = RootViewManager()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            Group {
+                switch rootViewManager.currentRoot {
+                case .welcome:
+                    WelcomeView()
+                case .main:
+                    MainView()
+                        .transition(.scale.animation(.easeIn(duration: 0.2)))
+                }
+            }
+            .environmentObject(rootViewManager)
         }
     }
 }
