@@ -15,7 +15,7 @@ class ActivitiesRepositoryImpl: ActivitiesRepository {
     static private(set) var shared = ActivitiesRepositoryImpl()
     
     // TODO store data by id, reduce complete reload
-    private var activities: [Date:[ActivityDataModel]]? = nil
+    private(set) var activities: [Date:[ActivityDataModel]]? = nil
     
     func insertActivityData(data: ActivityDataModel) {
         CoreDataRepository.shared.insertActivityData(data: data)

@@ -4,8 +4,7 @@ import SwiftUI
 
 struct LoginView: View {
     @ObservedObject private var viewModel = LoginViewModel()
-    
-    @EnvironmentObject private var rootViewManager: RootViewManager
+
     var body: some View
     {
         VStack(alignment: .center)
@@ -14,14 +13,25 @@ struct LoginView: View {
                 DefaultTextFieldView("Login", text: $viewModel.login)
                 DefaultTextFieldView("Password", text: $viewModel.password, isSecure: true)
             } footer: {
-                Text(viewModel.errorMsg).font(.footnote).foregroundColor(.red)
+                Text(viewModel.errorMsg.isEmpty ? " " : viewModel.errorMsg ).font(.footnote).foregroundColor(.red)
             }
             
             Button {
                 viewModel.logIn()
                 
             } label: {
-                Text("Login").frame(maxWidth: .infinity).padding(EdgeInsets(top: 14, leading: 0, bottom: 14, trailing: 0))
+                Group{
+                    if viewModel.status != .inProgress
+                    {
+                        Text("Login")
+                    }
+                    else
+                    {
+                        ProgressView().progressViewStyle(CircularProgressViewStyle(tint: Color.white))
+                    }
+                }
+                    .frame(maxWidth: .infinity).padding(EdgeInsets(top: 14, leading: 0, bottom: 14, trailing: 0))
+                
             }
             .background(Color.blue)
             .foregroundColor(Color.white)
@@ -30,12 +40,6 @@ struct LoginView: View {
             
             
             Spacer()
-                .onReceive(viewModel.$status, perform: { status in
-                    if status == .success
-                    {
-                        rootViewManager.currentRoot = .main
-                    }
-                })
         }
         .padding(.all)
         .navigationBarTitle("Login", displayMode: .large)

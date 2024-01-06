@@ -28,7 +28,7 @@ public struct ActivityDataModel : Identifiable
         
     }
     
-    func getTime()->String
+    func getTime() -> String
     {
         var resStr : String = ""
         

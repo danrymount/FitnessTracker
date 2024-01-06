@@ -7,9 +7,7 @@ struct RegistrationView: View{
     @State private var name: String = ""
     
     @ObservedObject private var viewModel: RegistrationViewModel = RegistrationViewModel()
-    
-    @EnvironmentObject private var rootViewManager: RootViewManager
-    
+
     @State var isOpenLoginView = false
     
     var body: some View
@@ -22,14 +20,25 @@ struct RegistrationView: View{
                 DefaultTextFieldView("Password", text: $viewModel.password, isSecure: true)
                 DefaultTextFieldView("Confirm password", text: $viewModel.confirmPassword, isSecure: true)
             } footer: {
-                Text(viewModel.errorMsg).font(.footnote).foregroundColor(.red)
+                Text(viewModel.errorMsg.isEmpty ? " " : viewModel.errorMsg).font(.footnote).foregroundColor(.red)
             }
             
             Button {
                 viewModel.register()
                 
             } label: {
-                Text("Register").frame(maxWidth: .infinity).padding(EdgeInsets(top: 14, leading: 0, bottom: 14, trailing: 0))
+                
+                Group {
+                    if viewModel.status != .inProgress
+                    {
+                        Text("Register")
+                    }
+                    else
+                    {
+                        ProgressView().progressViewStyle(CircularProgressViewStyle(tint: Color.white))
+                    }
+                }
+                .frame(maxWidth: .infinity).padding(EdgeInsets(top: 14, leading: 0, bottom: 14, trailing: 0))
             }
             .background(Color.blue)
             .foregroundColor(Color.white)

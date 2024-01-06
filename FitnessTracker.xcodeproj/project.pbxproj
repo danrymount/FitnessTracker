@@ -37,6 +37,15 @@
 		962EBD1F2B38A27D00C3866B /* RoundTimerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962EBD1E2B38A27D00C3866B /* RoundTimerService.swift */; };
 		962EBD232B38A2F400C3866B /* PopUpModalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962EBD222B38A2F400C3866B /* PopUpModalController.swift */; };
 		962EBD3B2B39E26E00C3866B /* CoreDataRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962EBD3A2B39E26E00C3866B /* CoreDataRepository.swift */; };
+		96661EB62B4684A500546BF3 /* LoginRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96661EB52B4684A500546BF3 /* LoginRequest.swift */; };
+		96661EB82B4684AE00546BF3 /* LoginResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96661EB72B4684AE00546BF3 /* LoginResponse.swift */; };
+		96661EBB2B46AB9700546BF3 /* ServerRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96661EBA2B46AB9700546BF3 /* ServerRequest.swift */; };
+		96661EBD2B46D5FB00546BF3 /* ServerResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96661EBC2B46D5FB00546BF3 /* ServerResponse.swift */; };
+		96661EBF2B47225C00546BF3 /* RegistrationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96661EBE2B47225C00546BF3 /* RegistrationRequest.swift */; };
+		96661EC12B47D13A00546BF3 /* RegistrationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96661EC02B47D13A00546BF3 /* RegistrationResponse.swift */; };
+		96661EC52B490E2100546BF3 /* SecureStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96661EC42B490E2100546BF3 /* SecureStorage.swift */; };
+		96661EC72B490E5000546BF3 /* TokenStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96661EC62B490E5000546BF3 /* TokenStorage.swift */; };
+		96661EC92B4911B500546BF3 /* Auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96661EC82B4911B500546BF3 /* Auth.swift */; };
 		96B87FE02B37527100E9BEAD /* FitnessTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B87FDF2B37527100E9BEAD /* FitnessTrackerApp.swift */; };
 		96B87FE22B37527100E9BEAD /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B87FE12B37527100E9BEAD /* ContentView.swift */; };
 		96B87FE42B37527300E9BEAD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 96B87FE32B37527300E9BEAD /* Assets.xcassets */; };
@@ -76,6 +85,15 @@
 		962EBD1E2B38A27D00C3866B /* RoundTimerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundTimerService.swift; sourceTree = "<group>"; };
 		962EBD222B38A2F400C3866B /* PopUpModalController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpModalController.swift; sourceTree = "<group>"; };
 		962EBD3A2B39E26E00C3866B /* CoreDataRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataRepository.swift; sourceTree = "<group>"; };
+		96661EB52B4684A500546BF3 /* LoginRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRequest.swift; sourceTree = "<group>"; };
+		96661EB72B4684AE00546BF3 /* LoginResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginResponse.swift; sourceTree = "<group>"; };
+		96661EBA2B46AB9700546BF3 /* ServerRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerRequest.swift; sourceTree = "<group>"; };
+		96661EBC2B46D5FB00546BF3 /* ServerResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerResponse.swift; sourceTree = "<group>"; };
+		96661EBE2B47225C00546BF3 /* RegistrationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationRequest.swift; sourceTree = "<group>"; };
+		96661EC02B47D13A00546BF3 /* RegistrationResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationResponse.swift; sourceTree = "<group>"; };
+		96661EC42B490E2100546BF3 /* SecureStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureStorage.swift; sourceTree = "<group>"; };
+		96661EC62B490E5000546BF3 /* TokenStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenStorage.swift; sourceTree = "<group>"; };
+		96661EC82B4911B500546BF3 /* Auth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Auth.swift; sourceTree = "<group>"; };
 		96B87FDC2B37527100E9BEAD /* FitnessTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FitnessTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		96B87FDF2B37527100E9BEAD /* FitnessTrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessTrackerApp.swift; sourceTree = "<group>"; };
 		96B87FE12B37527100E9BEAD /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -132,6 +150,7 @@
 		962EBCC72B384C9900C3866B /* LoginScreen */ = {
 			isa = PBXGroup;
 			children = (
+				96661EB42B46847300546BF3 /* Model */,
 				962EBCDA2B38700000C3866B /* ViewModel */,
 				962EBCCD2B3863B400C3866B /* View */,
 			);
@@ -157,6 +176,8 @@
 		962EBCD02B3866FD00C3866B /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				96661EBE2B47225C00546BF3 /* RegistrationRequest.swift */,
+				96661EC02B47D13A00546BF3 /* RegistrationResponse.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -172,6 +193,7 @@
 		962EBCD62B386F0A00C3866B /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				96661EB92B46AB8A00546BF3 /* Server */,
 				962EBD202B38A2D700C3866B /* PopUpModal */,
 				962EBD142B38A20900C3866B /* RoundTimer */,
 				962EBCD72B386F1C00C3866B /* View */,
@@ -423,6 +445,42 @@
 			path = Entity;
 			sourceTree = "<group>";
 		};
+		96661EB42B46847300546BF3 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				96661EB52B4684A500546BF3 /* LoginRequest.swift */,
+				96661EB72B4684AE00546BF3 /* LoginResponse.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		96661EB92B46AB8A00546BF3 /* Server */ = {
+			isa = PBXGroup;
+			children = (
+				96661EBA2B46AB9700546BF3 /* ServerRequest.swift */,
+				96661EBC2B46D5FB00546BF3 /* ServerResponse.swift */,
+			);
+			path = Server;
+			sourceTree = "<group>";
+		};
+		96661EC22B490DF400546BF3 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				96661EC32B490DFF00546BF3 /* Auth */,
+				96661EC42B490E2100546BF3 /* SecureStorage.swift */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
+		96661EC32B490DFF00546BF3 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				96661EC62B490E5000546BF3 /* TokenStorage.swift */,
+				96661EC82B4911B500546BF3 /* Auth.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
 		96B87FD32B37527100E9BEAD = {
 			isa = PBXGroup;
 			children = (
@@ -442,6 +500,7 @@
 		96B87FDE2B37527100E9BEAD /* FitnessTracker */ = {
 			isa = PBXGroup;
 			children = (
+				96661EC22B490DF400546BF3 /* Storage */,
 				962EBD242B39D05400C3866B /* App */,
 				962EBD062B38A01D00C3866B /* SetsExerciseScreen */,
 				962EBCFF2B389B8D00C3866B /* ActivitySelectionScreen */,
@@ -547,20 +606,27 @@
 			files = (
 				962EBD192B38A23300C3866B /* RoundTimerController.swift in Sources */,
 				962EBD0B2B38A05D00C3866B /* ExerciseParamView.swift in Sources */,
+				96661EB82B4684AE00546BF3 /* LoginResponse.swift in Sources */,
 				962EBCFC2B387D3000C3866B /* ActivityDetailsViewModel.swift in Sources */,
 				962EBCC92B384E4A00C3866B /* RegistrationView.swift in Sources */,
+				96661EC52B490E2100546BF3 /* SecureStorage.swift in Sources */,
 				962EBD122B38A16600C3866B /* SetsExerciseController.swift in Sources */,
 				962EBCF52B38757C00C3866B /* CommonDefines.swift in Sources */,
 				962EBCE02B38724100C3866B /* MainView.swift in Sources */,
+				96661EC12B47D13A00546BF3 /* RegistrationResponse.swift in Sources */,
 				962EBD032B389BC500C3866B /* ActivitySelectionView.swift in Sources */,
 				96B87FE92B37527300E9BEAD /* Persistence.swift in Sources */,
 				962EBCEB2B3873FD00C3866B /* ActivityCardView.swift in Sources */,
 				962EBD3B2B39E26E00C3866B /* CoreDataRepository.swift in Sources */,
+				96661EC92B4911B500546BF3 /* Auth.swift in Sources */,
 				962EBCC22B38451400C3866B /* InitialView.swift in Sources */,
 				962EBCF02B3874B100C3866B /* ActivityListView.swift in Sources */,
 				962EBD1F2B38A27D00C3866B /* RoundTimerService.swift in Sources */,
+				96661EBD2B46D5FB00546BF3 /* ServerResponse.swift in Sources */,
 				962EBCCF2B3863C200C3866B /* LoginView.swift in Sources */,
+				96661EC72B490E5000546BF3 /* TokenStorage.swift in Sources */,
 				962EBCFE2B38921400C3866B /* ActivitiesRepository.swift in Sources */,
+				96661EBF2B47225C00546BF3 /* RegistrationRequest.swift in Sources */,
 				96B87FE22B37527100E9BEAD /* ContentView.swift in Sources */,
 				962EBCD52B38688C00C3866B /* RegistrationViewModel.swift in Sources */,
 				962EBCC42B3847A300C3866B /* Resources.swift in Sources */,
@@ -578,6 +644,8 @@
 				962EBD232B38A2F400C3866B /* PopUpModalController.swift in Sources */,
 				962EBCEE2B38744000C3866B /* ActivityDataModel.swift in Sources */,
 				962EBD0E2B38A12900C3866B /* SetsExerciseSettingsModel.swift in Sources */,
+				96661EB62B4684A500546BF3 /* LoginRequest.swift in Sources */,
+				96661EBB2B46AB9700546BF3 /* ServerRequest.swift in Sources */,
 				962EBD1D2B38A25C00C3866B /* RoundTimerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -720,6 +788,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -750,6 +819,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

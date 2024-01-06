@@ -4,9 +4,7 @@ import SwiftUI
 
 struct ProfileView: View {
     
-    @EnvironmentObject private var rootViewManager: RootViewManager
-    
-    
+
     init() {
         if #available(iOS 14.0, *) {
             // iOS 14 doesn't have extra separators below the list by default.
@@ -48,15 +46,13 @@ struct ProfileView: View {
             .background(Color.gray)
             .overlay(
                 Button(action: {
-                    rootViewManager.currentRoot = .welcome
+                    Auth.shared.logout()
                 }) {
                     Text("Sign out")
                         .frame(maxWidth: .infinity)
                         .padding()
                         .font(.system(size: 17))
                         .foregroundColor(.white)
-                    
-                    
                         .shadow(color: .gray, radius: 0.2, x: 1, y: 1)
                         .background(Color.red)
                     
