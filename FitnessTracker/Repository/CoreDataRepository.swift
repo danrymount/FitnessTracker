@@ -5,30 +5,46 @@ import CoreData
 
 public final class CoreDataRepository: NSObject {
     public static let shared = CoreDataRepository()
-    var lastId: UInt64
+    var lastId: Int64
     private override init() {
         lastId = 0
         super.init()
         lastId = getLastId()
-        print(lastId)
     }
-    
-//    private var appDelegate: FitnessTrackerApp {
-//        FitnessTrackerApp.instance
-//    }
     
     private var context: NSManagedObjectContext {
         return PersistenceController.shared.container.viewContext
     }
     
-    private func getLastId() -> UInt64 {
+    private func saveContext() -> Bool {
+        do
+        {
+            try context.save()
+        }
+        catch{
+            print(error.localizedDescription)
+            return false
+        }
+        
+        return true
+    }
+    
+    private func getLastId() -> Int64 {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Activity")
+        let sort = NSSortDescriptor(key: "id", ascending: false)
+        fetchRequest.sortDescriptors = [sort]
+        fetchRequest.fetchLimit = 1
+        
         do {
-                let count = try context.count(for: fetchRequest)
-                return UInt64(count)
-            } catch {
-                print(error.localizedDescription)
+            let lastData = try context.fetch(fetchRequest)
+            
+            if lastData.count > 0
+            {
+                return (lastData[0] as! ActivityEntityClass).id
             }
+        } catch {
+            print(error.localizedDescription)
+        }
         return 0
     }
     
@@ -38,22 +54,19 @@ public final class CoreDataRepository: NSObject {
         else {
             return
         }
-
+        
         let d = ActivityEntityClass(entity: activityEntityDescription, insertInto: context)
-        d.id = Int64(lastId)
+        d.id = Int64(lastId + 1)
         d.amount = Double(data.performedAmount)
         d.date = data.datetime
         d.type = Int16(data.type.rawValue)
         d.duration = data.duration
-        d.username = "empty"
+        d.username = data.username
+
         
-        do
+        if saveContext()
         {
-            try context.save()
             lastId += 1
-        }
-        catch{
-            print(error.localizedDescription)
         }
     }
     
@@ -70,16 +83,16 @@ public final class CoreDataRepository: NSObject {
         return []
     }
     
-    public func fetchActivity(uid: UInt) -> ActivityEntityClass?
+    public func fetchActivity(uid: Int) -> ActivityEntityClass?
     {
-        do
-        {
+        do {
             let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Activity")
             fetchRequest.predicate = NSPredicate(
                 format: "id == %@", String(uid)
             )
             
             let result = try context.fetch(fetchRequest)
+            
             
             for obj in result {
                 return (obj as! ActivityEntityClass)
@@ -89,5 +102,15 @@ public final class CoreDataRepository: NSObject {
             print(error.localizedDescription)
         }
         return nil
+    }
+    
+    public func deleteActivity(uid: Int)
+    {
+        if let act = fetchActivity(uid: uid)
+        {
+            print("delete")
+            context.delete(act)
+            saveContext()
+        }
     }
 }

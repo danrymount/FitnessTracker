@@ -1,10 +1,14 @@
 
 import Foundation
 
+struct LoginResponseData: Decodable {
+    let accessToken: String
+    let refreshToken: String
+}
 
 struct LoginResponse: ServerResponse {
     var status: EServerResponseStatus
     
-    let accessToken: String
-    let refreshToken: String
+    var data: LoginResponseData
+    
 }

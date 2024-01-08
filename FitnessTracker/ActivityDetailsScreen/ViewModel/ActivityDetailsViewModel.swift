@@ -16,4 +16,9 @@ class ActivityDetailsViewModel: ObservableObject {
     {
         activityData = ActivitiesRepositoryImpl.shared.getActivityById(id: activityId)
     }
+    
+    func deleteData()
+    {
+        ActivitiesRepositoryImpl.shared.deleteActivity(id: activityId)
+    }
 }

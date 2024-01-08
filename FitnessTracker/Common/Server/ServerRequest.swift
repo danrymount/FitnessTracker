@@ -8,9 +8,9 @@ struct ServerRequest
     
     func exec(completition: @escaping (EServerResponseStatus, Data?) -> Void)
     {
+        // TODO move to some app constants
         let scheme: String = "http"
-        let host: String = "127.0.0.1"
-        let path = "/login"
+        let host: String = "192.168.0.140"
         let port = 4567
         
         var components = URLComponents()

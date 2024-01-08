@@ -3,11 +3,13 @@ import Foundation
 
 protocol ActivitiesRepository
 {
-    func getActivities() -> [Date : [ActivityDataModel]]
+    func getActivities() -> [ActivityDataModel]
     
     func getActivityById(id: Int) -> ActivityDataModel?
     
     func insertActivityData(data: ActivityDataModel)
+    
+    func deleteActivity(id: Int)
 }
 
 
@@ -15,11 +17,16 @@ class ActivitiesRepositoryImpl: ActivitiesRepository {
     static private(set) var shared = ActivitiesRepositoryImpl()
     
     // TODO store data by id, reduce complete reload
-    private(set) var activities: [Date:[ActivityDataModel]]? = nil
+    @Published public var activities: [ActivityDataModel.ID : ActivityDataModel] = [:]
     
     func insertActivityData(data: ActivityDataModel) {
         CoreDataRepository.shared.insertActivityData(data: data)
-        reloadAll()
+        
+        if let act = CoreDataRepository.shared.fetchActivity(uid: Int(CoreDataRepository.shared.lastId))
+        {
+            print(act)
+            activities[ActivityDataModel.ID(act.id)] = ActivityDataModel.init(id: Int(act.id), performedAmount: act.amount, duration: act.duration , type: ActivityType(rawValue: Int(act.type)) ?? .Push_ups, datetime: act.date!)
+        }
     }
     
     func getMockData() -> [ActivityDataModel]
@@ -42,41 +49,28 @@ class ActivitiesRepositoryImpl: ActivitiesRepository {
                 CoreDataRepository.shared.insertActivityData(data: act)
             }
         }
-    }
-    
-    func reloadAll()
-    {
-        var arr : [ActivityDataModel] = []
+        
         for act in CoreDataRepository.shared.fetchActivities()
         {
-            arr.append(ActivityDataModel.init(id: Int(act.id), performedAmount: act.amount, duration: act.duration , type: ActivityType(rawValue: Int(act.type)) ?? .Push_ups, datetime: act.date!))
+            activities[ActivityDataModel.ID(act.id)] = ActivityDataModel.init(id: Int(act.id), performedAmount: act.amount, duration: act.duration , type: ActivityType(rawValue: Int(act.type)) ?? .Push_ups, datetime: act.date!)
         }
-        arr.sort(by: {$0.datetime > $1.datetime})
-        activities = Dictionary(grouping: arr, by: { Calendar.current.startOfDay(for: $0.datetime) })
     }
     
-    func getActivities() -> [Date : [ActivityDataModel]] {
-        if activities == nil
-        {
-            reloadAll()
-        }
-        
-        
-        return activities == nil ? [:] : activities!
+    func getActivities() -> [ActivityDataModel] {
+        return Array(activities.values)
     }
     
     func getActivityById(id: Int) -> ActivityDataModel? {
-        for dateData in getActivities().values
+        if let activityData = activities[id]
         {
-            for data in dateData
-            {
-                if data.id == id
-                {
-                    return data
-                }
-            }
+            return activityData
         }
         
         return nil
+    }
+    
+    func deleteActivity(id: Int) {
+        CoreDataRepository.shared.deleteActivity(uid: id)
+        activities[id] = nil
     }
 }

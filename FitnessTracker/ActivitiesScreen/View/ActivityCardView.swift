@@ -4,10 +4,12 @@ import SwiftUI
 
 struct ActivityCardView: View {
     var activityData: ActivityDataModel
+    @State var activityTime: String = ""
     
     @State var isOpenView = false
     init(data: ActivityDataModel) {
         activityData = data
+        activityTime = activityData.getDate()
     }
     
     var body: some View {
@@ -19,9 +21,16 @@ struct ActivityCardView: View {
                     .foregroundColor(.gray)
                 
                 HStack {
-                    Text("\(activityData.type.toString())")
+                    HStack
+                    {
+                        ActivityIconView(imageName: activityData.type.toIconName(), radius: 12)
+                        Text(activityData.type.toString())
+                    }
                     Spacer()
-                    Text("\(activityData.getTime())")
+                    Text("\(activityTime)")
+                        .onAppear {
+                            activityTime = activityData.getDate()
+                        }
                 }
             }
         }

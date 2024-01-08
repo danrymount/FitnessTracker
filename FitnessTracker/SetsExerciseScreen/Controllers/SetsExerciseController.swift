@@ -203,7 +203,7 @@ class SetsExerciseViewController: UIViewController, PopUpModalDelegate {
     func showTimeoutView() {
         if RoundTimerVC == nil {
             print(settings.timeout.value)
-            RoundTimerVC = RoundTimerViewController(duration: settings.timeout.value, resolution: 0.1)
+            RoundTimerVC = RoundTimerViewController(duration: settings.timeout.value, resolution: 1.0/120.0)
             RoundTimerVC!.view.translatesAutoresizingMaskIntoConstraints = false
             add(RoundTimerVC!)
             NSLayoutConstraint.activate([

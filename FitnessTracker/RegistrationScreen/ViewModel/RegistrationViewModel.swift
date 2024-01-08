@@ -17,6 +17,7 @@ class RegistrationViewModel: ObservableObject {
     @Published var name: String = ""
     
     @Published private(set) var status: RegistrationStatus = .undefined
+    // TODO move errorMsg to Error class description
     @Published private(set) var errorMsg: String = ""
     
     
@@ -40,7 +41,7 @@ class RegistrationViewModel: ObservableObject {
                 break
             }
             
-            var act = RegisterAction(parameters: RegistrationRequest(username: "name", password: "password", name: name))
+            var act = RegisterAction(parameters: RegistrationRequest(username: login, password: password, name: name))
             
             status = .inProgress
             
@@ -73,7 +74,6 @@ struct RegisterAction {
         
         request.exec { error, data in
             var response = RegistrationResponse(status: error)
-            
             completition(response)
         }
     }

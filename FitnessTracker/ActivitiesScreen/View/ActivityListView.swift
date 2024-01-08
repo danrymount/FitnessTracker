@@ -12,7 +12,7 @@ enum ActivityListType
 
 struct ActivitiesListView: View
 {
-    @ObservedObject private var activitiesViewModel: ActivitiesListViewModel = ActivitiesListViewModel()
+    @ObservedObject private var activitiesViewModel: ActivitiesListViewModel
 
     private var activityListType: ActivityListType
     
@@ -29,33 +29,40 @@ struct ActivitiesListView: View
         UITableView.appearance().separatorStyle = .none
         
         activityListType = type
+        activitiesViewModel = ActivitiesListViewModel(activityListType: activityListType)
     }
     
     var body: some View {
         VStack
         {
-            List {
-                Group
-                {
-                    ForEach(activitiesViewModel.activities.keys.sorted(by: {$0 > $1}), id: \.self) { key in
-                        Text(key.toString())
-                        ForEach(activitiesViewModel.activities[key]!) { activity in
-                            ActivityCardView(data: activity)
+            if activitiesViewModel.activities.count > 0 {
+                List {
+                    Group
+                    {
+                        ForEach(activitiesViewModel.activities.keys.sorted(by: {$0 > $1}), id: \.self) { key in
+                            Text(key.toString())
+                            ForEach(activitiesViewModel.activities[key]!) { activity in
+                                ActivityCardView(data: activity)
+                            }
                         }
-                    }
-                    .listRowBackground(Color.clear)
-                    .hideListSeparator()
-                    ExtraBottomSafeAreaInset()
-                        .listRowInsets(EdgeInsets(top: 0,leading: 0,bottom: 0,trailing: 0))
                         .listRowBackground(Color.clear)
-                    
+                        .hideListSeparator()
+                        ExtraBottomSafeAreaInset()
+                            .listRowInsets(EdgeInsets(top: 0,leading: 0,bottom: 0,trailing: 0))
+                            .listRowBackground(Color.clear)
+                        
+                    }
                 }
+                .listStyle(.plain)
+                .listRowBackground(Color.clear)
             }
-            .listStyle(.plain)
-            .listRowBackground(Color.clear)
-            .onAppear {
-                activitiesViewModel.reload()
+            else
+            {
+                Text("No activities")
             }
+        }
+        .onAppear {
+            activitiesViewModel.loadData()
         }
     }
 }

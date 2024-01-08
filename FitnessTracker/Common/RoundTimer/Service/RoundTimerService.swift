@@ -16,6 +16,7 @@ class RoundTimer
         leftTime = duration
         stepDivider = _stepDivider
         onStep(leftTime)
+        // Maybe using timer is not optimal
         timer = Timer()
     }
     

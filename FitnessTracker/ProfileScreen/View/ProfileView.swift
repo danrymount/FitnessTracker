@@ -27,17 +27,14 @@ struct ProfileView: View {
                     HStack{
                         Text("Login")
                         Spacer()
-                        Text("***")
+                        // TODO load actual data
+                        Text("Login")
                     }
                     HStack{
                         Text("Name")
                         Spacer()
-                        Text("***")
-                    }
-                    HStack{
-                        Text("Password")
-                        Spacer()
-                        Text("***")
+                        // TODO load actual data
+                        Text("Name")
                     }
                 }
                 

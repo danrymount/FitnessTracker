@@ -13,9 +13,8 @@ struct ActivitiesView: View {
             .pickerStyle(SegmentedPickerStyle())
             .padding()
             .border(.gray.opacity(0.4))
-
+            
             TabView(selection: $currentTab) {
-
                 ActivitiesListView(type: .myActivities)
                     .tag(0)
                 ActivitiesListView(type: .userActivities)
@@ -27,7 +26,8 @@ struct ActivitiesView: View {
                 .bottomSafeAreaInset(
                     Button(action:
                             {
-                                self.needOpenActivitySelection = true})
+                                self.needOpenActivitySelection = true
+                            })
                     {
                         Text("Start")
                             .frame(maxWidth: .infinity)

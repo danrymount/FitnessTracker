@@ -19,39 +19,34 @@ class LoginViewModel: ObservableObject {
     @Published private(set) var status: LoginStatus = .undefined
     
     func logIn() {
+        if login.isEmpty
+        {
+            errorMsg = "Login is not specified"
+            status = .failure
+            return
+        }
         
-        repeat {
-            if login.isEmpty
-            {
-                errorMsg = "Login is not specified"
-                status = .failure
-                break
+        if password.isEmpty
+        {
+            errorMsg = "Password is not specified"
+            status = .failure
+            return
+        }
+        
+        errorMsg = ""
+        self.status = .inProgress
+        
+        var act = LoginAction(parameters: LoginRequest(username: login, password: password))
+        
+        act.call(completition: { response in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                // TODO handle server response, remove mock auth info
+                Auth.shared.setCredentials(accessToken: response.data.accessToken, refreshToken: response.data.refreshToken)
+                self.status = .success
+                print(response)
             }
             
-            if password.isEmpty
-            {
-                errorMsg = "Password is not specified"
-                status = .failure
-                break
-            }
-            
-            errorMsg = ""
-            self.status = .inProgress
-            
-            var act = LoginAction(parameters: LoginRequest(username: "name", password: "password"))
-            
-            act.call(completition: { response in
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                    Auth.shared.setCredentials(accessToken: "1", refreshToken: "1")
-                    self.status = .success
-                    print(response)
-                }
-                
-            })
-            
-            
-        } while false
-        
+        })
     }
 }
 
@@ -66,13 +61,12 @@ struct LoginAction {
         
         request.exec { error, data in
             
-            var response = LoginResponse(status: error, accessToken: "", refreshToken: "")
+            var response = LoginResponse(status: error, data: LoginResponseData(accessToken: "", refreshToken: ""))
             
-            if data != nil
+            if let respData = data
             {
                 do {
-                    var responseData = try JSONDecoder().decode(LoginResponse.self, from: data!)
-                    print(responseData)
+                    response.data = try JSONDecoder().decode(LoginResponseData.self, from: respData)
                 } catch {
                     
                 }

@@ -8,6 +8,7 @@ public struct ActivityDataModel : Identifiable
     var duration: TimeInterval
     var type: ActivityType
     var datetime: Date
+    var username: String = ""
     
     func getDurationStr() -> String
     {
@@ -28,7 +29,21 @@ public struct ActivityDataModel : Identifiable
         
     }
     
-    func getTime() -> String
+    func getStartTime() -> String {
+        let startTime = datetime
+        let dateformat = DateFormatter()
+        dateformat.dateFormat = "HH:mm:ss"
+        return dateformat.string(from: startTime)
+    }
+    
+    func getStopTime() -> String {
+        let stopTime = datetime + duration
+        let dateformat = DateFormatter()
+        dateformat.dateFormat = "HH:mm:ss"
+        return dateformat.string(from: stopTime)
+    }
+    
+    func getDate() -> String
     {
         var resStr : String = ""
         
@@ -40,14 +55,12 @@ public struct ActivityDataModel : Identifiable
                 resStr.append("\(sinceTime/3600) hours ")
                 sinceTime = sinceTime % 3600
             }
-            
-            if sinceTime/60 > 0
+            else if sinceTime/60 > 0
             {
                 resStr.append("\(sinceTime/60) minutes ")
                 sinceTime = sinceTime % 60
             }
-            
-            
+
             if resStr.count == 0
             {
                 resStr = "just now"
@@ -60,7 +73,7 @@ public struct ActivityDataModel : Identifiable
         else
         {
             let dateformat = DateFormatter()
-            dateformat.dateFormat = "yyyy-MM-dd HH:mm"
+            dateformat.dateFormat = "yyyy-MM-dd"
             return dateformat.string(from: datetime)
         }
         
