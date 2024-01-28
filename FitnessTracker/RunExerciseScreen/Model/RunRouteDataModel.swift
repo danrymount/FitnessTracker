@@ -1,8 +1,10 @@
-//
-//  RunRouteDataModel.swift
-//  FitnessTracker
-//
-//  Created by Илья Хачатрян on 23.01.2024.
-//
 
 import Foundation
+import CoreLocation
+
+
+struct RunRouteDataModel
+{
+    var totalDistance: Double = 0
+    var routeCoordinates: [CLLocation] = []
+}

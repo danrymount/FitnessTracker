@@ -102,6 +102,7 @@ class ActivitySelectionViewController: UIViewController {
         case .Squats:
             newVC = SetsExerciseViewController(activityType: .Squats)
         case .Run:
+            newVC = RunExerciseController()
             break
         }
         

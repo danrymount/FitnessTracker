@@ -16,7 +16,6 @@ struct MainView: View {
     var body: some View {
         NavigationView {
             TabView(selection: $selectedTab) {
-                
                 ActivitiesView()
                     .tabItem {
                         Image(systemName: "figure.walk.circle")

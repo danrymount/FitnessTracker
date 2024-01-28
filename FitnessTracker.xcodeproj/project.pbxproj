@@ -46,12 +46,21 @@
 		96661EC52B490E2100546BF3 /* SecureStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96661EC42B490E2100546BF3 /* SecureStorage.swift */; };
 		96661EC72B490E5000546BF3 /* TokenStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96661EC62B490E5000546BF3 /* TokenStorage.swift */; };
 		96661EC92B4911B500546BF3 /* Auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96661EC82B4911B500546BF3 /* Auth.swift */; };
+		96AD1DA72B5F08D4000F9EF4 /* ExerciseLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96AD1DA62B5F08D4000F9EF4 /* ExerciseLocationManager.swift */; };
+		96AD1DAA2B5F12D2000F9EF4 /* RunRouteDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96AD1DA92B5F12D2000F9EF4 /* RunRouteDataModel.swift */; };
 		96B87FE02B37527100E9BEAD /* FitnessTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B87FDF2B37527100E9BEAD /* FitnessTrackerApp.swift */; };
 		96B87FE22B37527100E9BEAD /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B87FE12B37527100E9BEAD /* ContentView.swift */; };
 		96B87FE42B37527300E9BEAD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 96B87FE32B37527300E9BEAD /* Assets.xcassets */; };
 		96B87FE72B37527300E9BEAD /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 96B87FE62B37527300E9BEAD /* Preview Assets.xcassets */; };
 		96B87FE92B37527300E9BEAD /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B87FE82B37527300E9BEAD /* Persistence.swift */; };
 		96B87FEC2B37527300E9BEAD /* FitnessTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 96B87FEA2B37527300E9BEAD /* FitnessTracker.xcdatamodeld */; };
+		96BC47032B5C3F0C00BDD797 /* GoogleMaps in Frameworks */ = {isa = PBXBuildFile; productRef = 96BC47022B5C3F0C00BDD797 /* GoogleMaps */; };
+		96BC47052B5C3F0C00BDD797 /* GoogleMapsBase in Frameworks */ = {isa = PBXBuildFile; productRef = 96BC47042B5C3F0C00BDD797 /* GoogleMapsBase */; };
+		96BC47072B5C3F0C00BDD797 /* GoogleMapsCore in Frameworks */ = {isa = PBXBuildFile; productRef = 96BC47062B5C3F0C00BDD797 /* GoogleMapsCore */; };
+		96BC47092B5C3F0C00BDD797 /* GoogleMapsM4B in Frameworks */ = {isa = PBXBuildFile; productRef = 96BC47082B5C3F0C00BDD797 /* GoogleMapsM4B */; };
+		96BC470F2B5C43B300BDD797 /* RunExerciseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96BC470E2B5C43B300BDD797 /* RunExerciseController.swift */; };
+		96C4B9C82B60538000973D6E /* RunExerciseInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C4B9C72B60538000973D6E /* RunExerciseInfoView.swift */; };
+		96FD941D2B5D4966005955D7 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FD941C2B5D4966005955D7 /* MapViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -94,6 +103,8 @@
 		96661EC42B490E2100546BF3 /* SecureStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureStorage.swift; sourceTree = "<group>"; };
 		96661EC62B490E5000546BF3 /* TokenStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenStorage.swift; sourceTree = "<group>"; };
 		96661EC82B4911B500546BF3 /* Auth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Auth.swift; sourceTree = "<group>"; };
+		96AD1DA62B5F08D4000F9EF4 /* ExerciseLocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseLocationManager.swift; sourceTree = "<group>"; };
+		96AD1DA92B5F12D2000F9EF4 /* RunRouteDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunRouteDataModel.swift; sourceTree = "<group>"; };
 		96B87FDC2B37527100E9BEAD /* FitnessTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FitnessTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		96B87FDF2B37527100E9BEAD /* FitnessTrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessTrackerApp.swift; sourceTree = "<group>"; };
 		96B87FE12B37527100E9BEAD /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -101,6 +112,9 @@
 		96B87FE62B37527300E9BEAD /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		96B87FE82B37527300E9BEAD /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		96B87FEB2B37527300E9BEAD /* FitnessTracker.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FitnessTracker.xcdatamodel; sourceTree = "<group>"; };
+		96BC470E2B5C43B300BDD797 /* RunExerciseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunExerciseController.swift; sourceTree = "<group>"; };
+		96C4B9C72B60538000973D6E /* RunExerciseInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunExerciseInfoView.swift; sourceTree = "<group>"; };
+		96FD941C2B5D4966005955D7 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +122,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				96BC47032B5C3F0C00BDD797 /* GoogleMaps in Frameworks */,
+				96BC47072B5C3F0C00BDD797 /* GoogleMapsCore in Frameworks */,
+				96BC47092B5C3F0C00BDD797 /* GoogleMapsM4B in Frameworks */,
+				96BC47052B5C3F0C00BDD797 /* GoogleMapsBase in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -481,6 +499,22 @@
 			path = Auth;
 			sourceTree = "<group>";
 		};
+		96AD1DA52B5F08C2000F9EF4 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				96AD1DA62B5F08D4000F9EF4 /* ExerciseLocationManager.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		96AD1DA82B5F12BF000F9EF4 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				96AD1DA92B5F12D2000F9EF4 /* RunRouteDataModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		96B87FD32B37527100E9BEAD = {
 			isa = PBXGroup;
 			children = (
@@ -500,6 +534,7 @@
 		96B87FDE2B37527100E9BEAD /* FitnessTracker */ = {
 			isa = PBXGroup;
 			children = (
+				96BC470C2B5C438400BDD797 /* RunExerciseScreen */,
 				96661EC22B490DF400546BF3 /* Storage */,
 				962EBD242B39D05400C3866B /* App */,
 				962EBD062B38A01D00C3866B /* SetsExerciseScreen */,
@@ -534,6 +569,34 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		96BC470C2B5C438400BDD797 /* RunExerciseScreen */ = {
+			isa = PBXGroup;
+			children = (
+				96C4B9C62B6052D600973D6E /* View */,
+				96AD1DA82B5F12BF000F9EF4 /* Model */,
+				96AD1DA52B5F08C2000F9EF4 /* Utils */,
+				96BC470D2B5C43A200BDD797 /* Controllers */,
+			);
+			path = RunExerciseScreen;
+			sourceTree = "<group>";
+		};
+		96BC470D2B5C43A200BDD797 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				96BC470E2B5C43B300BDD797 /* RunExerciseController.swift */,
+				96FD941C2B5D4966005955D7 /* MapViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		96C4B9C62B6052D600973D6E /* View */ = {
+			isa = PBXGroup;
+			children = (
+				96C4B9C72B60538000973D6E /* RunExerciseInfoView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -550,6 +613,12 @@
 			dependencies = (
 			);
 			name = FitnessTracker;
+			packageProductDependencies = (
+				96BC47022B5C3F0C00BDD797 /* GoogleMaps */,
+				96BC47042B5C3F0C00BDD797 /* GoogleMapsBase */,
+				96BC47062B5C3F0C00BDD797 /* GoogleMapsCore */,
+				96BC47082B5C3F0C00BDD797 /* GoogleMapsM4B */,
+			);
 			productName = FitnessTracker;
 			productReference = 96B87FDC2B37527100E9BEAD /* FitnessTracker.app */;
 			productType = "com.apple.product-type.application";
@@ -578,6 +647,9 @@
 				Base,
 			);
 			mainGroup = 96B87FD32B37527100E9BEAD;
+			packageReferences = (
+				96BC47012B5C3F0C00BDD797 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */,
+			);
 			productRefGroup = 96B87FDD2B37527100E9BEAD /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -606,12 +678,15 @@
 			files = (
 				962EBD192B38A23300C3866B /* RoundTimerController.swift in Sources */,
 				962EBD0B2B38A05D00C3866B /* ExerciseParamView.swift in Sources */,
+				96C4B9C82B60538000973D6E /* RunExerciseInfoView.swift in Sources */,
 				96661EB82B4684AE00546BF3 /* LoginResponse.swift in Sources */,
 				962EBCFC2B387D3000C3866B /* ActivityDetailsViewModel.swift in Sources */,
 				962EBCC92B384E4A00C3866B /* RegistrationView.swift in Sources */,
 				96661EC52B490E2100546BF3 /* SecureStorage.swift in Sources */,
 				962EBD122B38A16600C3866B /* SetsExerciseController.swift in Sources */,
 				962EBCF52B38757C00C3866B /* CommonDefines.swift in Sources */,
+				96AD1DA72B5F08D4000F9EF4 /* ExerciseLocationManager.swift in Sources */,
+				96FD941D2B5D4966005955D7 /* MapViewController.swift in Sources */,
 				962EBCE02B38724100C3866B /* MainView.swift in Sources */,
 				96661EC12B47D13A00546BF3 /* RegistrationResponse.swift in Sources */,
 				962EBD032B389BC500C3866B /* ActivitySelectionView.swift in Sources */,
@@ -634,6 +709,7 @@
 				96B87FE02B37527100E9BEAD /* FitnessTrackerApp.swift in Sources */,
 				962EBCF82B387C8300C3866B /* ActivityDetailsView.swift in Sources */,
 				962EBCE92B3873CA00C3866B /* ActivitiesView.swift in Sources */,
+				96AD1DAA2B5F12D2000F9EF4 /* RunRouteDataModel.swift in Sources */,
 				962EBCDC2B38701B00C3866B /* LoginViewModel.swift in Sources */,
 				96B87FEC2B37527300E9BEAD /* FitnessTracker.xcdatamodeld in Sources */,
 				962EBD052B389C0D00C3866B /* ActivitySelectionViewController.swift in Sources */,
@@ -642,6 +718,7 @@
 				962EBCE72B3872AE00C3866B /* ProfileView.swift in Sources */,
 				962EBCCC2B384E8A00C3866B /* Constants.swift in Sources */,
 				962EBD232B38A2F400C3866B /* PopUpModalController.swift in Sources */,
+				96BC470F2B5C43B300BDD797 /* RunExerciseController.swift in Sources */,
 				962EBCEE2B38744000C3866B /* ActivityDataModel.swift in Sources */,
 				962EBD0E2B38A12900C3866B /* SetsExerciseSettingsModel.swift in Sources */,
 				96661EB62B4684A500546BF3 /* LoginRequest.swift in Sources */,
@@ -783,6 +860,7 @@
 				DEVELOPMENT_TEAM = 936DWSSS7A;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = ForRun;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -814,6 +892,7 @@
 				DEVELOPMENT_TEAM = 936DWSSS7A;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = ForRun;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -856,6 +935,40 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		96BC47012B5C3F0C00BDD797 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googlemaps/ios-maps-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.3.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		96BC47022B5C3F0C00BDD797 /* GoogleMaps */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 96BC47012B5C3F0C00BDD797 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
+			productName = GoogleMaps;
+		};
+		96BC47042B5C3F0C00BDD797 /* GoogleMapsBase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 96BC47012B5C3F0C00BDD797 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
+			productName = GoogleMapsBase;
+		};
+		96BC47062B5C3F0C00BDD797 /* GoogleMapsCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 96BC47012B5C3F0C00BDD797 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
+			productName = GoogleMapsCore;
+		};
+		96BC47082B5C3F0C00BDD797 /* GoogleMapsM4B */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 96BC47012B5C3F0C00BDD797 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
+			productName = GoogleMapsM4B;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		96B87FEA2B37527300E9BEAD /* FitnessTracker.xcdatamodeld */ = {

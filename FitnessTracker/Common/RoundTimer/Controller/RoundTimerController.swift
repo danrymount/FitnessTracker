@@ -81,6 +81,7 @@ class RoundTimerViewController: UIViewController
         circleIndicator = CircleProgressView(progress: 1, baseColor: .lightGray, progressColor: .systemBlue)
         timerDuration = duration
         timerResolution = resolution
+        // TODO Replace with CADisplayLink
         timer = RoundTimer(duration: duration, _stepDivider: resolution, _onStep:{_ in })
         onFinishCb = {}
         super.init(nibName: nil, bundle: nil)
