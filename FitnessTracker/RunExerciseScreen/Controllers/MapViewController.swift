@@ -10,28 +10,52 @@ protocol MapViewControllerProtocol {
     func setStartPoint(location: CLLocationCoordinate2D);
 }
 
+class MapCustomAnnotation: NSObject, MKAnnotation {
+    enum EType {
+        case startPoint
+        case currentPoint
+        
+        func toImage() -> UIImage? {
+            var imgName = "mappin.and.ellipse"
+            switch self
+            {
+                case .startPoint:
+                    imgName = "mappin.and.ellipse"
+                case .currentPoint:
+                    imgName = "mappin.and.ellipse"
+            }
+            
+            return UIImage(systemName: imgName)
+        }
+    }
+    
+    var coordinate: CLLocationCoordinate2D = CLLocationCoordinate2D()
+    var type: EType = .startPoint
+}
+
 class MapViewController : UIViewController, MapViewControllerProtocol {
     var routeCoordinates : [CLLocationCoordinate2D] = []
     
-    var mapCurPosAnnotation: MKPointAnnotation = MKPointAnnotation()
+    var mapPosAnnotation: MapCustomAnnotation = MapCustomAnnotation()
+    //    var mapCurPosAnnotation: MKPointAnnotation = MKPointAnnotation()
     
     func clearRoute() {
         
     }
     
     func appendNewRoutePoint(location: CLLocationCoordinate2D) {
-//        routeCoordinates.append(location)
-//        
-//        let polyline = MKPolyline(coordinates: routeCoordinates, count: routeCoordinates.count)
-//        mapView.removeOverlays(mapView.overlays)
-//        mapView.addOverlay(polyline)
-//        var l1 = CLLocation(latitude: routeCoordinates.last!.latitude, longitude: routeCoordinates.last!.longitude)
-//        var l2 = CLLocation(latitude: routeCoordinates[routeCoordinates.count-2].latitude, longitude:
-//                                routeCoordinates[routeCoordinates.count-2].longitude)
-////        runRouteData.distance += l1.distance(from: l2)
-//
-//        centerMap(location: location)
-//        print(mapView.overlays.count)
+        //        routeCoordinates.append(location)
+        //
+        //        let polyline = MKPolyline(coordinates: routeCoordinates, count: routeCoordinates.count)
+        //        mapView.removeOverlays(mapView.overlays)
+        //        mapView.addOverlay(polyline)
+        //        var l1 = CLLocation(latitude: routeCoordinates.last!.latitude, longitude: routeCoordinates.last!.longitude)
+        //        var l2 = CLLocation(latitude: routeCoordinates[routeCoordinates.count-2].latitude, longitude:
+        //                                routeCoordinates[routeCoordinates.count-2].longitude)
+        ////        runRouteData.distance += l1.distance(from: l2)
+        //
+        //        centerMap(location: location)
+        //        print(mapView.overlays.count)
     }
     
     func centerMap(location: CLLocationCoordinate2D)
@@ -43,7 +67,8 @@ class MapViewController : UIViewController, MapViewControllerProtocol {
     
     func setStartPoint(location: CLLocationCoordinate2D) {
         centerMap(location: location)
-        mapCurPosAnnotation.coordinate = location
+        mapPosAnnotation.coordinate = location
+        
         routeCoordinates.append(location)
         let polyline = MKPolyline(coordinates: routeCoordinates, count: routeCoordinates.count)
         mapView.removeOverlays(mapView.overlays)
@@ -62,12 +87,12 @@ class MapViewController : UIViewController, MapViewControllerProtocol {
         mapView.delegate = self
         
         setMapConstraints()
-        mapView.addAnnotation(mapCurPosAnnotation)
+        mapView.addAnnotation(mapPosAnnotation)
     }
     
     func setMapConstraints() {
         view.addSubview(mapView)
-
+        
         mapView.translatesAutoresizingMaskIntoConstraints = false
         mapView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor).isActive = true
         mapView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
@@ -91,14 +116,14 @@ extension MapViewController : MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        if (annotation is MKUserLocation) {
-            return nil
+        
+        if let ant = annotation as? MapCustomAnnotation {
+            let v = MKAnnotationView()
+            v.image = ant.type.toImage()
+            
+            return v
         }
-        let reuseId = "reuseId"
         
-        let v = MKAnnotationView()
-        v.image = UIImage(systemName: "plus")
-        
-        return v
+        return nil
     }
 }

@@ -75,6 +75,22 @@ class RunExerciseInfoView: UIView {
         return lb
     }()
     
+    let stepsLabel = {
+        let lb = UILabel()
+        lb.font = UIFont.monospacedDigitSystemFont(ofSize: 15, weight: .regular)
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        return lb
+    }()
+    
+    let paceLabel = {
+        let lb = UILabel()
+        lb.font = UIFont.monospacedDigitSystemFont(ofSize: 15, weight: .regular)
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        return lb
+    }()
+    
+    
+    
     let startPauseButton = {
         let btn = UIButton()
         btn.setImage(UIImage(systemName:"play.fill"), for: .normal)
@@ -143,6 +159,8 @@ class RunExerciseInfoView: UIView {
             stack.addSubview(label)
             stack.addSubview(distanceLabel)
             stack.addSubview(durationLabel)
+            stack.addSubview(paceLabel)
+            stack.addSubview(stepsLabel)
             stack.addSubview(buttonStackView)
             buttonStackView.addSubview(startPauseButton)
             
@@ -156,9 +174,15 @@ class RunExerciseInfoView: UIView {
                 durationLabel.topAnchor.constraint(equalTo: distanceLabel.topAnchor),
                 durationLabel.trailingAnchor.constraint(equalTo: stack.trailingAnchor),
                 
+                stepsLabel.topAnchor.constraint(equalTo: distanceLabel.bottomAnchor, constant: 8),
+                stepsLabel.leadingAnchor.constraint(equalTo: stack.leadingAnchor),
+                
+                paceLabel.topAnchor.constraint(equalTo: stepsLabel.bottomAnchor, constant: 8),
+                paceLabel.leadingAnchor.constraint(equalTo: stack.leadingAnchor),
+                
                 buttonStackView.leadingAnchor.constraint(equalTo: stack.leadingAnchor),
                 buttonStackView.trailingAnchor.constraint(equalTo: stack.trailingAnchor),
-                buttonStackView.topAnchor.constraint(equalTo: durationLabel.bottomAnchor, constant: 40),
+                buttonStackView.topAnchor.constraint(equalTo: paceLabel.bottomAnchor, constant: 40),
                 buttonStackView.bottomAnchor.constraint(equalTo: stack.bottomAnchor, constant: -32),
                 
                 startPauseButton.centerXAnchor.constraint(equalTo: buttonStackView.centerXAnchor)
@@ -208,6 +232,13 @@ class RunExerciseInfoView: UIView {
         distanceLabel.text = str
     }
     
+    func setPaceStr(str: String) {
+        paceLabel.text = str
+    }
+    
+    func setStepsStr(str: String) {
+        stepsLabel.text = str
+    }
     
     required public init?(coder aDecoder: NSCoder) {
         fatalError()

@@ -60,6 +60,8 @@
 		96BC47092B5C3F0C00BDD797 /* GoogleMapsM4B in Frameworks */ = {isa = PBXBuildFile; productRef = 96BC47082B5C3F0C00BDD797 /* GoogleMapsM4B */; };
 		96BC470F2B5C43B300BDD797 /* RunExerciseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96BC470E2B5C43B300BDD797 /* RunExerciseController.swift */; };
 		96C4B9C82B60538000973D6E /* RunExerciseInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C4B9C72B60538000973D6E /* RunExerciseInfoView.swift */; };
+		96D8AA162B73E44C00B3071B /* ExerciseMotionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D8AA152B73E44C00B3071B /* ExerciseMotionManager.swift */; };
+		96D8AA182B73E6C500B3071B /* RunMotionDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D8AA172B73E6C500B3071B /* RunMotionDataModel.swift */; };
 		96FD941D2B5D4966005955D7 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FD941C2B5D4966005955D7 /* MapViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -114,6 +116,8 @@
 		96B87FEB2B37527300E9BEAD /* FitnessTracker.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FitnessTracker.xcdatamodel; sourceTree = "<group>"; };
 		96BC470E2B5C43B300BDD797 /* RunExerciseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunExerciseController.swift; sourceTree = "<group>"; };
 		96C4B9C72B60538000973D6E /* RunExerciseInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunExerciseInfoView.swift; sourceTree = "<group>"; };
+		96D8AA152B73E44C00B3071B /* ExerciseMotionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseMotionManager.swift; sourceTree = "<group>"; };
+		96D8AA172B73E6C500B3071B /* RunMotionDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunMotionDataModel.swift; sourceTree = "<group>"; };
 		96FD941C2B5D4966005955D7 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -503,6 +507,7 @@
 			isa = PBXGroup;
 			children = (
 				96AD1DA62B5F08D4000F9EF4 /* ExerciseLocationManager.swift */,
+				96D8AA152B73E44C00B3071B /* ExerciseMotionManager.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -511,6 +516,7 @@
 			isa = PBXGroup;
 			children = (
 				96AD1DA92B5F12D2000F9EF4 /* RunRouteDataModel.swift */,
+				96D8AA172B73E6C500B3071B /* RunMotionDataModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -687,6 +693,7 @@
 				962EBCF52B38757C00C3866B /* CommonDefines.swift in Sources */,
 				96AD1DA72B5F08D4000F9EF4 /* ExerciseLocationManager.swift in Sources */,
 				96FD941D2B5D4966005955D7 /* MapViewController.swift in Sources */,
+				96D8AA162B73E44C00B3071B /* ExerciseMotionManager.swift in Sources */,
 				962EBCE02B38724100C3866B /* MainView.swift in Sources */,
 				96661EC12B47D13A00546BF3 /* RegistrationResponse.swift in Sources */,
 				962EBD032B389BC500C3866B /* ActivitySelectionView.swift in Sources */,
@@ -712,6 +719,7 @@
 				96AD1DAA2B5F12D2000F9EF4 /* RunRouteDataModel.swift in Sources */,
 				962EBCDC2B38701B00C3866B /* LoginViewModel.swift in Sources */,
 				96B87FEC2B37527300E9BEAD /* FitnessTracker.xcdatamodeld in Sources */,
+				96D8AA182B73E6C500B3071B /* RunMotionDataModel.swift in Sources */,
 				962EBD052B389C0D00C3866B /* ActivitySelectionViewController.swift in Sources */,
 				962EBD092B38A04F00C3866B /* SetsInfoView.swift in Sources */,
 				962EBCD92B386F3700C3866B /* DefaultTextFieldView.swift in Sources */,
@@ -860,7 +868,9 @@
 				DEVELOPMENT_TEAM = 936DWSSS7A;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = ForRun;
+				INFOPLIST_KEY_NSMotionUsageDescription = ForRun;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -892,7 +902,9 @@
 				DEVELOPMENT_TEAM = 936DWSSS7A;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = ForRun;
+				INFOPLIST_KEY_NSMotionUsageDescription = ForRun;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
