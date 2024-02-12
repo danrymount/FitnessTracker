@@ -54,10 +54,6 @@
 		96B87FE72B37527300E9BEAD /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 96B87FE62B37527300E9BEAD /* Preview Assets.xcassets */; };
 		96B87FE92B37527300E9BEAD /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B87FE82B37527300E9BEAD /* Persistence.swift */; };
 		96B87FEC2B37527300E9BEAD /* FitnessTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 96B87FEA2B37527300E9BEAD /* FitnessTracker.xcdatamodeld */; };
-		96BC47032B5C3F0C00BDD797 /* GoogleMaps in Frameworks */ = {isa = PBXBuildFile; productRef = 96BC47022B5C3F0C00BDD797 /* GoogleMaps */; };
-		96BC47052B5C3F0C00BDD797 /* GoogleMapsBase in Frameworks */ = {isa = PBXBuildFile; productRef = 96BC47042B5C3F0C00BDD797 /* GoogleMapsBase */; };
-		96BC47072B5C3F0C00BDD797 /* GoogleMapsCore in Frameworks */ = {isa = PBXBuildFile; productRef = 96BC47062B5C3F0C00BDD797 /* GoogleMapsCore */; };
-		96BC47092B5C3F0C00BDD797 /* GoogleMapsM4B in Frameworks */ = {isa = PBXBuildFile; productRef = 96BC47082B5C3F0C00BDD797 /* GoogleMapsM4B */; };
 		96BC470F2B5C43B300BDD797 /* RunExerciseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96BC470E2B5C43B300BDD797 /* RunExerciseController.swift */; };
 		96C4B9C82B60538000973D6E /* RunExerciseInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C4B9C72B60538000973D6E /* RunExerciseInfoView.swift */; };
 		96D8AA162B73E44C00B3071B /* ExerciseMotionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D8AA152B73E44C00B3071B /* ExerciseMotionManager.swift */; };
@@ -126,10 +122,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				96BC47032B5C3F0C00BDD797 /* GoogleMaps in Frameworks */,
-				96BC47072B5C3F0C00BDD797 /* GoogleMapsCore in Frameworks */,
-				96BC47092B5C3F0C00BDD797 /* GoogleMapsM4B in Frameworks */,
-				96BC47052B5C3F0C00BDD797 /* GoogleMapsBase in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -620,10 +612,6 @@
 			);
 			name = FitnessTracker;
 			packageProductDependencies = (
-				96BC47022B5C3F0C00BDD797 /* GoogleMaps */,
-				96BC47042B5C3F0C00BDD797 /* GoogleMapsBase */,
-				96BC47062B5C3F0C00BDD797 /* GoogleMapsCore */,
-				96BC47082B5C3F0C00BDD797 /* GoogleMapsM4B */,
 			);
 			productName = FitnessTracker;
 			productReference = 96B87FDC2B37527100E9BEAD /* FitnessTracker.app */;
@@ -654,7 +642,6 @@
 			);
 			mainGroup = 96B87FD32B37527100E9BEAD;
 			packageReferences = (
-				96BC47012B5C3F0C00BDD797 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */,
 			);
 			productRefGroup = 96B87FDD2B37527100E9BEAD /* Products */;
 			projectDirPath = "";
@@ -790,7 +777,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -847,7 +834,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -868,7 +855,8 @@
 				DEVELOPMENT_TEAM = 936DWSSS7A;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_CFBundleDisplayName = "Fitness Tracker";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = ForRun;
 				INFOPLIST_KEY_NSMotionUsageDescription = ForRun;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -877,7 +865,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -902,7 +890,8 @@
 				DEVELOPMENT_TEAM = 936DWSSS7A;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_CFBundleDisplayName = "Fitness Tracker";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = ForRun;
 				INFOPLIST_KEY_NSMotionUsageDescription = ForRun;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -911,7 +900,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -947,40 +936,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		96BC47012B5C3F0C00BDD797 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/googlemaps/ios-maps-sdk";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 8.3.1;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		96BC47022B5C3F0C00BDD797 /* GoogleMaps */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 96BC47012B5C3F0C00BDD797 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
-			productName = GoogleMaps;
-		};
-		96BC47042B5C3F0C00BDD797 /* GoogleMapsBase */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 96BC47012B5C3F0C00BDD797 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
-			productName = GoogleMapsBase;
-		};
-		96BC47062B5C3F0C00BDD797 /* GoogleMapsCore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 96BC47012B5C3F0C00BDD797 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
-			productName = GoogleMapsCore;
-		};
-		96BC47082B5C3F0C00BDD797 /* GoogleMapsM4B */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 96BC47012B5C3F0C00BDD797 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
-			productName = GoogleMapsM4B;
-		};
-/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		96B87FEA2B37527300E9BEAD /* FitnessTracker.xcdatamodeld */ = {
