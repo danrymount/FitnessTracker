@@ -5,6 +5,7 @@ import UIKit
 
 enum RunExerciseState {
     case initial
+    case readyToStart
     case inProgress
     case paused
     case finished
@@ -35,12 +36,29 @@ class RunExerciseController: UIViewController {
         return exInfo
     }()
     
+    func showWarningIcon(_ show: Bool) {
+        if show {
+            let btn = UIButton()
+            btn.setImage(UIImage(systemName: "exclamationmark.triangle.fill"), for: .normal)
+            btn.tintColor = .systemYellow
+            // TODO add warning info show on tap
+            navigationItem.rightBarButtonItem = UIBarButtonItem(customView: btn)
+        }
+        else {
+            navigationItem.rightBarButtonItem = nil
+        }
+    }
+    
     private var state: RunExerciseState {
         get { return _state }
         set(newState) {
             switch newState {
                 case .initial:
-                    break
+                    exerciseInfoView.setEnable(enable: false)
+                    showWarningIcon(false)
+                case .readyToStart:
+                    exerciseInfoView.setEnable(enable: true)
+                    showWarningIcon(true)
                 case .inProgress:
                     startTimer()
                     locationManager.start()
@@ -91,8 +109,9 @@ class RunExerciseController: UIViewController {
         
         motionManager.motionDelegate = self
         
-        exerciseInfoView.setPaceStr(str: "--/--")
+        exerciseInfoView.setPaceStr(str: "--'--\"")
         exerciseInfoView.setStepsStr(str: "0 steps")
+        state = .initial
     }
     
     @objc func addDummyCord(_ sender: UITapGestureRecognizer? = nil) {
@@ -131,7 +150,6 @@ class RunExerciseController: UIViewController {
             exerciseInfoView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             exerciseInfoView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             exerciseInfoView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            exerciseInfoView.topAnchor.constraint(equalTo: view.bottomAnchor, constant: -360),
             
             button.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             button.centerYAnchor.constraint(equalTo: view.centerYAnchor)
@@ -151,7 +169,9 @@ extension RunExerciseController: ExerciseLocationDelegate {
         runRouteData.routeCoordinates.append(location)
     }
     
-    func onChangeStatus(status: CLAuthorizationStatus) {}
+    func onChangeStatus(status: CLAuthorizationStatus) {
+        // TODO: handle error
+    }
 }
 
 extension RunExerciseController {

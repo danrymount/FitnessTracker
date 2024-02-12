@@ -15,6 +15,7 @@ enum ExerciseInfoViewState {
 }
 
 class RunExerciseInfoView: UIView {
+    var enabled = true
     var viewDelegate: RunExerciseInfoViewDelegate?
     var _state: ExerciseInfoViewState = .inited
     var state: ExerciseInfoViewState
@@ -59,6 +60,14 @@ class RunExerciseInfoView: UIView {
             
             _state = newVal
         }
+    }
+    
+    func setEnable(enable: Bool)
+    {
+        startPauseButton.isEnabled = enable
+        finishButton.isEnabled = enable
+        
+        enabled = enable
     }
     
     let distanceLabel = {
@@ -183,9 +192,11 @@ class RunExerciseInfoView: UIView {
                 buttonStackView.leadingAnchor.constraint(equalTo: stack.leadingAnchor),
                 buttonStackView.trailingAnchor.constraint(equalTo: stack.trailingAnchor),
                 buttonStackView.topAnchor.constraint(equalTo: paceLabel.bottomAnchor, constant: 40),
-                buttonStackView.bottomAnchor.constraint(equalTo: stack.bottomAnchor, constant: -32),
-                
-                startPauseButton.centerXAnchor.constraint(equalTo: buttonStackView.centerXAnchor)
+
+                startPauseButton.centerXAnchor.constraint(equalTo: buttonStackView.centerXAnchor),
+                startPauseButton.bottomAnchor.constraint(equalTo: buttonStackView.bottomAnchor),
+                buttonStackView.heightAnchor.constraint(equalTo: startPauseButton.heightAnchor),
+                buttonStackView.bottomAnchor.constraint(equalTo: stack.bottomAnchor)
             ])
             
             // Place finish button below startPause button
@@ -193,6 +204,7 @@ class RunExerciseInfoView: UIView {
             NSLayoutConstraint.activate([
                 finishButton.topAnchor.constraint(equalTo: startPauseButton.topAnchor),
                 finishButton.centerXAnchor.constraint(equalTo: startPauseButton.centerXAnchor),
+                
             ])
             finishButton.isHidden = true
             
@@ -208,7 +220,7 @@ class RunExerciseInfoView: UIView {
             stackView.topAnchor.constraint(equalTo: topAnchor, constant: 24),
             stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 24),
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -24),
-            stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -32)
+            stackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
         ])
     }
     

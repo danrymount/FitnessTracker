@@ -14,7 +14,8 @@ struct MainView: View {
         UITabBar.appearance().backgroundColor = UIColor.white
     }
     var body: some View {
-        NavigationView {
+        // TODO remove navigation stack in order to support previous ios versions
+        NavigationStack {
             TabView(selection: $selectedTab) {
                 ActivitiesView()
                     .tabItem {
