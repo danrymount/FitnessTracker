@@ -4,10 +4,14 @@ import CoreMotion
 import Foundation
 
 
+enum MotionManagerStatus {
+    case ready
+    case error
+}
 
 protocol ExerciseMotionDelegate {
     func onChangeData(data: RunMotionDataModel)
-//    func onChangeStatus(status: CLAuthorizationStatus)
+    func onChangeStatus(status: MotionManagerStatus)
 }
 
 protocol ExerciseMotionManagerProtocol {
@@ -23,7 +27,11 @@ class ExerciseMotionManager: ExerciseMotionManagerProtocol {
 
     func start() {
         pedometer.startUpdates(from: Date()) { pedometerData, error in
-            guard let pedometerData = pedometerData, error == nil else { return }
+            guard let pedometerData = pedometerData, error == nil else {
+                self.motionDelegate?.onChangeStatus(status: .error)
+                return
+            }
+            self.motionDelegate?.onChangeStatus(status: .ready)
 
             self.motionDelegate?.onChangeData(data: RunMotionDataModel(distance: pedometerData.distance?.doubleValue, avgPace: pedometerData.averageActivePace?.doubleValue, steps: pedometerData.numberOfSteps.uint64Value))
         }

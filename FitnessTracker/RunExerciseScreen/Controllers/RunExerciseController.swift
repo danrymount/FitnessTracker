@@ -1,31 +1,61 @@
 
 import CoreMotion
 import MapKit
+import OSLog
 import UIKit
 
-enum RunExerciseState {
+enum RunExerciseState: String, CustomStringConvertible {
     case initial
     case readyToStart
     case inProgress
     case paused
     case finished
+
+    var description: String {
+        get {
+            return self.rawValue
+        }
+    }
 }
 
 class RunExerciseController: UIViewController {
     private var _state: RunExerciseState = .initial
+    
+    func processManagerStatus() {
+        if motionManagerStatus != .ready || (locationManagerStatus != .authorizedWhenInUse && locationManagerStatus != .authorizedAlways) {
+            showWarningIcon(true)
+        }
+        else {
+            showWarningIcon(false)
+            state = .readyToStart
+        }
+    }
+    
+    var motionManagerStatus: MotionManagerStatus = .ready {
+        didSet {
+            Logger().info("motionManagerStatus set to \(String(describing: self.motionManagerStatus))")
+            processManagerStatus()
+        }
+    }
+
+    var locationManagerStatus: CLAuthorizationStatus = .notDetermined {
+        didSet {
+            Logger().info("locationManagerStatus set to \(String(describing: self.locationManagerStatus))")
+            processManagerStatus()
+        }
+    }
 
     var runRouteData = RunRouteDataModel()
     var motionData = RunMotionDataModel()
-    var locationManager: ExerciseLocationManagerProtocol = ExerciseLocationManager()
+    var locationManager: ExerciseLocationManagerProtocol
     var motionManager: ExerciseMotionManager = .init()
     var mapVC = MapViewController()
     
-    private weak var displayLink: CADisplayLink?
-    var startTime: CFTimeInterval?
-    private var elapsed: CFTimeInterval = 0
-    private var priorElapsed: CFTimeInterval = 0
+    var stopwatchService = StopwatchService()
     
-    var exerciseInfoView = {
+    var distanceAfterLastLocation: Double = 0
+    
+    lazy var exerciseInfoView = {
         let exInfo = RunExerciseInfoView()
         exInfo.translatesAutoresizingMaskIntoConstraints = false
         exInfo.backgroundColor = .white
@@ -41,7 +71,7 @@ class RunExerciseController: UIViewController {
             let btn = UIButton()
             btn.setImage(UIImage(systemName: "exclamationmark.triangle.fill"), for: .normal)
             btn.tintColor = .systemYellow
-            // TODO add warning info show on tap
+            // TODO: add warning info show on tap
             navigationItem.rightBarButtonItem = UIBarButtonItem(customView: btn)
         }
         else {
@@ -52,23 +82,23 @@ class RunExerciseController: UIViewController {
     private var state: RunExerciseState {
         get { return _state }
         set(newState) {
+            Logger().info("[State]: \(newState.description)")
             switch newState {
                 case .initial:
                     exerciseInfoView.setEnable(enable: false)
-                    showWarningIcon(false)
                 case .readyToStart:
                     exerciseInfoView.setEnable(enable: true)
-                    showWarningIcon(true)
+                    showWarningIcon(false)
                 case .inProgress:
-                    startTimer()
+                    stopwatchService.start()
                     locationManager.start()
                     motionManager.start()
                 case .paused:
-                    pauseTimer()
+                    stopwatchService.pause()
                     locationManager.stop()
                     motionManager.stop()
                 case .finished:
-                    pauseTimer()
+                    stopwatchService.pause()
                     locationManager.stop()
                     motionManager.stop()
             }
@@ -77,69 +107,20 @@ class RunExerciseController: UIViewController {
         }
     }
     
-    func startTimer() {
-        if displayLink == nil {
-            startDisplayLink()
-        }
-    }
-    
-    func pauseTimer() {
-        priorElapsed += elapsed
-        elapsed = 0
-        stopDisplayLink()
-    }
-    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        stopDisplayLink()
+        stopwatchService.reset()
         locationManager.stop()
         motionManager.stop()
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.view.backgroundColor = UIColor.white
+    override func loadView() {
+        super.loadView()
         
-        setupLayout()
-        
-        exerciseInfoView.viewDelegate = self
-        
-        locationManager.locationDelegate = self
-        locationManager.configure()
-        
-        motionManager.motionDelegate = self
-        
-        exerciseInfoView.setPaceStr(str: "--'--\"")
-        exerciseInfoView.setStepsStr(str: "0 steps")
-        state = .initial
-    }
-    
-    @objc func addDummyCord(_ sender: UITapGestureRecognizer? = nil) {
-        if let lastCoord = runRouteData.routeCoordinates.last {
-            let newLat = lastCoord.coordinate.latitude + Double(Int.random(in: 0...10))/50000 * Double(Int.random(in: -1...1))
-            let newLong = lastCoord.coordinate.longitude + Double(Int.random(in: 0...10))/50000
-            var newCoord = CLLocation(latitude: newLat, longitude: newLong)
-            
-            runRouteData.routeCoordinates.append(newCoord)
-            mapVC.setStartPoint(location: newCoord.coordinate)
-            runRouteData.totalDistance += newCoord.distance(from: lastCoord)
-            exerciseInfoView.setDistanceStr(str: "\(runRouteData.totalDistance.rounded()) m.")
-        }
-    }
-    
-    func setupLayout() {
         mapVC.view.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(mapVC.view)
         view.addSubview(exerciseInfoView)
-        
-        var button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .gray
-        button.setTitle("D", for: .normal)
-        view.addSubview(button)
-        
-        button.addTapGesture(tapNumber: 1, target: self, action: #selector(addDummyCord(_:)))
         
         NSLayoutConstraint.activate([
             mapVC.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -150,50 +131,88 @@ class RunExerciseController: UIViewController {
             exerciseInfoView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             exerciseInfoView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             exerciseInfoView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
+        ])
+        
+        #if DEBUG
+        var button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.backgroundColor = .gray
+        button.setTitle("D", for: .normal)
+        view.addSubview(button)
+
+        button.addTapGesture(tapNumber: 1, target: self, action: #selector(testRequestLocation(_:)))
+        
+        NSLayoutConstraint.activate([
             button.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             button.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        ])
+            ])
+        #endif
+    }
+    
+    init() {
+        #if SIMULATE_LOCATION
+        locationManager = DummyExerciseLocationManager()
+        #else
+        locationManager = ExerciseLocationManager()
+        #endif
+        
+        super.init(nibName: nil, bundle: nil)
+        
+        exerciseInfoView.viewDelegate = self
+        locationManager.locationDelegate = self
+        motionManager.motionDelegate = self
+        stopwatchService.onTimeUpdate = onStopwatchUpdate
+        state = .initial
+    }
+    
+    @available(*, unavailable)
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("Storyboard is not supported")
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.view.backgroundColor = UIColor.white
+        
+        locationManager.configure()
+        
+        exerciseInfoView.setPaceStr(str: "--'--\"")
+        exerciseInfoView.setStepsStr(str: "0 steps")
+        locationManager.getCurrentLocation()
     }
 }
 
 extension RunExerciseController: ExerciseLocationDelegate {
     func onChangeLocation(locations: [CLLocation]) {
         let location: CLLocation = locations.last!
-        print(location)
-        mapVC.setStartPoint(location: location.coordinate)
-        if let lastCoord = runRouteData.routeCoordinates.last {
-//            runRouteData.totalDistance += location.distance(from: lastCoord)
-//            exerciseInfoView.setDistanceStr(str: "\(runRouteData.totalDistance.rounded()) m.")
-        }
+        Logger.common.info("New location data: \(location)")
+        
         runRouteData.routeCoordinates.append(location)
+        
+        if runRouteData.routeCoordinates.count == 1 {
+            DispatchQueue.main.async {
+                self.mapVC.setStartPoint(location: location.coordinate)
+            }
+        }
+        else {
+            DispatchQueue.main.async {
+                self.mapVC.appendNewRoutePoint(location: location.coordinate)
+            }
+        }
+        
+        Logger.common.info("Total locations: \(self.runRouteData.routeCoordinates)")
     }
     
     func onChangeStatus(status: CLAuthorizationStatus) {
         // TODO: handle error
+        print("New location status \(status)")
+        locationManagerStatus = status
     }
 }
 
 extension RunExerciseController {
-    func startDisplayLink() {
-        startTime = CACurrentMediaTime()
-        let displayLink = CADisplayLink(target: self, selector: #selector(handleDisplayLink(_:)))
-        displayLink.add(to: .main, forMode: .common)
-        self.displayLink = displayLink
-    }
-    
-    func stopDisplayLink() {
-        displayLink?.invalidate()
-    }
-    
-    @objc func handleDisplayLink(_ displayLink: CADisplayLink) {
-        guard let startTime = startTime else { return }
-        elapsed = CACurrentMediaTime() - startTime
-        updateUI()
-    }
-    
-    func updateUI() {
-        let totalElapsed = elapsed + priorElapsed
+    func onStopwatchUpdate(elapsed: CFTimeInterval) {
+        let totalElapsed = elapsed
         let hundredths = Int((totalElapsed * 100).rounded())
         let (minutes, hundredthsOfSeconds) = hundredths.quotientAndRemainder(dividingBy: 60 * 100)
         let (seconds, milliseconds) = hundredthsOfSeconds.quotientAndRemainder(dividingBy: 100)
@@ -217,13 +236,32 @@ extension RunExerciseController: RunExerciseInfoViewDelegate {
 }
 
 extension RunExerciseController: ExerciseMotionDelegate {
-    func onChangeData(data: RunMotionDataModel) {
-        print(data)
+    func onChangeStatus(status: MotionManagerStatus) {
         DispatchQueue.main.async {
-            self.motionData = data
+            self.motionManagerStatus = status
+        }
+    }
+    
+    func onChangeData(data: RunMotionDataModel) {
+        Logger.common.info("New motion data: \(String(describing: data))")
+        if let newDist = data.distance {
+            if newDist - distanceAfterLastLocation > 10 {
+                locationManager.getCurrentLocation()
+                distanceAfterLastLocation = newDist
+            }
+        }
+        
+        self.motionData = data
+        DispatchQueue.main.async {
             self.exerciseInfoView.setPaceStr(str: self.motionData.getPaceStr())
             self.exerciseInfoView.setStepsStr(str: self.motionData.getStepsStr())
             self.exerciseInfoView.setDistanceStr(str: self.motionData.getDistanceStr())
         }
+    }
+}
+
+extension RunExerciseController {
+    @objc func testRequestLocation(_ sender: UITapGestureRecognizer? = nil) {
+        locationManager.getCurrentLocation()
     }
 }

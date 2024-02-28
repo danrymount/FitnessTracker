@@ -1,5 +1,7 @@
 
 import Foundation
+import OSLog
+
 
 @objc enum ActivityType : Int
 {
@@ -32,4 +34,13 @@ import Foundation
             return "Squats"
         }
     }
+}
+
+
+
+extension Logger {
+    /// Using your bundle identifier is a great way to ensure a unique identifier.
+    private static var subsystem = Bundle.main.bundleIdentifier!
+
+    static let common = Logger(subsystem: subsystem, category: "common")
 }

@@ -1,13 +1,13 @@
 
 
 import Foundation
-import UIKit
 import MapKit
+import UIKit
 
 protocol MapViewControllerProtocol {
-    func clearRoute();
-    func appendNewRoutePoint(location: CLLocationCoordinate2D);
-    func setStartPoint(location: CLLocationCoordinate2D);
+    func clearRoute()
+    func appendNewRoutePoint(location: CLLocationCoordinate2D)
+    func setStartPoint(location: CLLocationCoordinate2D)
 }
 
 class MapCustomAnnotation: NSObject, MKAnnotation {
@@ -17,65 +17,70 @@ class MapCustomAnnotation: NSObject, MKAnnotation {
         
         func toImage() -> UIImage? {
             var imgName = "mappin.and.ellipse"
-            switch self
-            {
+            switch self {
                 case .startPoint:
                     imgName = "mappin.and.ellipse"
                 case .currentPoint:
-                    imgName = "mappin.and.ellipse"
+                    imgName = "target"
             }
             
             return UIImage(systemName: imgName)
         }
     }
     
-    var coordinate: CLLocationCoordinate2D = CLLocationCoordinate2D()
+    var coordinate: CLLocationCoordinate2D = .init()
     var type: EType = .startPoint
 }
 
-class MapViewController : UIViewController, MapViewControllerProtocol {
-    var routeCoordinates : [CLLocationCoordinate2D] = []
+class MapViewController: UIViewController, MapViewControllerProtocol {
+    var routeCoordinates: [CLLocationCoordinate2D] = []
     
-    var mapPosAnnotation: MapCustomAnnotation = MapCustomAnnotation()
-    //    var mapCurPosAnnotation: MKPointAnnotation = MKPointAnnotation()
+    var mapPosAnnotation: MapCustomAnnotation = .init()
+    var mapCurPosAnnotation: MapCustomAnnotation = .init()
     
-    func clearRoute() {
-        
-    }
+    func clearRoute() {}
     
     func appendNewRoutePoint(location: CLLocationCoordinate2D) {
-        //        routeCoordinates.append(location)
-        //
-        //        let polyline = MKPolyline(coordinates: routeCoordinates, count: routeCoordinates.count)
-        //        mapView.removeOverlays(mapView.overlays)
-        //        mapView.addOverlay(polyline)
-        //        var l1 = CLLocation(latitude: routeCoordinates.last!.latitude, longitude: routeCoordinates.last!.longitude)
-        //        var l2 = CLLocation(latitude: routeCoordinates[routeCoordinates.count-2].latitude, longitude:
-        //                                routeCoordinates[routeCoordinates.count-2].longitude)
-        ////        runRouteData.distance += l1.distance(from: l2)
-        //
-        //        centerMap(location: location)
-        //        print(mapView.overlays.count)
+        routeCoordinates.append(location)
+        let polyline = MKPolyline(coordinates: routeCoordinates, count: routeCoordinates.count)
+        mapView.removeOverlays(mapView.overlays)
+        mapView.addOverlay(polyline)
+        
+        centerMap(location: location)
+        mapView.removeAnnotation(mapCurPosAnnotation)
+        mapCurPosAnnotation.coordinate = location
+        mapView.addAnnotation(mapCurPosAnnotation)
+        
+//                routeCoordinates.append(location)
+//
+//                let polyline = MKPolyline(coordinates: routeCoordinates, count: routeCoordinates.count)
+//                mapView.removeOverlays(mapView.overlays)
+//                mapView.addOverlay(polyline)
+//                var l1 = CLLocation(latitude: routeCoordinates.last!.latitude, longitude: routeCoordinates.last!.longitude)
+//                var l2 = CLLocation(latitude: routeCoordinates[routeCoordinates.count-2].latitude, longitude:
+//                                        routeCoordinates[routeCoordinates.count-2].longitude)
+//        //        runRouteData.distance += l1.distance(from: l2)
+//
+//                centerMap(location: location)
+//                print(mapView.overlays.count)
     }
     
-    func centerMap(location: CLLocationCoordinate2D)
-    {
+    func centerMap(location: CLLocationCoordinate2D) {
         let mRegion = MKCoordinateRegion(center: location, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
         
         mapView.setRegion(mRegion, animated: true)
     }
     
     func setStartPoint(location: CLLocationCoordinate2D) {
+        mapView.removeAnnotation(mapPosAnnotation)
         centerMap(location: location)
         mapPosAnnotation.coordinate = location
-        
-        routeCoordinates.append(location)
-        let polyline = MKPolyline(coordinates: routeCoordinates, count: routeCoordinates.count)
-        mapView.removeOverlays(mapView.overlays)
-        mapView.addOverlay(polyline)
+        mapView.addAnnotation(mapPosAnnotation)
+
+        routeCoordinates = [location]
     }
     
-    let mapView : MKMapView = {
+    let mapView: MKMapView = {
         let map = MKMapView()
         map.overrideUserInterfaceStyle = .light
         return map
@@ -87,7 +92,7 @@ class MapViewController : UIViewController, MapViewControllerProtocol {
         mapView.delegate = self
         
         setMapConstraints()
-        mapView.addAnnotation(mapPosAnnotation)
+        mapCurPosAnnotation.type = .currentPoint
     }
     
     func setMapConstraints() {
@@ -101,14 +106,12 @@ class MapViewController : UIViewController, MapViewControllerProtocol {
     }
 }
 
-
-extension MapViewController : MKMapViewDelegate {
+extension MapViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-        
         if let routePolyline = overlay as? MKPolyline {
             let renderer = MKPolylineRenderer(polyline: routePolyline)
-            renderer.strokeColor = UIColor.blue
-            renderer.lineWidth = 7
+            renderer.strokeColor = UIColor.orange
+            renderer.lineWidth = 5
             return renderer
         }
         
@@ -116,7 +119,6 @@ extension MapViewController : MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        
         if let ant = annotation as? MapCustomAnnotation {
             let v = MKAnnotationView()
             v.image = ant.type.toImage()

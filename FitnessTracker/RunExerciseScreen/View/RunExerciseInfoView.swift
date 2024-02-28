@@ -70,28 +70,28 @@ class RunExerciseInfoView: UIView {
         enabled = enable
     }
     
-    let distanceLabel = {
+    lazy var distanceLabel = {
         let lb = UILabel()
         lb.font = UIFont.monospacedDigitSystemFont(ofSize: 15, weight: .regular)
         lb.translatesAutoresizingMaskIntoConstraints = false
         return lb
     }()
     
-    let durationLabel = {
+    lazy var durationLabel = {
         let lb = UILabel()
         lb.font = UIFont.monospacedDigitSystemFont(ofSize: 15, weight: .regular)
         lb.translatesAutoresizingMaskIntoConstraints = false
         return lb
     }()
     
-    let stepsLabel = {
+    lazy var stepsLabel = {
         let lb = UILabel()
         lb.font = UIFont.monospacedDigitSystemFont(ofSize: 15, weight: .regular)
         lb.translatesAutoresizingMaskIntoConstraints = false
         return lb
     }()
     
-    let paceLabel = {
+    lazy var paceLabel = {
         let lb = UILabel()
         lb.font = UIFont.monospacedDigitSystemFont(ofSize: 15, weight: .regular)
         lb.translatesAutoresizingMaskIntoConstraints = false
@@ -100,7 +100,7 @@ class RunExerciseInfoView: UIView {
     
     
     
-    let startPauseButton = {
+    lazy var startPauseButton = {
         let btn = UIButton()
         btn.setImage(UIImage(systemName:"play.fill"), for: .normal)
         btn.backgroundColor = .systemBlue
@@ -118,7 +118,7 @@ class RunExerciseInfoView: UIView {
         return btn
     }()
     
-    let finishButton = {
+    lazy var finishButton = {
         let btn = UIButton()
         btn.setImage(UIImage(systemName:"flag.fill"), for: .normal)
         btn.backgroundColor = .systemBlue
@@ -136,8 +136,8 @@ class RunExerciseInfoView: UIView {
         return btn
     }()
     
-    var stackView = UIStackView()
-    var buttonStackView = {
+    lazy var stackView = UIStackView()
+    lazy var buttonStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
         stack.translatesAutoresizingMaskIntoConstraints = false

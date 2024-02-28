@@ -14,9 +14,14 @@ protocol ExerciseLocationManagerProtocol {
     func configure()
     func start()
     func stop()
+    func getCurrentLocation()
 }
 
 class ExerciseLocationManager: NSObject, CLLocationManagerDelegate, ExerciseLocationManagerProtocol {
+    func getCurrentLocation() {
+        locationManager.requestLocation()
+    }
+    
     var locationDelegate: ExerciseLocationDelegate?
     var locationManager: CLLocationManager!
     
@@ -29,17 +34,16 @@ class ExerciseLocationManager: NSObject, CLLocationManagerDelegate, ExerciseLoca
     }
     
     func start() {
-        locationManager.startUpdatingLocation()
+//        locationManager.startUpdatingLocation()
     }
     
     func stop() {
-        locationManager.stopUpdatingLocation()
+//        locationManager.stopUpdatingLocation()
     }
     
     // Handle incoming location events.
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let location: CLLocation = locations.last!
-        print("Location: \(location)")
         
         locationDelegate?.onChangeLocation(locations: locations)
         
@@ -82,4 +86,36 @@ class ExerciseLocationManager: NSObject, CLLocationManagerDelegate, ExerciseLoca
         //        locationManager.stopUpdatingLocation()
         print("Error: \(error)")
     }
+}
+
+
+
+
+class DummyExerciseLocationManager: ExerciseLocationManagerProtocol {
+    var locationDelegate: ExerciseLocationDelegate?
+    private var lastLocation = CLLocationCoordinate2D(latitude: 43.253173, longitude: 76.92095)
+    
+    func configure() {
+        locationDelegate?.onChangeStatus(status: .authorizedAlways)
+    }
+    
+    func start() {
+        
+    }
+    
+    func stop() {
+        
+    }
+    
+    func getCurrentLocation() {
+        let newLat = lastLocation.latitude + Double(Int.random(in: 0...10))/50000 * Double(Int.random(in: 0...1))
+        let newLong = lastLocation.longitude + Double(Int.random(in: 0...10))/50000
+        var newCoord = CLLocation(latitude: newLat, longitude: newLong)
+        
+        locationDelegate?.onChangeLocation(locations: [newCoord])
+        
+        lastLocation = newCoord.coordinate
+    }
+    
+    
 }

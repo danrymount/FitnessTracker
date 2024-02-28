@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>FitnessTracker(Simulator).xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 		<key>FitnessTracker.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
@@ -12,6 +17,11 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>9666D13F2B8FACFA008BCAD6</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>96B87FDB2B37527100E9BEAD</key>
 		<dict>
 			<key>primary</key>
