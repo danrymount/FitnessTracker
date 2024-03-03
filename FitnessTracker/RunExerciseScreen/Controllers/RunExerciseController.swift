@@ -12,13 +12,28 @@ enum RunExerciseState: String, CustomStringConvertible {
     case finished
 
     var description: String {
-        get {
-            return self.rawValue
-        }
+        return self.rawValue
     }
 }
 
-class RunExerciseController: UIViewController {
+class RunExerciseController: UIViewController, PopUpModalDelegate {
+    func didTapCancel() {
+        self.dismiss(animated: true)
+    }
+    
+    func didTapAccept() {
+        _ = navigationController?.popToRootViewController(animated: true)
+        self.dismiss(animated: true)
+    }
+    
+    func getModalInfoView() -> UIView {
+        var lb = UILabel()
+        
+        lb.text = "Result"
+        
+        return lb
+    }
+    
     private var _state: RunExerciseState = .initial
     
     func processManagerStatus() {
@@ -65,13 +80,32 @@ class RunExerciseController: UIViewController {
         exInfo.layer.borderWidth = 1
         return exInfo
     }()
+
+    
+    @objc func onWarningIconPress(_ sender: UITapGestureRecognizer? = nil) {
+        var msg = ""
+        
+        if motionManagerStatus == .error {
+            msg += "Motion is not available\n"
+        }
+        if locationManagerStatus == .denied {
+            msg += "Location service is disabled\n"
+        }
+        else if locationManagerStatus == .restricted {
+            msg += "Location service is restricted\n"
+        }
+        
+        let alert = UIAlertController(title: "Warning", message: String(msg.dropLast()), preferredStyle: .actionSheet)
+        self.present(alert, animated: true, completion: nil)
+        Timer.scheduledTimer(withTimeInterval: 3, repeats: false, block: { _ in alert.dismiss(animated: true, completion: nil) })
+    }
     
     func showWarningIcon(_ show: Bool) {
         if show {
             let btn = UIButton()
             btn.setImage(UIImage(systemName: "exclamationmark.triangle.fill"), for: .normal)
             btn.tintColor = .systemYellow
-            // TODO: add warning info show on tap
+            btn.addTapGesture(tapNumber: 1, target: self, action: #selector(onWarningIconPress))
             navigationItem.rightBarButtonItem = UIBarButtonItem(customView: btn)
         }
         else {
@@ -90,10 +124,13 @@ class RunExerciseController: UIViewController {
                     exerciseInfoView.setEnable(enable: true)
                     showWarningIcon(false)
                 case .inProgress:
+                    exerciseInfoView.state = .inProgress
                     stopwatchService.start()
                     locationManager.start()
                     motionManager.start()
                 case .paused:
+                    exerciseInfoView.state = .paused
+                    exerciseInfoView.state = .paused
                     stopwatchService.pause()
                     locationManager.stop()
                     motionManager.stop()
@@ -114,8 +151,28 @@ class RunExerciseController: UIViewController {
         motionManager.stop()
     }
     
+    func showFinishDialog() {
+        let view = PopUpModalViewController(delegate: self)
+        view.delegate = self
+        view.modalPresentationStyle = .overFullScreen
+        view.modalTransitionStyle = .coverVertical
+        self.present(view, animated: true)
+    }
+    
+    @objc func backButtonCb(sender: AnyObject) {
+        if state != .initial && state != .readyToStart {
+            state = .paused
+            showFinishDialog()
+        }
+        else {
+            _ = navigationController?.popToRootViewController(animated: true)
+        }
+    }
+    
     override func loadView() {
         super.loadView()
+        
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .done, target: self, action: #selector(backButtonCb(sender:)))
         
         mapVC.view.translatesAutoresizingMaskIntoConstraints = false
         
@@ -144,8 +201,8 @@ class RunExerciseController: UIViewController {
         
         NSLayoutConstraint.activate([
             button.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            button.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-            ])
+            button.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+        ])
         #endif
     }
     
@@ -157,6 +214,8 @@ class RunExerciseController: UIViewController {
         #endif
         
         super.init(nibName: nil, bundle: nil)
+        
+        title = "Run"
         
         exerciseInfoView.viewDelegate = self
         locationManager.locationDelegate = self

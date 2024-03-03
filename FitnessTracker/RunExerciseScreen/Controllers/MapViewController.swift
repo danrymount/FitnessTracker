@@ -16,15 +16,16 @@ class MapCustomAnnotation: NSObject, MKAnnotation {
         case currentPoint
         
         func toImage() -> UIImage? {
+            var imageView: UIImage?
             var imgName = "mappin.and.ellipse"
             switch self {
                 case .startPoint:
-                    imgName = "mappin.and.ellipse"
+                    imageView = UIImage(systemName: "mappin.and.ellipse")
                 case .currentPoint:
-                    imgName = "target"
+                    imageView = UIImage(systemName: "target")?.withTintColor(.systemBlue)
             }
             
-            return UIImage(systemName: imgName)
+            return imageView
         }
     }
     
@@ -50,19 +51,6 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
         mapView.removeAnnotation(mapCurPosAnnotation)
         mapCurPosAnnotation.coordinate = location
         mapView.addAnnotation(mapCurPosAnnotation)
-        
-//                routeCoordinates.append(location)
-//
-//                let polyline = MKPolyline(coordinates: routeCoordinates, count: routeCoordinates.count)
-//                mapView.removeOverlays(mapView.overlays)
-//                mapView.addOverlay(polyline)
-//                var l1 = CLLocation(latitude: routeCoordinates.last!.latitude, longitude: routeCoordinates.last!.longitude)
-//                var l2 = CLLocation(latitude: routeCoordinates[routeCoordinates.count-2].latitude, longitude:
-//                                        routeCoordinates[routeCoordinates.count-2].longitude)
-//        //        runRouteData.distance += l1.distance(from: l2)
-//
-//                centerMap(location: location)
-//                print(mapView.overlays.count)
     }
     
     func centerMap(location: CLLocationCoordinate2D) {
@@ -122,6 +110,7 @@ extension MapViewController: MKMapViewDelegate {
         if let ant = annotation as? MapCustomAnnotation {
             let v = MKAnnotationView()
             v.image = ant.type.toImage()
+            v.image?.withTintColor(.red, renderingMode: .alwaysOriginal)
             
             return v
         }

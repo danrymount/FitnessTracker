@@ -227,12 +227,10 @@ class RunExerciseInfoView: UIView {
     @objc func onStartPauseButtonPressed(_ sender: UITapGestureRecognizer? = nil) {
         if state == .inited || state == .paused
         {
-            state = .inProgress
             viewDelegate?.startButtonPressed()
         }
         else {
             viewDelegate?.pauseButtonPressed()
-            state = .paused
         }
     }
     
