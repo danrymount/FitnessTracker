@@ -1,7 +1,7 @@
 
 import Foundation
 
-public struct ActivityDataModel : Identifiable
+public struct ActivityDataModel: Identifiable
 {
     public var id: Int
     var performedAmount: Double
@@ -9,6 +9,7 @@ public struct ActivityDataModel : Identifiable
     var type: ActivityType
     var datetime: Date
     var username: String = ""
+    var isCompleted: Bool = false
     
     func getDurationStr() -> String
     {
@@ -17,7 +18,7 @@ public struct ActivityDataModel : Identifiable
     
     func getPerformedInfo() -> String
     {
-        switch (type)
+        switch type
         {
         case .Push_ups, .Squats:
             return "\(UInt(performedAmount)) reps."
@@ -26,17 +27,18 @@ public struct ActivityDataModel : Identifiable
         default:
             return "UNDEF!"
         }
-        
     }
     
-    func getStartTime() -> String {
+    func getStartTime() -> String
+    {
         let startTime = datetime
         let dateformat = DateFormatter()
         dateformat.dateFormat = "HH:mm:ss"
         return dateformat.string(from: startTime)
     }
     
-    func getStopTime() -> String {
+    func getStopTime() -> String
+    {
         let stopTime = datetime + duration
         let dateformat = DateFormatter()
         dateformat.dateFormat = "HH:mm:ss"
@@ -45,9 +47,9 @@ public struct ActivityDataModel : Identifiable
     
     func getDate() -> String
     {
-        var resStr : String = ""
+        var resStr = ""
         
-        if datetime.timeIntervalSinceNow > Date(timeIntervalSinceNow: -TimeInterval(24*60*60)).timeIntervalSinceNow
+        if datetime.timeIntervalSinceNow > Date(timeIntervalSinceNow: -TimeInterval(24 * 60 * 60)).timeIntervalSinceNow
         {
             var sinceTime = abs(Int(datetime.timeIntervalSinceNow.rounded()))
             if sinceTime/3600 > 0
@@ -81,18 +83,17 @@ public struct ActivityDataModel : Identifiable
     }
 }
 
-extension TimeInterval {
-    
-    func stringFromTimeInterval() -> String {
-        
+extension TimeInterval
+{
+    func stringFromTimeInterval() -> String
+    {
         let time = NSInteger(self)
         
         let ms = Int((self.truncatingRemainder(dividingBy: 1)) * 1000)
         let seconds = time % 60
-        let minutes = (time / 60) % 60
+        let minutes = (time/60) % 60
         
         return String(format: "%0.2d:%0.2d", minutes, seconds)
-        
     }
 }
 

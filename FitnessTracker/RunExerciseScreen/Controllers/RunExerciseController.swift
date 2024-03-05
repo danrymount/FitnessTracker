@@ -27,11 +27,43 @@ class RunExerciseController: UIViewController, PopUpModalDelegate {
     }
     
     func getModalInfoView() -> UIView {
-        var lb = UILabel()
+        var stack = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.axis = .vertical
         
-        lb.text = "Result"
+        let distanceLb = UILabel()
+        distanceLb.text = "Distance: \(motionData.getDistanceStr())"
         
-        return lb
+        let paceLb = UILabel()
+        paceLb.text = "Pace: \(motionData.getPaceStr())"
+        
+        let stepsLb = UILabel()
+        stepsLb.text = "Steps: \(motionData.getStepsStr())"
+        
+        distanceLb.translatesAutoresizingMaskIntoConstraints = false
+        paceLb.translatesAutoresizingMaskIntoConstraints = false
+        stepsLb.translatesAutoresizingMaskIntoConstraints = false
+        
+        stack.addSubview(distanceLb)
+        stack.addSubview(paceLb)
+        stack.addSubview(stepsLb)
+        
+        NSLayoutConstraint.activate([
+            distanceLb.leadingAnchor.constraint(equalTo: stack.leadingAnchor),
+            distanceLb.trailingAnchor.constraint(equalTo: stack.trailingAnchor),
+            distanceLb.topAnchor.constraint(equalTo: stack.topAnchor),
+            
+            stepsLb.topAnchor.constraint(equalTo: distanceLb.bottomAnchor, constant: 12),
+            stepsLb.leadingAnchor.constraint(equalTo: distanceLb.leadingAnchor),
+            stepsLb.trailingAnchor.constraint(equalTo: distanceLb.trailingAnchor),
+            
+            paceLb.topAnchor.constraint(equalTo: stepsLb.bottomAnchor, constant: 12),
+            paceLb.leadingAnchor.constraint(equalTo: distanceLb.leadingAnchor),
+            paceLb.trailingAnchor.constraint(equalTo: distanceLb.trailingAnchor),
+        
+        ])
+        
+        return stack
     }
     
     private var _state: RunExerciseState = .initial
@@ -69,6 +101,7 @@ class RunExerciseController: UIViewController, PopUpModalDelegate {
     var stopwatchService = StopwatchService()
     
     var distanceAfterLastLocation: Double = 0
+    var activityData: RunExerciseDataModel?
     
     lazy var exerciseInfoView = {
         let exInfo = RunExerciseInfoView()
@@ -81,7 +114,6 @@ class RunExerciseController: UIViewController, PopUpModalDelegate {
         return exInfo
     }()
 
-    
     @objc func onWarningIconPress(_ sender: UITapGestureRecognizer? = nil) {
         var msg = ""
         
@@ -113,10 +145,14 @@ class RunExerciseController: UIViewController, PopUpModalDelegate {
         }
     }
     
+    func saveActivityData() {
+        
+//        ActivitiesRepositoryImpl.shared.updateActivity(data: activityData!)
+    }
+    
     private var state: RunExerciseState {
         get { return _state }
         set(newState) {
-            Logger().info("[State]: \(newState.description)")
             switch newState {
                 case .initial:
                     exerciseInfoView.setEnable(enable: false)
@@ -124,6 +160,10 @@ class RunExerciseController: UIViewController, PopUpModalDelegate {
                     exerciseInfoView.setEnable(enable: true)
                     showWarningIcon(false)
                 case .inProgress:
+                    if state == .readyToStart {
+                        activityData = RunExerciseDataModel(datetime: Date(timeIntervalSinceNow: 0))
+                        ActivitiesRepositoryImpl.shared.createActivity(data: activityData!)
+                    }
                     exerciseInfoView.state = .inProgress
                     stopwatchService.start()
                     locationManager.start()
@@ -311,6 +351,17 @@ extension RunExerciseController: ExerciseMotionDelegate {
         }
         
         self.motionData = data
+        
+        if let newDist = motionData.distance {
+            activityData?.distance = newDist
+        }
+        
+        if let newPace = motionData.avgPace {
+            activityData?.pace = newPace
+        }
+        
+        activityData?.steps = Int64(motionData.steps)
+
         DispatchQueue.main.async {
             self.exerciseInfoView.setPaceStr(str: self.motionData.getPaceStr())
             self.exerciseInfoView.setStepsStr(str: self.motionData.getStepsStr())
