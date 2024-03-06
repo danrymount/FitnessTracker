@@ -15,7 +15,7 @@ struct ActivityCardView: View {
     var body: some View {
         VStack(alignment: .leading) {
             Group {
-                Text(activityData.getPerformedInfo()).padding(EdgeInsets(top: 14, leading: 0, bottom: 0, trailing: 0))
+                Text(activityData.summary).padding(EdgeInsets(top: 14, leading: 0, bottom: 0, trailing: 0))
                     .font(.system(size: 22, weight: .semibold))
                 Text("\(activityData.getDurationStr())").padding(EdgeInsets(top: 0, leading: 0, bottom: 9, trailing: 0))
                     .foregroundColor(.gray)
@@ -41,7 +41,7 @@ struct ActivityCardView: View {
         .onTapGesture {
             isOpenView = true
         }
-        .background(NavigationLink(destination: ActivityDetailsScreen(activityId: activityData.id), isActive: $isOpenView)
+        .background(NavigationLink(destination: ActivityDetailsScreen(activityId: Int(activityData.id)), isActive: $isOpenView)
         {
             EmptyView()
         })

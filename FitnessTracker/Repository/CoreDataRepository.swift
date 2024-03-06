@@ -1,25 +1,120 @@
 
 import CoreData
 import Foundation
-import UIKit
 import OSLog
+import UIKit
 
-fileprivate func log(message: String) {
-    var msg = "[CoreDataRepository] " + message
+private func log(message: String) {
+    let msg = "[CoreDataRepository] " + message
     Logger().info("\(msg)")
 }
 
-public final class CoreDataRepository: NSObject {
+protocol CoreDataRepositoryProtocol {
+    func fetchActivities() -> [ActivityDataModel]
+    func fetchActivity(id: Int64) -> ActivityDataModel?
+    
+    func insertExerciseData(data: RunExerciseDataModel) -> RunExerciseDataModel?
+    func insertExerciseData(data: SetsExerciseDataModel) -> SetsExerciseDataModel?
+    
+    func updateRunExerciseData(data: RunExerciseDataModel) -> RunExerciseDataModel?
+    func updateSetsExerciseData(data: SetsExerciseDataModel) -> SetsExerciseDataModel?
+    
+    func deleteActivity(id: Int64) -> Bool
+    
+    func commit() -> Bool
+}
+
+class CoreDataRepository: NSObject, CoreDataRepositoryProtocol {
     public static let shared = CoreDataRepository()
-    var lastId: Int64
+    var lastId: Int64 = 0
+
     override private init() {
-        lastId = 0
         super.init()
         lastId = getLastId()
     }
     
     private var context: NSManagedObjectContext {
         return PersistenceController.shared.container.viewContext
+    }
+    
+    func fetchActivities() -> [ActivityDataModel] {
+        let allActivitiesRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "ActivityData")
+        let allRunExerciseRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "RunExerciseData")
+        let allSetsExerciseRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "SetsExerciseData")
+        var result: [ActivityDataModel] = []
+        do {
+            var activities = try context.fetch(allActivitiesRequest) as! [ActivityDataEntityClass]
+            
+            var runExercises = try Dictionary(uniqueKeysWithValues: (context.fetch(allRunExerciseRequest) as! [RunExerciseDataEntityClass]).map { ($0.id, $0) })
+            
+            var setsExercises = try Dictionary(uniqueKeysWithValues: (context.fetch(allSetsExerciseRequest) as! [SetsExerciseDataEntityClass]).map { ($0.id, $0) })
+            
+            for act in activities {
+                let actType = ActivityType(val: act.type)
+                if actType == .Push_ups || actType == .Squats {
+                    let newData = SetsExerciseDataModel(datetime: act.date ?? Date(timeIntervalSince1970: 0))
+                    newData.type = actType
+                    newData.duration = act.duration
+                    newData.isCompleted = act.completed
+                    newData.id = act.id
+                    newData.actualReps = setsExercises[act.id]?.actualReps ?? []
+                    newData.planReps = setsExercises[act.id]?.planReps ?? []
+                    
+                    result.append(newData)
+                } else if actType == .Run {
+                    let newData = RunExerciseDataModel(datetime: act.date ?? Date(timeIntervalSince1970: 0))
+                    newData.duration = act.duration
+                    newData.isCompleted = act.completed
+                    newData.id = act.id
+                    newData.distance = runExercises[act.id]?.distance ?? -1
+                    newData.pace = runExercises[act.id]?.pace ?? -1
+                    newData.steps = runExercises[act.id]?.steps ?? -1
+                    
+                    result.append(newData)
+                }
+            }
+        } catch {
+            print(error.localizedDescription)
+        }
+        
+        return result
+    }
+    
+    func fetchActivity(id: Int64) -> ActivityDataModel? {
+        return nil
+    }
+    
+    func updateRunExerciseData(data: RunExerciseDataModel) -> RunExerciseDataModel? {
+        nil
+    }
+    
+    func updateSetsExerciseData(data: SetsExerciseDataModel) -> SetsExerciseDataModel? {
+        nil
+    }
+    
+    func deleteActivity(id: Int64) -> Bool {
+        var activityEntity: ActivityDataEntityClass? = fetchEntity(id: id)
+        
+        var runEntity: RunExerciseDataEntityClass? = fetchEntity(id: id)
+        var setsEntity: SetsExerciseDataEntityClass? = fetchEntity(id: id)
+        
+        if let activityEntity {
+            context.delete(activityEntity)
+        }
+        
+        if let runEntity {
+            context.delete(runEntity)
+        }
+        
+        if let setsEntity {
+            context.delete(setsEntity)
+        }
+        
+        return saveContext()
+    }
+    
+    func commit() -> Bool {
+        false
     }
     
     private func saveContext() -> Bool {
@@ -34,7 +129,7 @@ public final class CoreDataRepository: NSObject {
     }
     
     private func getLastId() -> Int64 {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Activity")
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "ActivityData")
         let sort = NSSortDescriptor(key: "id", ascending: false)
         fetchRequest.sortDescriptors = [sort]
         fetchRequest.fetchLimit = 1
@@ -43,7 +138,7 @@ public final class CoreDataRepository: NSObject {
             let lastData = try context.fetch(fetchRequest)
             
             if lastData.count > 0 {
-                return (lastData[0] as! ActivityEntityClass).id
+                return (lastData[0] as! ActivityDataEntityClass).id
             }
         } catch {
             print(error.localizedDescription)
@@ -51,101 +146,117 @@ public final class CoreDataRepository: NSObject {
         return 0
     }
     
-    func insertRunActivityData(data: RunExerciseDataModel) -> Int64 {
-        let newActivityId = insertActivityData(data: data)
-        
-        guard let runDataEntityDesc = NSEntityDescription.entity(forEntityName: "RunData", in: context)
-        else {
-            return -1
-        }
-        let d = RunDataEntityClass(entity: runDataEntityDesc, insertInto: context)
-        d.id = newActivityId
-        d.distance = data.distance
-        d.pace = data.pace
-        // TODO fill locations
-        
-        if saveContext() {
-            // TODO handle
-        }
-        
-        return newActivityId
-    }
-    
-    func insertActivityData(data: ActivityDataModelProtocol) -> Int64 {
-        guard let activityEntityDescription = NSEntityDescription.entity(forEntityName: "Activity", in: context)
-        else {
-            return -1
-        }
-        let d = ActivityEntityClass(entity: activityEntityDescription, insertInto: context)
-        d.id = Int64(lastId + 1)
-        d.date = data.datetime
-        d.type = Int16(data.type.rawValue)
-        d.duration = data.duration
-        d.username = data.username
-
-        if saveContext() {
-            lastId += 1
-        }
-        
-        return d.id
-    }
-    
-    
-    
-    public func insertActivityData(data: ActivityDataModel) -> Int64 {
-        guard let activityEntityDescription = NSEntityDescription.entity(forEntityName: "Activity", in: context)
-        else {
-            return -1
-        }
-        let d = ActivityEntityClass(entity: activityEntityDescription, insertInto: context)
-        d.id = Int64(lastId + 1)
-        d.amount = Double(data.performedAmount)
-        d.date = data.datetime
-        d.type = Int16(data.type.rawValue)
-        d.duration = data.duration
-        d.username = data.username
-
-        if saveContext() {
-            lastId += 1
-        }
-        
-        return d.id
-    }
-    
-    public func fetchActivities() -> [ActivityEntityClass] {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Activity")
-        do {
-            return try context.fetch(fetchRequest) as! [ActivityEntityClass]
-        } catch {
-            print(error.localizedDescription)
-        }
-        
-        return []
-    }
-    
-    public func fetchActivity(uid: Int) -> ActivityEntityClass? {
-        do {
-            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Activity")
-            fetchRequest.predicate = NSPredicate(
-                format: "id == %@", String(uid)
-            )
-            
-            let result = try context.fetch(fetchRequest)
-            
-            for obj in result {
-                return (obj as! ActivityEntityClass)
+    private func insertEntity<EntityClass>() -> EntityClass? {
+        var entityName: String = {
+            if EntityClass.self == ActivityDataEntityClass.self {
+                return "ActivityData"
+            } else if EntityClass.self == RunExerciseDataEntityClass.self {
+                return "RunExerciseData"
+            } else if EntityClass.self == SetsExerciseDataEntityClass.self {
+                return "SetsExerciseData"
+            } else {
+                fatalError("Incorrect entity class")
             }
-        } catch {
-            print(error.localizedDescription)
+        }()
+        
+        guard let dataEntityDesc = NSEntityDescription.entity(forEntityName: entityName, in: context)
+        else {
+            return nil
         }
+        
+        if EntityClass.self == ActivityDataEntityClass.self {
+            return ActivityDataEntityClass(entity: dataEntityDesc, insertInto: context) as? EntityClass
+        } else if EntityClass.self == RunExerciseDataEntityClass.self {
+            return RunExerciseDataEntityClass(entity: dataEntityDesc, insertInto: context) as? EntityClass
+        } else if EntityClass.self == SetsExerciseDataEntityClass.self {
+            return SetsExerciseDataEntityClass(entity: dataEntityDesc, insertInto: context) as? EntityClass
+        }
+        
         return nil
     }
     
-    public func deleteActivity(uid: Int) {
-        if let act = fetchActivity(uid: uid) {
-            log(message: "Delete activity \(uid)")
-            context.delete(act)
-            saveContext()
+    private func fetchEntity<EntityClass>(id: Int64) -> EntityClass? {
+        do {
+            var entityName: String = {
+                if EntityClass.self == ActivityDataEntityClass.self {
+                    return "ActivityData"
+                } else if EntityClass.self == RunExerciseDataEntityClass.self {
+                    return "RunExerciseData"
+                } else if EntityClass.self == SetsExerciseDataEntityClass.self {
+                    return "SetsExerciseData"
+                } else {
+                    fatalError("Incorrect entity class")
+                }
+            }()
+            
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
+            fetchRequest.predicate = NSPredicate(
+                format: "id == %@", String(id)
+            )
+        
+            let result = try context.fetch(fetchRequest)
+        
+            for obj in result {
+                return (obj as? EntityClass)
+            }
+        } catch {
+            Logger().info("\(error.localizedDescription)")
+//            log(error.localizedDescription)
         }
+        
+        return nil
+    }
+    
+    func insertActivityData(data: ActivityDataModel) -> Int64 {
+        var id = Int64(lastId + 1)
+        
+        if let entity: ActivityDataEntityClass = insertEntity() {
+            entity.id = id
+            entity.date = data.datetime
+            entity.type = Int16(data.type.rawValue)
+            entity.duration = data.duration
+            entity.username = data.username
+
+            if saveContext() {
+                lastId += 1
+            }
+        } else {
+            return -1
+        }
+        
+        return id
+    }
+    
+    func insertExerciseData(data: RunExerciseDataModel) -> RunExerciseDataModel? {
+        let newActivityId = insertActivityData(data: data)
+        
+        if let entity: RunExerciseDataEntityClass = insertEntity() {
+            entity.id = newActivityId
+            entity.distance = data.distance
+            entity.steps = data.steps
+            entity.pace = data.pace
+            
+            if saveContext() {
+                return data
+            }
+        }
+        
+        return nil
+    }
+    
+    func insertExerciseData(data: SetsExerciseDataModel) -> SetsExerciseDataModel? {
+        let newActivityId = insertActivityData(data: data)
+
+        if let entity: SetsExerciseDataEntityClass = insertEntity() {
+            entity.id = newActivityId
+            entity.planReps = data.planReps
+            entity.actualReps = data.actualReps
+            
+            if saveContext() {
+                return data
+            }
+        }
+        
+        return nil
     }
 }

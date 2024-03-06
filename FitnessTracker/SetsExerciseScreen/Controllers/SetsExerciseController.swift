@@ -73,8 +73,8 @@ class SetsExerciseViewController: UIViewController, PopUpModalDelegate {
         
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .done, target: self, action: #selector(backButtonCb(sender:)))
         
-        var mainActionView = UIView()
-        var actButton = UIButton()
+        let mainActionView = UIView()
+        let actButton = UIButton()
         
         actButton.backgroundColor = .systemBlue
         view.addSubview(actButton)
@@ -181,7 +181,7 @@ class SetsExerciseViewController: UIViewController, PopUpModalDelegate {
                 setsInfoView!.bottomAnchor.constraint(equalTo: mainActionView!.bottomAnchor, constant: -16)
             ])
             
-            var lb = UILabel()
+            let lb = UILabel()
             lb.text = settings.repeats.toString()
             lb.textColor = .black
             lb.font = lb.font.withSize(32)
@@ -222,13 +222,13 @@ class SetsExerciseViewController: UIViewController, PopUpModalDelegate {
     
     
     func initViewWithSettings() {
-        var settingsView = UIView()
+        let settingsView = UIView()
         
         settingsScreen = UIView()
         
-        var setsSettingsView = ExerciseParamView(settingName: "Sets")
-        var repsSettingsView = ExerciseParamView(settingName: "Repeats")
-        var timeoutSettingsView = ExerciseParamView(settingName: "Timeout")
+        let setsSettingsView = ExerciseParamView(settingName: "Sets")
+        let repsSettingsView = ExerciseParamView(settingName: "Repeats")
+        let timeoutSettingsView = ExerciseParamView(settingName: "Timeout")
         
         settings.setObserving(forType: .Repeats) {
             repsSettingsView.updateValue(s: self.settings.repeats.toString())
@@ -270,7 +270,7 @@ class SetsExerciseViewController: UIViewController, PopUpModalDelegate {
         
         settings.resetValues()
         
-        var vStack = UIStackView()
+        let vStack = UIStackView()
         vStack.axis = .vertical
         vStack.spacing = 16
         vStack.alignment = .fill
@@ -347,24 +347,24 @@ class SetsExerciseViewController: UIViewController, PopUpModalDelegate {
     
     func getModalInfoView() -> UIView {
         let compositeView = UIView()
-        var r = UILabel()
-        compositeView.addSubview(r)
-        r.translatesAutoresizingMaskIntoConstraints = false
+        let summaryLb = UILabel()
+        compositeView.addSubview(summaryLb)
+        summaryLb.translatesAutoresizingMaskIntoConstraints = false
         
         
-        r.text = """
+        summaryLb.text = """
         Total \(self.activityType.toString()): \(self.exerciseInfo.completedSets * self.settings.repeats.value)
         Duration: \((Date(timeIntervalSinceNow: TimeInterval()) - exerciseInfo.timeStart).stringFromTimeInterval())
         """
         
-        r.numberOfLines = 2
+        summaryLb.numberOfLines = 2
         NSLayoutConstraint.activate([
-            r.topAnchor.constraint(equalTo: compositeView.topAnchor),
-            r.leadingAnchor.constraint(equalTo: compositeView.leadingAnchor),
-            r.bottomAnchor.constraint(lessThanOrEqualTo: compositeView.bottomAnchor),
-            r.trailingAnchor.constraint(lessThanOrEqualTo: compositeView.trailingAnchor),
+            summaryLb.topAnchor.constraint(equalTo: compositeView.topAnchor),
+            summaryLb.leadingAnchor.constraint(equalTo: compositeView.leadingAnchor),
+            summaryLb.bottomAnchor.constraint(lessThanOrEqualTo: compositeView.bottomAnchor),
+            summaryLb.trailingAnchor.constraint(lessThanOrEqualTo: compositeView.trailingAnchor),
         ])
-        r.backgroundColor = .clear
+        summaryLb.backgroundColor = .clear
         return compositeView
     }
     func didTapCancel() {
@@ -374,7 +374,15 @@ class SetsExerciseViewController: UIViewController, PopUpModalDelegate {
     func didTapAccept() {
         let completedAmount = self.exerciseInfo.completedSets * self.settings.repeats.value
         let exerciseDuration = Date(timeIntervalSinceNow: TimeInterval()) - exerciseInfo.timeStart
-        ActivitiesRepositoryImpl.shared.insertActivityData(data: ActivityDataModel(id: 0, performedAmount: Double(completedAmount), duration: exerciseDuration, type: self.activityType, datetime: Date.init(timeIntervalSinceNow: TimeInterval())))
+        
+        var dataModel = SetsExerciseDataModel(datetime: Date.init(timeIntervalSinceNow: exerciseDuration))
+        dataModel.planReps = Array(0..<self.settings.sets.value).map( { _ in self.settings.repeats.value})
+        dataModel.actualReps = Array(0..<self.exerciseInfo.completedSets).map( { _ in self.settings.repeats.value})
+        dataModel.type = self.activityType
+        dataModel.duration = exerciseDuration
+        ActivitiesRepositoryImpl.shared.createActivity(data: dataModel)
+        
+//        ActivitiesRepositoryImpl.shared.insertActivityData(data: ActivityDataModel(id: 0, performedAmount: Double(completedAmount), duration: exerciseDuration, type: self.activityType, datetime: Date.init(timeIntervalSinceNow: TimeInterval())))
         _ = navigationController?.popToRootViewController(animated: true)
         self.dismiss(animated: true)
     }

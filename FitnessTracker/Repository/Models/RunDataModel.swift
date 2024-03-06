@@ -4,19 +4,15 @@ import Foundation
 import MapKit
 
 
-class RunExerciseDataModel: ActivityDataModelProtocol {
-    var id: Int64 = -1
-    var type: ActivityType = .Run
-    var datetime: Date
-    var duration: TimeInterval = 0
-    var username: String?
-    var isCompleted: Bool = false
+class RunExerciseDataModel: ActivityDataModel {
 
-    required init(datetime: Date) {
-        self.datetime = datetime
+    required override init(datetime: Date) {
+        super.init(datetime: datetime)
+        self.type = .Run
+        
     }
     
-    var summary: String {
+    override var summary: String {
         "\(distance) km."
     }
     

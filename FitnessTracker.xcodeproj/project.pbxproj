@@ -19,7 +19,6 @@
 		962EBCE72B3872AE00C3866B /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962EBCE62B3872AE00C3866B /* ProfileView.swift */; };
 		962EBCE92B3873CA00C3866B /* ActivitiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962EBCE82B3873CA00C3866B /* ActivitiesView.swift */; };
 		962EBCEB2B3873FD00C3866B /* ActivityCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962EBCEA2B3873FD00C3866B /* ActivityCardView.swift */; };
-		962EBCEE2B38744000C3866B /* ActivityDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962EBCED2B38744000C3866B /* ActivityDataModel.swift */; };
 		962EBCF02B3874B100C3866B /* ActivityListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962EBCEF2B3874B100C3866B /* ActivityListView.swift */; };
 		962EBCF32B38751300C3866B /* ActivityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962EBCF22B38751300C3866B /* ActivityViewModel.swift */; };
 		962EBCF52B38757C00C3866B /* CommonDefines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962EBCF42B38757C00C3866B /* CommonDefines.swift */; };
@@ -91,7 +90,6 @@
 		9666D16B2B8FACFA008BCAD6 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962EBCCB2B384E8A00C3866B /* Constants.swift */; };
 		9666D16C2B8FACFA008BCAD6 /* PopUpModalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962EBD222B38A2F400C3866B /* PopUpModalController.swift */; };
 		9666D16D2B8FACFA008BCAD6 /* RunExerciseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96BC470E2B5C43B300BDD797 /* RunExerciseController.swift */; };
-		9666D16E2B8FACFA008BCAD6 /* ActivityDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962EBCED2B38744000C3866B /* ActivityDataModel.swift */; };
 		9666D16F2B8FACFA008BCAD6 /* SetsExerciseSettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962EBD0D2B38A12900C3866B /* SetsExerciseSettingsModel.swift */; };
 		9666D1702B8FACFA008BCAD6 /* LoginRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96661EB52B4684A500546BF3 /* LoginRequest.swift */; };
 		9666D1712B8FACFA008BCAD6 /* ServerRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96661EBA2B46AB9700546BF3 /* ServerRequest.swift */; };
@@ -102,8 +100,10 @@
 		9666D17F2B8FBB5E008BCAD6 /* StopwatchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9666D17D2B8FB890008BCAD6 /* StopwatchService.swift */; };
 		96A203922B94EF9D002A0244 /* RunDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A203912B94EF9D002A0244 /* RunDataModel.swift */; };
 		96A203932B94EF9D002A0244 /* RunDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A203912B94EF9D002A0244 /* RunDataModel.swift */; };
-		96A203962B97BC53002A0244 /* ActivityDataModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A203952B97BC53002A0244 /* ActivityDataModelProtocol.swift */; };
-		96A203972B97BC53002A0244 /* ActivityDataModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A203952B97BC53002A0244 /* ActivityDataModelProtocol.swift */; };
+		96A203962B97BC53002A0244 /* ActivityDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A203952B97BC53002A0244 /* ActivityDataModel.swift */; };
+		96A203972B97BC53002A0244 /* ActivityDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A203952B97BC53002A0244 /* ActivityDataModel.swift */; };
+		96A203992B98DB7D002A0244 /* SetsExerciseDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A203982B98DB7D002A0244 /* SetsExerciseDataModel.swift */; };
+		96A2039A2B98DB7D002A0244 /* SetsExerciseDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A203982B98DB7D002A0244 /* SetsExerciseDataModel.swift */; };
 		96AD1DA72B5F08D4000F9EF4 /* ExerciseLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96AD1DA62B5F08D4000F9EF4 /* ExerciseLocationManager.swift */; };
 		96AD1DAA2B5F12D2000F9EF4 /* RunRouteDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96AD1DA92B5F12D2000F9EF4 /* RunRouteDataModel.swift */; };
 		96B87FE02B37527100E9BEAD /* FitnessTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B87FDF2B37527100E9BEAD /* FitnessTrackerApp.swift */; };
@@ -132,7 +132,6 @@
 		962EBCE62B3872AE00C3866B /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		962EBCE82B3873CA00C3866B /* ActivitiesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivitiesView.swift; sourceTree = "<group>"; };
 		962EBCEA2B3873FD00C3866B /* ActivityCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityCardView.swift; sourceTree = "<group>"; };
-		962EBCED2B38744000C3866B /* ActivityDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityDataModel.swift; sourceTree = "<group>"; };
 		962EBCEF2B3874B100C3866B /* ActivityListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityListView.swift; sourceTree = "<group>"; };
 		962EBCF22B38751300C3866B /* ActivityViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityViewModel.swift; sourceTree = "<group>"; };
 		962EBCF42B38757C00C3866B /* CommonDefines.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonDefines.swift; sourceTree = "<group>"; };
@@ -162,7 +161,8 @@
 		9666D17A2B8FACFA008BCAD6 /* FitnessTracker(Simulator).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FitnessTracker(Simulator).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9666D17D2B8FB890008BCAD6 /* StopwatchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopwatchService.swift; sourceTree = "<group>"; };
 		96A203912B94EF9D002A0244 /* RunDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunDataModel.swift; sourceTree = "<group>"; };
-		96A203952B97BC53002A0244 /* ActivityDataModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityDataModelProtocol.swift; sourceTree = "<group>"; };
+		96A203952B97BC53002A0244 /* ActivityDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityDataModel.swift; sourceTree = "<group>"; };
+		96A203982B98DB7D002A0244 /* SetsExerciseDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetsExerciseDataModel.swift; sourceTree = "<group>"; };
 		96AD1DA62B5F08D4000F9EF4 /* ExerciseLocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseLocationManager.swift; sourceTree = "<group>"; };
 		96AD1DA92B5F12D2000F9EF4 /* RunRouteDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunRouteDataModel.swift; sourceTree = "<group>"; };
 		96B87FDC2B37527100E9BEAD /* FitnessTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FitnessTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -357,7 +357,6 @@
 			children = (
 				96A203942B97BC39002A0244 /* Models */,
 				962EBD262B39DE7200C3866B /* Entity */,
-				962EBCED2B38744000C3866B /* ActivityDataModel.swift */,
 				962EBCFD2B38921400C3866B /* ActivitiesRepository.swift */,
 				962EBD3A2B39E26E00C3866B /* CoreDataRepository.swift */,
 			);
@@ -577,7 +576,8 @@
 			isa = PBXGroup;
 			children = (
 				96A203912B94EF9D002A0244 /* RunDataModel.swift */,
-				96A203952B97BC53002A0244 /* ActivityDataModelProtocol.swift */,
+				96A203952B97BC53002A0244 /* ActivityDataModel.swift */,
+				96A203982B98DB7D002A0244 /* SetsExerciseDataModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -795,6 +795,7 @@
 				9666D1452B8FACFA008BCAD6 /* ActivityDetailsViewModel.swift in Sources */,
 				9666D1462B8FACFA008BCAD6 /* RegistrationView.swift in Sources */,
 				9666D1472B8FACFA008BCAD6 /* SecureStorage.swift in Sources */,
+				96A2039A2B98DB7D002A0244 /* SetsExerciseDataModel.swift in Sources */,
 				9666D1482B8FACFA008BCAD6 /* SetsExerciseController.swift in Sources */,
 				9666D1492B8FACFA008BCAD6 /* CommonDefines.swift in Sources */,
 				9666D14A2B8FACFA008BCAD6 /* ExerciseLocationManager.swift in Sources */,
@@ -830,12 +831,11 @@
 				9666D1672B8FACFA008BCAD6 /* ActivitySelectionViewController.swift in Sources */,
 				9666D1682B8FACFA008BCAD6 /* SetsInfoView.swift in Sources */,
 				9666D1692B8FACFA008BCAD6 /* DefaultTextFieldView.swift in Sources */,
-				96A203972B97BC53002A0244 /* ActivityDataModelProtocol.swift in Sources */,
+				96A203972B97BC53002A0244 /* ActivityDataModel.swift in Sources */,
 				9666D16A2B8FACFA008BCAD6 /* ProfileView.swift in Sources */,
 				9666D16B2B8FACFA008BCAD6 /* Constants.swift in Sources */,
 				9666D16C2B8FACFA008BCAD6 /* PopUpModalController.swift in Sources */,
 				9666D16D2B8FACFA008BCAD6 /* RunExerciseController.swift in Sources */,
-				9666D16E2B8FACFA008BCAD6 /* ActivityDataModel.swift in Sources */,
 				9666D16F2B8FACFA008BCAD6 /* SetsExerciseSettingsModel.swift in Sources */,
 				9666D1702B8FACFA008BCAD6 /* LoginRequest.swift in Sources */,
 				9666D1712B8FACFA008BCAD6 /* ServerRequest.swift in Sources */,
@@ -855,6 +855,7 @@
 				962EBCC92B384E4A00C3866B /* RegistrationView.swift in Sources */,
 				96661EC52B490E2100546BF3 /* SecureStorage.swift in Sources */,
 				962EBD122B38A16600C3866B /* SetsExerciseController.swift in Sources */,
+				96A203992B98DB7D002A0244 /* SetsExerciseDataModel.swift in Sources */,
 				962EBCF52B38757C00C3866B /* CommonDefines.swift in Sources */,
 				96AD1DA72B5F08D4000F9EF4 /* ExerciseLocationManager.swift in Sources */,
 				96FD941D2B5D4966005955D7 /* MapViewController.swift in Sources */,
@@ -890,12 +891,11 @@
 				962EBD052B389C0D00C3866B /* ActivitySelectionViewController.swift in Sources */,
 				962EBD092B38A04F00C3866B /* SetsInfoView.swift in Sources */,
 				962EBCD92B386F3700C3866B /* DefaultTextFieldView.swift in Sources */,
-				96A203962B97BC53002A0244 /* ActivityDataModelProtocol.swift in Sources */,
+				96A203962B97BC53002A0244 /* ActivityDataModel.swift in Sources */,
 				962EBCE72B3872AE00C3866B /* ProfileView.swift in Sources */,
 				962EBCCC2B384E8A00C3866B /* Constants.swift in Sources */,
 				962EBD232B38A2F400C3866B /* PopUpModalController.swift in Sources */,
 				96BC470F2B5C43B300BDD797 /* RunExerciseController.swift in Sources */,
-				962EBCEE2B38744000C3866B /* ActivityDataModel.swift in Sources */,
 				962EBD0E2B38A12900C3866B /* SetsExerciseSettingsModel.swift in Sources */,
 				96661EB62B4684A500546BF3 /* LoginRequest.swift in Sources */,
 				96661EBB2B46AB9700546BF3 /* ServerRequest.swift in Sources */,

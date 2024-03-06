@@ -9,6 +9,11 @@ import OSLog
     case Push_ups
     case Squats
     
+    init(val: Int16) {
+        // TODO fix
+        self.init(rawValue: Int(val))!
+    }
+    
     func toIconName() -> String
     {
         switch self

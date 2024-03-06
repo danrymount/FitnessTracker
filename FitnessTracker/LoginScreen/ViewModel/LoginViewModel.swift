@@ -36,7 +36,7 @@ class LoginViewModel: ObservableObject {
         errorMsg = ""
         self.status = .inProgress
         
-        var act = LoginAction(parameters: LoginRequest(username: login, password: password))
+        let act = LoginAction(parameters: LoginRequest(username: login, password: password))
         
         act.call(completition: { response in
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {

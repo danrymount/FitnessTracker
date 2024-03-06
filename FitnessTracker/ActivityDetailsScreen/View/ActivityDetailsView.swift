@@ -40,13 +40,13 @@ struct ActivityDetailsScreen: View
         {
             VStack(alignment: .leading)
             {
-                Text(activityData.getPerformedInfo()).bold()
+                Text(activityData.summary).bold()
                 Text(activityData.getDate()).foregroundColor(.gray)
                 Text(activityData.getDurationStr())
                     .bold()
                     .padding(EdgeInsets(top: 16, leading: 0, bottom: 0, trailing: 0))
                 
-                Text("Start \(activityData.getStartTime()) | Stop \(activityData.getStopTime())").foregroundColor(.gray)
+                Text("Start \(activityData.getStartTimeStr()) | Stop \(activityData.getStopTimeStr())").foregroundColor(.gray)
                 
                 Label {
                     Text(activityData.type.toString())

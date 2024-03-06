@@ -40,7 +40,7 @@ struct ServerRequest
         let task = URLSession.shared.dataTask(with: request) { data, _, error in
             
             var resErr: EServerResponseStatus = .success
-            if let err = error {
+            if error != nil {
                 resErr = .failure
             }
             

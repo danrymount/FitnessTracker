@@ -15,7 +15,7 @@ class SetsInfoView : UIView
         
         super.init(frame: CGRect())
         
-        var hStack = UIStackView()
+        let hStack = UIStackView()
         hStack.axis = .horizontal
         hStack.distribution = .fillProportionally
         hStack.alignment = .center
@@ -26,7 +26,7 @@ class SetsInfoView : UIView
         addSubview(hStack)
         for i in sets
         {
-            var lb = PaddingLabel(insets: UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12))
+            let lb = PaddingLabel(insets: UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12))
             
             lb.text = String(i)
             lb.layer.cornerRadius = 4

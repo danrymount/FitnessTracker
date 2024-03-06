@@ -3,26 +3,50 @@ import Foundation
 
 protocol ActivitiesRepository {
     func getActivities() -> [ActivityDataModel]
-    
     func getActivityById(id: Int) -> ActivityDataModel?
     
-    func createActivity(data: ActivityDataModel) -> ActivityDataModel?
-    
     func createActivity(data: RunExerciseDataModel)
-    func updateActivity(data: RunExerciseDataModel)
+    func createActivity(data: SetsExerciseDataModel)
     
-    func updateActivity(data: ActivityDataModel)
-    
-    func insertActivityData(data: ActivityDataModel)
+//    func updateActivity(data: RunExerciseDataModel)
+//    func updateActivity(data: SetsExerciseDataModel)
     
     func deleteActivity(id: Int)
 }
 
 class ActivitiesRepositoryImpl: ActivitiesRepository {
-    func createActivity(data: RunExerciseDataModel) {
-        let newId = CoreDataRepository.shared.insertActivityData(data: data)
+
+    
+    private(set) static var shared = ActivitiesRepositoryImpl()
+    
+    @Published public var activities: [Int64: ActivityDataModel] = [:]
+    
+    init() {
+        if CoreDataRepository.shared.fetchActivities().count == 0 {
+            
+            var ex1 = RunExerciseDataModel(datetime: Date(timeIntervalSinceNow: -TimeInterval(15*60*60)))
+            ex1.isCompleted = true
+            ex1.distance = 153
+            
+            CoreDataRepository.shared.insertExerciseData(data: ex1)
+//            for act in getMockData() {
+//                CoreDataRepository.shared.insertActivityData(data: act)
+//            }
+        }
         
-        data.id = newId
+        activities = Dictionary(uniqueKeysWithValues: CoreDataRepository.shared.fetchActivities().map { ($0.id, $0) })
+    }
+    
+    func createActivity(data: RunExerciseDataModel) {
+        if let res = CoreDataRepository.shared.insertExerciseData(data: data) {
+            activities[res.id] = res
+        }
+    }
+    
+    func createActivity(data: SetsExerciseDataModel) {
+        if let res = CoreDataRepository.shared.insertExerciseData(data: data) {
+            activities[res.id] = res
+        }
     }
     
     func updateActivity(data: RunExerciseDataModel) {
@@ -35,57 +59,12 @@ class ActivitiesRepositoryImpl: ActivitiesRepository {
         
     }
     
-    
-    func createActivity(data: ActivityDataModel) -> ActivityDataModel? {
-        var newId = CoreDataRepository.shared.insertActivityData(data: data)
-        
-        if let act = CoreDataRepository.shared.fetchActivity(uid: Int(newId)) {
-            activities[ActivityDataModel.ID(act.id)] = ActivityDataModel(id: Int(act.id), performedAmount: act.amount, duration: act.duration, type: ActivityType(rawValue: Int(act.type)) ?? .Push_ups, datetime: act.date!)
-        }
-        
-        return getActivityById(id: Int(newId))
-    }
-    
-    private(set) static var shared = ActivitiesRepositoryImpl()
-    
-    // TODO: store data by id, reduce complete reload
-    @Published public var activities: [ActivityDataModel.ID: ActivityDataModel] = [:]
-    
-    func insertActivityData(data: ActivityDataModel) {
-        var newId = CoreDataRepository.shared.insertActivityData(data: data)
-        
-        if let act = CoreDataRepository.shared.fetchActivity(uid: Int(newId)) {
-            activities[ActivityDataModel.ID(act.id)] = ActivityDataModel(id: Int(act.id), performedAmount: act.amount, duration: act.duration, type: ActivityType(rawValue: Int(act.type)) ?? .Push_ups, datetime: act.date!)
-        }
-    }
-    
-    func getMockData() -> [ActivityDataModel] {
-        return [.init(id: 1, performedAmount: 1, duration: TimeInterval(10), type: .Run, datetime: Date(timeIntervalSinceNow: -TimeInterval(50))),
-                .init(id: 2, performedAmount: 2, duration: TimeInterval(10), type: .Run, datetime: Date(timeIntervalSinceNow: -TimeInterval(15*60*60))),
-                .init(id: 3, performedAmount: 3, duration: TimeInterval(10), type: .Run, datetime: Date(timeIntervalSinceNow: -TimeInterval(100*60*60))),
-                .init(id: 4, performedAmount: 4, duration: TimeInterval(10), type: .Push_ups, datetime: Date(timeIntervalSinceNow: -TimeInterval(50))),
-                .init(id: 5, performedAmount: 5, duration: TimeInterval(10), type: .Push_ups, datetime: Date(timeIntervalSinceNow: -TimeInterval(15*60*60))),
-                .init(id: 6, performedAmount: 6, duration: TimeInterval(10), type: .Push_ups, datetime: Date(timeIntervalSinceNow: -TimeInterval(100*60*60)))]
-    }
-    
-    init() {
-        if CoreDataRepository.shared.fetchActivities().count == 0 {
-            for act in getMockData() {
-                CoreDataRepository.shared.insertActivityData(data: act)
-            }
-        }
-        
-        for act in CoreDataRepository.shared.fetchActivities() {
-            activities[ActivityDataModel.ID(act.id)] = ActivityDataModel(id: Int(act.id), performedAmount: act.amount, duration: act.duration, type: ActivityType(rawValue: Int(act.type)) ?? .Push_ups, datetime: act.date!)
-        }
-    }
-    
     func getActivities() -> [ActivityDataModel] {
         return Array(activities.values)
     }
     
     func getActivityById(id: Int) -> ActivityDataModel? {
-        if let activityData = activities[id] {
+        if let activityData = activities[Int64(id)] {
             return activityData
         }
         
@@ -93,7 +72,13 @@ class ActivitiesRepositoryImpl: ActivitiesRepository {
     }
     
     func deleteActivity(id: Int) {
-        CoreDataRepository.shared.deleteActivity(uid: id)
-        activities[id] = nil
+        if CoreDataRepository.shared.deleteActivity(id: Int64(id)) {
+            activities.removeValue(forKey: Int64(id))
+        }
     }
+}
+
+
+func getMockActivityData() {
+    
 }

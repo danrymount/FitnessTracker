@@ -41,7 +41,7 @@ class RegistrationViewModel: ObservableObject {
                 break
             }
             
-            var act = RegisterAction(parameters: RegistrationRequest(username: login, password: password, name: name))
+            let act = RegisterAction(parameters: RegistrationRequest(username: login, password: password, name: name))
             
             status = .inProgress
             
@@ -73,7 +73,7 @@ struct RegisterAction {
         let request = ServerRequest(path: "/register", data: parameters)
         
         request.exec { error, data in
-            var response = RegistrationResponse(status: error)
+            let response = RegistrationResponse(status: error)
             completition(response)
         }
     }

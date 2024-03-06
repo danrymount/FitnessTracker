@@ -3,7 +3,6 @@
 import Foundation
 import SwiftUI
 
-
 enum ActivityListType
 {
     case myActivities
