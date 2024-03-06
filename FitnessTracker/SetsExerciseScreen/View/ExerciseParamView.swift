@@ -57,8 +57,8 @@ public class ExerciseParamView: UIView {
         valueLabel = UILabel()
         super.init(frame: CGRect())
         isUserInteractionEnabled = true
-        var settingLabel = UILabel()
-        var labelVal = UILabel()
+        let settingLabel = UILabel()
+        let labelVal = UILabel()
         valueLabel = labelVal
         let hStack = UIStackView()
         let vStack = UIStackView()

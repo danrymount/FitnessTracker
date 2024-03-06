@@ -46,8 +46,6 @@ class ExerciseLocationManager: NSObject, CLLocationManagerDelegate, ExerciseLoca
         let location: CLLocation = locations.last!
         
         locationDelegate?.onChangeLocation(locations: locations)
-        
-        let center = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
     }
     
     // Handle authorization for the location manager.
@@ -110,7 +108,7 @@ class DummyExerciseLocationManager: ExerciseLocationManagerProtocol {
     func getCurrentLocation() {
         let newLat = lastLocation.latitude + Double(Int.random(in: 0...10))/50000 * Double(Int.random(in: 0...1))
         let newLong = lastLocation.longitude + Double(Int.random(in: 0...10))/50000
-        var newCoord = CLLocation(latitude: newLat, longitude: newLong)
+        let newCoord = CLLocation(latitude: newLat, longitude: newLong)
         
         locationDelegate?.onChangeLocation(locations: [newCoord])
         

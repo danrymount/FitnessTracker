@@ -19,7 +19,7 @@ class ActivitySelectionCard: UIView
         hStack.layer.cornerRadius = 10
         
         let icon = UIImageView(image:UIImage(systemName: activityType.toIconName()))
-        var spacer = UIView()
+        let spacer = UIView()
         
         
         hStack.addArrangedSubview(label)

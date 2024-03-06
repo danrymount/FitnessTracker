@@ -372,10 +372,9 @@ class SetsExerciseViewController: UIViewController, PopUpModalDelegate {
     }
     
     func didTapAccept() {
-        let completedAmount = self.exerciseInfo.completedSets * self.settings.repeats.value
         let exerciseDuration = Date(timeIntervalSinceNow: TimeInterval()) - exerciseInfo.timeStart
         
-        var dataModel = SetsExerciseDataModel(datetime: Date.init(timeIntervalSinceNow: exerciseDuration))
+        let dataModel = SetsExerciseDataModel(datetime: Date.init(timeIntervalSinceNow: exerciseDuration))
         dataModel.planReps = Array(0..<self.settings.sets.value).map( { _ in self.settings.repeats.value})
         dataModel.actualReps = Array(0..<self.exerciseInfo.completedSets).map( { _ in self.settings.repeats.value})
         dataModel.type = self.activityType

@@ -43,11 +43,11 @@ class CoreDataRepository: NSObject, CoreDataRepositoryProtocol {
         let allSetsExerciseRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "SetsExerciseData")
         var result: [ActivityDataModel] = []
         do {
-            var activities = try context.fetch(allActivitiesRequest) as! [ActivityDataEntityClass]
+            let activities = try context.fetch(allActivitiesRequest) as! [ActivityDataEntityClass]
             
-            var runExercises = try Dictionary(uniqueKeysWithValues: (context.fetch(allRunExerciseRequest) as! [RunExerciseDataEntityClass]).map { ($0.id, $0) })
+            let runExercises = try Dictionary(uniqueKeysWithValues: (context.fetch(allRunExerciseRequest) as! [RunExerciseDataEntityClass]).map { ($0.id, $0) })
             
-            var setsExercises = try Dictionary(uniqueKeysWithValues: (context.fetch(allSetsExerciseRequest) as! [SetsExerciseDataEntityClass]).map { ($0.id, $0) })
+            let setsExercises = try Dictionary(uniqueKeysWithValues: (context.fetch(allSetsExerciseRequest) as! [SetsExerciseDataEntityClass]).map { ($0.id, $0) })
             
             for act in activities {
                 let actType = ActivityType(val: act.type)
@@ -93,10 +93,10 @@ class CoreDataRepository: NSObject, CoreDataRepositoryProtocol {
     }
     
     func deleteActivity(id: Int64) -> Bool {
-        var activityEntity: ActivityDataEntityClass? = fetchEntity(id: id)
+        let activityEntity: ActivityDataEntityClass? = fetchEntity(id: id)
         
-        var runEntity: RunExerciseDataEntityClass? = fetchEntity(id: id)
-        var setsEntity: SetsExerciseDataEntityClass? = fetchEntity(id: id)
+        let runEntity: RunExerciseDataEntityClass? = fetchEntity(id: id)
+        let setsEntity: SetsExerciseDataEntityClass? = fetchEntity(id: id)
         
         if let activityEntity {
             context.delete(activityEntity)
@@ -147,7 +147,7 @@ class CoreDataRepository: NSObject, CoreDataRepositoryProtocol {
     }
     
     private func insertEntity<EntityClass>() -> EntityClass? {
-        var entityName: String = {
+        let entityName: String = {
             if EntityClass.self == ActivityDataEntityClass.self {
                 return "ActivityData"
             } else if EntityClass.self == RunExerciseDataEntityClass.self {
@@ -177,7 +177,7 @@ class CoreDataRepository: NSObject, CoreDataRepositoryProtocol {
     
     private func fetchEntity<EntityClass>(id: Int64) -> EntityClass? {
         do {
-            var entityName: String = {
+            let entityName: String = {
                 if EntityClass.self == ActivityDataEntityClass.self {
                     return "ActivityData"
                 } else if EntityClass.self == RunExerciseDataEntityClass.self {
@@ -208,7 +208,7 @@ class CoreDataRepository: NSObject, CoreDataRepositoryProtocol {
     }
     
     func insertActivityData(data: ActivityDataModel) -> Int64 {
-        var id = Int64(lastId + 1)
+        let id = Int64(lastId + 1)
         
         if let entity: ActivityDataEntityClass = insertEntity() {
             entity.id = id

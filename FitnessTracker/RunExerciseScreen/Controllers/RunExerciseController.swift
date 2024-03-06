@@ -27,7 +27,7 @@ class RunExerciseController: UIViewController, PopUpModalDelegate {
     }
     
     func getModalInfoView() -> UIView {
-        var stack = UIStackView()
+        let stack = UIStackView()
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.axis = .vertical
         
@@ -231,7 +231,7 @@ class RunExerciseController: UIViewController, PopUpModalDelegate {
         ])
         
         #if DEBUG
-        var button = UIButton()
+        let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .gray
         button.setTitle("D", for: .normal)

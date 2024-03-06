@@ -29,7 +29,6 @@ class ActivitySelectionViewController: UIViewController {
     }()
     
     private func setupScrollView() {
-        let margins = view.layoutMarginsGuide
         view.addSubview(scrollView)
         scrollView.addSubview(scrollStackViewContainer)
         
@@ -59,7 +58,7 @@ class ActivitySelectionViewController: UIViewController {
     }
     
     private func configureContainerView() {
-        var acts: [ActivityType] = [.Push_ups, .Squats, .Run]
+        let acts: [ActivityType] = [.Push_ups, .Squats, .Run]
         
         for act in acts
         {
