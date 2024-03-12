@@ -3,6 +3,9 @@ import CoreData
 import Foundation
 import OSLog
 import UIKit
+import MapKit
+
+
 
 private func log(message: String) {
     let msg = "[CoreDataRepository] " + message
@@ -69,6 +72,7 @@ class CoreDataRepository: NSObject, CoreDataRepositoryProtocol {
                     newData.distance = runExercises[act.id]?.distance ?? -1
                     newData.pace = runExercises[act.id]?.pace ?? -1
                     newData.steps = runExercises[act.id]?.steps ?? -1
+                    newData.locations = runExercises[act.id]?.locations ?? []
                     
                     result.append(newData)
                 }
@@ -82,10 +86,6 @@ class CoreDataRepository: NSObject, CoreDataRepositoryProtocol {
     
     func fetchActivity(id: Int64) -> ActivityDataModel? {
         return nil
-    }
-    
-    func updateRunExerciseData(data: RunExerciseDataModel) -> RunExerciseDataModel? {
-        nil
     }
     
     func updateSetsExerciseData(data: SetsExerciseDataModel) -> SetsExerciseDataModel? {
@@ -229,18 +229,60 @@ class CoreDataRepository: NSObject, CoreDataRepositoryProtocol {
     
     func insertExerciseData(data: RunExerciseDataModel) -> RunExerciseDataModel? {
         let newActivityId = insertActivityData(data: data)
-        
+        data.id = newActivityId
         if let entity: RunExerciseDataEntityClass = insertEntity() {
             entity.id = newActivityId
             entity.distance = data.distance
             entity.steps = data.steps
             entity.pace = data.pace
+            entity.cdLocations = ""
             
             if saveContext() {
                 return data
             }
         }
         
+        return nil
+    }
+    
+    func updateRunExerciseData(data: RunExerciseDataModel) -> RunExerciseDataModel? {
+        let id = data.id
+        let activityEntity: ActivityDataEntityClass? = fetchEntity(id: id)
+        let runEntity: RunExerciseDataEntityClass? = fetchEntity(id: id)
+        
+        if activityEntity != nil && runEntity != nil {
+            activityEntity?.setValue(data.duration, forKey: "duration")
+            
+            runEntity?.setValue(data.distance, forKey: "distance")
+            runEntity?.setValue(data.pace, forKey: "pace")
+            runEntity?.setValue(data.steps, forKey: "steps")
+            runEntity?.locations = data.locations
+
+            saveContext()
+        }
+        
+        
+//        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "RunExerciseData")
+//        fetchRequest.predicate = NSPredicate(
+//            format: "id == %@", String(id)
+//        )
+//        do {
+//            let result = try context.fetch(fetchRequest)
+//        
+//            runEntity?.setValue(<#T##value: Any?##Any?#>, forKey: <#T##String#>)
+//            for obj in result {
+//                return (obj as? EntityClass)
+//            }
+//            
+//            runEntity?.distance = 5
+//            
+//            saveContext()
+//        }
+//        catch {
+//            
+//        }
+        
+//        saveContext()
         return nil
     }
     

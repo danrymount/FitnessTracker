@@ -211,9 +211,6 @@ class RunExerciseInfoView: UIView {
             return stack
         }()
         
-        distanceLabel.text = "0 m"
-        durationLabel.text = "00:00"
-        
         addSubview(stackView)
         
         NSLayoutConstraint.activate([
@@ -222,6 +219,11 @@ class RunExerciseInfoView: UIView {
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -24),
             stackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
         ])
+        
+        setPace(nil)
+        setSteps(nil)
+        setDistance(0)
+        setDuration(0)
     }
     
     @objc func onStartPauseButtonPressed(_ sender: UITapGestureRecognizer? = nil) {
@@ -234,20 +236,33 @@ class RunExerciseInfoView: UIView {
         }
     }
     
-    func setDurationStr(str: String) {
-        durationLabel.text = str
+    func setDuration(_ duration: TimeInterval) {
+        let hundredths = Int((duration * 100).rounded())
+        let (minutes, hundredthsOfSeconds) = hundredths.quotientAndRemainder(dividingBy: 60 * 100)
+        let (seconds, milliseconds) = hundredthsOfSeconds.quotientAndRemainder(dividingBy: 100)
+        
+        durationLabel.text = String(minutes) + ":" + String(format: "%02d", seconds) + "." + String(format: "%02d", milliseconds)
     }
     
-    func setDistanceStr(str: String) {
-        distanceLabel.text = str
+    func setDistance(_ distance: Double) {
+        distanceLabel.text = "\(distance) m."
     }
     
-    func setPaceStr(str: String) {
-        paceLabel.text = str
+    func setPace(_ pace: Double?) {
+        if let pace {
+            paceLabel.text = "\(pace) m/km"
+        }
+        else {
+            paceLabel.text = "--:-- m/km"
+        }
     }
     
-    func setStepsStr(str: String) {
-        stepsLabel.text = str
+    func setSteps(_ steps: Int64?) {
+        if let steps {
+            stepsLabel.text = "\(steps) steps"
+        } else {
+            stepsLabel.text = "- steps"
+        }
     }
     
     required public init?(coder aDecoder: NSCoder) {

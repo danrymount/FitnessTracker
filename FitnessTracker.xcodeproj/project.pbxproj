@@ -104,6 +104,8 @@
 		96A203972B97BC53002A0244 /* ActivityDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A203952B97BC53002A0244 /* ActivityDataModel.swift */; };
 		96A203992B98DB7D002A0244 /* SetsExerciseDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A203982B98DB7D002A0244 /* SetsExerciseDataModel.swift */; };
 		96A2039A2B98DB7D002A0244 /* SetsExerciseDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A203982B98DB7D002A0244 /* SetsExerciseDataModel.swift */; };
+		96A203C22B9E1C8C002A0244 /* LocationData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A203C12B9E1C8C002A0244 /* LocationData.swift */; };
+		96A203C32B9E1C8C002A0244 /* LocationData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A203C12B9E1C8C002A0244 /* LocationData.swift */; };
 		96AD1DA72B5F08D4000F9EF4 /* ExerciseLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96AD1DA62B5F08D4000F9EF4 /* ExerciseLocationManager.swift */; };
 		96AD1DAA2B5F12D2000F9EF4 /* RunRouteDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96AD1DA92B5F12D2000F9EF4 /* RunRouteDataModel.swift */; };
 		96B87FE02B37527100E9BEAD /* FitnessTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B87FDF2B37527100E9BEAD /* FitnessTrackerApp.swift */; };
@@ -163,6 +165,7 @@
 		96A203912B94EF9D002A0244 /* RunDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunDataModel.swift; sourceTree = "<group>"; };
 		96A203952B97BC53002A0244 /* ActivityDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityDataModel.swift; sourceTree = "<group>"; };
 		96A203982B98DB7D002A0244 /* SetsExerciseDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetsExerciseDataModel.swift; sourceTree = "<group>"; };
+		96A203C12B9E1C8C002A0244 /* LocationData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationData.swift; sourceTree = "<group>"; };
 		96AD1DA62B5F08D4000F9EF4 /* ExerciseLocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseLocationManager.swift; sourceTree = "<group>"; };
 		96AD1DA92B5F12D2000F9EF4 /* RunRouteDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunRouteDataModel.swift; sourceTree = "<group>"; };
 		96B87FDC2B37527100E9BEAD /* FitnessTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FitnessTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -524,6 +527,7 @@
 		962EBD262B39DE7200C3866B /* Entity */ = {
 			isa = PBXGroup;
 			children = (
+				96A203C12B9E1C8C002A0244 /* LocationData.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -823,6 +827,7 @@
 				9666D15F2B8FACFA008BCAD6 /* ActivityViewModel.swift in Sources */,
 				9666D1602B8FACFA008BCAD6 /* FitnessTrackerApp.swift in Sources */,
 				9666D1612B8FACFA008BCAD6 /* ActivityDetailsView.swift in Sources */,
+				96A203C32B9E1C8C002A0244 /* LocationData.swift in Sources */,
 				9666D1622B8FACFA008BCAD6 /* ActivitiesView.swift in Sources */,
 				9666D1632B8FACFA008BCAD6 /* RunRouteDataModel.swift in Sources */,
 				9666D1642B8FACFA008BCAD6 /* LoginViewModel.swift in Sources */,
@@ -883,6 +888,7 @@
 				962EBCF32B38751300C3866B /* ActivityViewModel.swift in Sources */,
 				96B87FE02B37527100E9BEAD /* FitnessTrackerApp.swift in Sources */,
 				962EBCF82B387C8300C3866B /* ActivityDetailsView.swift in Sources */,
+				96A203C22B9E1C8C002A0244 /* LocationData.swift in Sources */,
 				962EBCE92B3873CA00C3866B /* ActivitiesView.swift in Sources */,
 				96AD1DAA2B5F12D2000F9EF4 /* RunRouteDataModel.swift in Sources */,
 				962EBCDC2B38701B00C3866B /* LoginViewModel.swift in Sources */,

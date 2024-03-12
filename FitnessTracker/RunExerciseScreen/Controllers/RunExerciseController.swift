@@ -3,6 +3,7 @@ import CoreMotion
 import MapKit
 import OSLog
 import UIKit
+import Combine
 
 enum RunExerciseState: String, CustomStringConvertible {
     case initial
@@ -16,69 +17,44 @@ enum RunExerciseState: String, CustomStringConvertible {
     }
 }
 
-class RunExerciseController: UIViewController, PopUpModalDelegate {
-    func didTapCancel() {
-        self.dismiss(animated: true)
+class RunExerciseController: UIViewController {
+    enum DataAcquisitionType {
+        case none
+        case location
+        case motion
+        case all
     }
     
-    func didTapAccept() {
-        _ = navigationController?.popToRootViewController(animated: true)
-        self.dismiss(animated: true)
-    }
     
-    func getModalInfoView() -> UIView {
-        let stack = UIStackView()
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        stack.axis = .vertical
-        
-        let distanceLb = UILabel()
-        distanceLb.text = "Distance: \(motionData.getDistanceStr())"
-        
-        let paceLb = UILabel()
-        paceLb.text = "Pace: \(motionData.getPaceStr())"
-        
-        let stepsLb = UILabel()
-        stepsLb.text = "Steps: \(motionData.getStepsStr())"
-        
-        distanceLb.translatesAutoresizingMaskIntoConstraints = false
-        paceLb.translatesAutoresizingMaskIntoConstraints = false
-        stepsLb.translatesAutoresizingMaskIntoConstraints = false
-        
-        stack.addSubview(distanceLb)
-        stack.addSubview(paceLb)
-        stack.addSubview(stepsLb)
-        
-        NSLayoutConstraint.activate([
-            distanceLb.leadingAnchor.constraint(equalTo: stack.leadingAnchor),
-            distanceLb.trailingAnchor.constraint(equalTo: stack.trailingAnchor),
-            distanceLb.topAnchor.constraint(equalTo: stack.topAnchor),
-            
-            stepsLb.topAnchor.constraint(equalTo: distanceLb.bottomAnchor, constant: 12),
-            stepsLb.leadingAnchor.constraint(equalTo: distanceLb.leadingAnchor),
-            stepsLb.trailingAnchor.constraint(equalTo: distanceLb.trailingAnchor),
-            
-            paceLb.topAnchor.constraint(equalTo: stepsLb.bottomAnchor, constant: 12),
-            paceLb.leadingAnchor.constraint(equalTo: distanceLb.leadingAnchor),
-            paceLb.trailingAnchor.constraint(equalTo: distanceLb.trailingAnchor),
-        
-        ])
-        
-        return stack
-    }
+    private var dataAcqusition: DataAcquisitionType = .none
     
     private var _state: RunExerciseState = .initial
     
     func processManagerStatus() {
-        if motionManagerStatus != .ready || (locationManagerStatus != .authorizedWhenInUse && locationManagerStatus != .authorizedAlways) {
-            showWarningIcon(true)
+        let locationAvailable = locationManagerStatus == .authorizedWhenInUse || locationManagerStatus == .authorizedAlways
+        let motionAvailable = motionManagerStatus == .ready
+        
+        if motionAvailable && !locationAvailable {
+            dataAcqusition = .motion
+        } else if !motionAvailable && locationAvailable {
+            dataAcqusition = .location
+        } else if motionAvailable && locationAvailable {
+            dataAcqusition = .all
         }
         else {
-            showWarningIcon(false)
+            dataAcqusition = .none
+        }
+        
+        if dataAcqusition != .none {
+            if dataAcqusition != .all {
+                showWarningIcon(true)
+            }
+
             state = .readyToStart
         }
     }
     
-    var motionManagerStatus: MotionManagerStatus = .ready {
+    var motionManagerStatus: MotionManagerStatus = .error {
         didSet {
             Logger().info("motionManagerStatus set to \(String(describing: self.motionManagerStatus))")
             processManagerStatus()
@@ -101,7 +77,7 @@ class RunExerciseController: UIViewController, PopUpModalDelegate {
     var stopwatchService = StopwatchService()
     
     var distanceAfterLastLocation: Double = 0
-    var activityData: RunExerciseDataModel?
+    var activityData = RunExerciseDataModel(datetime: Date(timeIntervalSinceNow: 0))
     
     lazy var exerciseInfoView = {
         let exInfo = RunExerciseInfoView()
@@ -147,7 +123,29 @@ class RunExerciseController: UIViewController, PopUpModalDelegate {
     
     func saveActivityData() {
         
-//        ActivitiesRepositoryImpl.shared.updateActivity(data: activityData!)
+        ActivitiesRepositoryImpl.shared.updateActivity(data: activityData)
+    }
+    
+    func createActivityData() {
+        activityData.datetime = Date(timeIntervalSinceNow: 0)
+        ActivitiesRepositoryImpl.shared.createActivity(data: activityData)
+        
+        activityData.$distance.sink{ dist in
+            self.exerciseInfoView.setDistance(dist)
+
+        }.store(in: &subscriptions)
+        
+        activityData.$pace.sink{ pace in
+            self.exerciseInfoView.setPace(pace)
+        }.store(in: &subscriptions)
+        
+        activityData.$steps.sink{ steps in
+            self.exerciseInfoView.setSteps(steps)
+        }.store(in: &subscriptions)
+        
+        activityData.$duration.sink{ duration in
+            self.exerciseInfoView.setDuration(duration)
+        }.store(in: &subscriptions)
     }
     
     private var state: RunExerciseState {
@@ -158,18 +156,15 @@ class RunExerciseController: UIViewController, PopUpModalDelegate {
                     exerciseInfoView.setEnable(enable: false)
                 case .readyToStart:
                     exerciseInfoView.setEnable(enable: true)
-                    showWarningIcon(false)
                 case .inProgress:
                     if state == .readyToStart {
-                        activityData = RunExerciseDataModel(datetime: Date(timeIntervalSinceNow: 0))
-                        ActivitiesRepositoryImpl.shared.createActivity(data: activityData!)
+                        createActivityData()
                     }
                     exerciseInfoView.state = .inProgress
                     stopwatchService.start()
                     locationManager.start()
                     motionManager.start()
                 case .paused:
-                    exerciseInfoView.state = .paused
                     exerciseInfoView.state = .paused
                     stopwatchService.pause()
                     locationManager.stop()
@@ -178,6 +173,8 @@ class RunExerciseController: UIViewController, PopUpModalDelegate {
                     stopwatchService.pause()
                     locationManager.stop()
                     motionManager.stop()
+                    saveActivityData()
+                    _ = navigationController?.popToRootViewController(animated: true)
             }
             
             _state = newState
@@ -269,14 +266,13 @@ class RunExerciseController: UIViewController, PopUpModalDelegate {
         fatalError("Storyboard is not supported")
     }
     
+    var subscriptions: Set<AnyCancellable> = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.white
         
         locationManager.configure()
-        
-        exerciseInfoView.setPaceStr(str: "--'--\"")
-        exerciseInfoView.setStepsStr(str: "0 steps")
         locationManager.getCurrentLocation()
     }
 }
@@ -287,6 +283,11 @@ extension RunExerciseController: ExerciseLocationDelegate {
         Logger.common.info("New location data: \(location)")
         
         runRouteData.routeCoordinates.append(location)
+        
+        activityData.locations.append(Location(location:location))
+        if dataAcqusition == .location {
+            activityData.distance = runRouteData.totalDistance / 1000
+        }
         
         if runRouteData.routeCoordinates.count == 1 {
             DispatchQueue.main.async {
@@ -311,12 +312,7 @@ extension RunExerciseController: ExerciseLocationDelegate {
 
 extension RunExerciseController {
     func onStopwatchUpdate(elapsed: CFTimeInterval) {
-        let totalElapsed = elapsed
-        let hundredths = Int((totalElapsed * 100).rounded())
-        let (minutes, hundredthsOfSeconds) = hundredths.quotientAndRemainder(dividingBy: 60 * 100)
-        let (seconds, milliseconds) = hundredthsOfSeconds.quotientAndRemainder(dividingBy: 100)
-        
-        exerciseInfoView.setDurationStr(str: String(minutes) + ":" + String(format: "%02d", seconds) + "." + String(format: "%02d", milliseconds))
+        self.activityData.duration = elapsed
     }
 }
 
@@ -331,6 +327,58 @@ extension RunExerciseController: RunExerciseInfoViewDelegate {
     
     func pauseButtonPressed() {
         state = .paused
+    }
+}
+
+extension RunExerciseController: PopUpModalDelegate {
+    func didTapCancel() {
+        self.dismiss(animated: true)
+    }
+    
+    func didTapAccept() {
+        saveActivityData()
+        _ = navigationController?.popToRootViewController(animated: true)
+        self.dismiss(animated: true)
+    }
+    
+    func getModalInfoView() -> UIView {
+        let stack = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.axis = .vertical
+        
+        let distanceLb = UILabel()
+        distanceLb.text = "Distance: \(motionData.getDistanceStr())"
+        
+        let paceLb = UILabel()
+        paceLb.text = "Pace: \(motionData.getPaceStr())"
+        
+        let stepsLb = UILabel()
+        stepsLb.text = "Steps: \(motionData.getStepsStr())"
+        
+        distanceLb.translatesAutoresizingMaskIntoConstraints = false
+        paceLb.translatesAutoresizingMaskIntoConstraints = false
+        stepsLb.translatesAutoresizingMaskIntoConstraints = false
+        
+        stack.addSubview(distanceLb)
+        stack.addSubview(paceLb)
+        stack.addSubview(stepsLb)
+        
+        NSLayoutConstraint.activate([
+            distanceLb.leadingAnchor.constraint(equalTo: stack.leadingAnchor),
+            distanceLb.trailingAnchor.constraint(equalTo: stack.trailingAnchor),
+            distanceLb.topAnchor.constraint(equalTo: stack.topAnchor),
+            
+            stepsLb.topAnchor.constraint(equalTo: distanceLb.bottomAnchor, constant: 12),
+            stepsLb.leadingAnchor.constraint(equalTo: distanceLb.leadingAnchor),
+            stepsLb.trailingAnchor.constraint(equalTo: distanceLb.trailingAnchor),
+            
+            paceLb.topAnchor.constraint(equalTo: stepsLb.bottomAnchor, constant: 12),
+            paceLb.leadingAnchor.constraint(equalTo: distanceLb.leadingAnchor),
+            paceLb.trailingAnchor.constraint(equalTo: distanceLb.trailingAnchor),
+        
+        ])
+        
+        return stack
     }
 }
 
@@ -353,20 +401,14 @@ extension RunExerciseController: ExerciseMotionDelegate {
         self.motionData = data
         
         if let newDist = motionData.distance {
-            activityData?.distance = newDist
+            activityData.distance = newDist/1000
         }
         
         if let newPace = motionData.avgPace {
-            activityData?.pace = newPace
+            activityData.pace = newPace
         }
         
-        activityData?.steps = Int64(motionData.steps)
-
-        DispatchQueue.main.async {
-            self.exerciseInfoView.setPaceStr(str: self.motionData.getPaceStr())
-            self.exerciseInfoView.setStepsStr(str: self.motionData.getStepsStr())
-            self.exerciseInfoView.setDistanceStr(str: self.motionData.getDistanceStr())
-        }
+        activityData.steps = Int64(motionData.steps)
     }
 }
 

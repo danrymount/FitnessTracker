@@ -6,12 +6,21 @@ class ActivityDataModel : Identifiable {
     var id: Int64 = 0
     var type: ActivityType = .Push_ups
     var datetime: Date = Date.now
-    var duration: TimeInterval = 0
+    @Published var duration: TimeInterval = 0
     var username: String?
     var isCompleted: Bool = false
     
     init(datetime: Date) {
         self.datetime = datetime
+    }
+    
+    init(id: Int64, type: ActivityType, datetime: Date, duration: TimeInterval, username: String? = nil, isCompleted: Bool) {
+        self.id = id
+        self.type = type
+        self.datetime = datetime
+        self.duration = duration
+        self.username = username
+        self.isCompleted = isCompleted
     }
     
     func getStartTimeStr() -> String {

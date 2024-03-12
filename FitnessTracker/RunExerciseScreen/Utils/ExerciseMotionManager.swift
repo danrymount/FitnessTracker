@@ -38,6 +38,7 @@ class ExerciseMotionManager: ExerciseMotionManagerProtocol {
     }
 
     func stop() {
+        
         pedometer.stopUpdates()
     }
 }

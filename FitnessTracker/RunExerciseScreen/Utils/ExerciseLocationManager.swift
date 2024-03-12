@@ -42,9 +42,7 @@ class ExerciseLocationManager: NSObject, CLLocationManagerDelegate, ExerciseLoca
     }
     
     // Handle incoming location events.
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let location: CLLocation = locations.last!
-        
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {        
         locationDelegate?.onChangeLocation(locations: locations)
     }
     
