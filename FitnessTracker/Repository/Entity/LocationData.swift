@@ -10,7 +10,7 @@ public class Location: Codable {
     
     init(location: CLLocation) {
         self.latitude = location.coordinate.latitude
-        self.longtitude = location.coordinate.latitude
+        self.longtitude = location.coordinate.longitude
         self.timestamp = location.timestamp
     }
     

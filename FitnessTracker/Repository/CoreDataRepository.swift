@@ -41,9 +41,9 @@ class CoreDataRepository: NSObject, CoreDataRepositoryProtocol {
     }
     
     func fetchActivities() -> [ActivityDataModel] {
-        let allActivitiesRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "ActivityData")
-        let allRunExerciseRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "RunExerciseData")
-        let allSetsExerciseRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "SetsExerciseData")
+        let allActivitiesRequest = NSFetchRequest<NSFetchRequestResult>(entityName: ActivityDataEntityClass.entityName)
+        let allRunExerciseRequest = NSFetchRequest<NSFetchRequestResult>(entityName: RunExerciseDataEntityClass.entityName)
+        let allSetsExerciseRequest = NSFetchRequest<NSFetchRequestResult>(entityName: SetsExerciseDataEntityClass.entityName)
         var result: [ActivityDataModel] = []
         do {
             let activities = try context.fetch(allActivitiesRequest) as! [ActivityDataEntityClass]
@@ -94,7 +94,6 @@ class CoreDataRepository: NSObject, CoreDataRepositoryProtocol {
     
     func deleteActivity(id: Int64) -> Bool {
         let activityEntity: ActivityDataEntityClass? = fetchEntity(id: id)
-        
         let runEntity: RunExerciseDataEntityClass? = fetchEntity(id: id)
         let setsEntity: SetsExerciseDataEntityClass? = fetchEntity(id: id)
         
@@ -129,7 +128,7 @@ class CoreDataRepository: NSObject, CoreDataRepositoryProtocol {
     }
     
     private func getLastId() -> Int64 {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "ActivityData")
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: ActivityDataEntityClass.entityName)
         let sort = NSSortDescriptor(key: "id", ascending: false)
         fetchRequest.sortDescriptors = [sort]
         fetchRequest.fetchLimit = 1
@@ -146,50 +145,18 @@ class CoreDataRepository: NSObject, CoreDataRepositoryProtocol {
         return 0
     }
     
-    private func insertEntity<EntityClass>() -> EntityClass? {
-        let entityName: String = {
-            if EntityClass.self == ActivityDataEntityClass.self {
-                return "ActivityData"
-            } else if EntityClass.self == RunExerciseDataEntityClass.self {
-                return "RunExerciseData"
-            } else if EntityClass.self == SetsExerciseDataEntityClass.self {
-                return "SetsExerciseData"
-            } else {
-                fatalError("Incorrect entity class")
-            }
-        }()
-        
-        guard let dataEntityDesc = NSEntityDescription.entity(forEntityName: entityName, in: context)
+    private func insertEntity<EntityClass: CustomEntityClass>() -> EntityClass? {
+        guard let dataEntityDesc = NSEntityDescription.entity(forEntityName: EntityClass.entityName, in: context)
         else {
             return nil
         }
         
-        if EntityClass.self == ActivityDataEntityClass.self {
-            return ActivityDataEntityClass(entity: dataEntityDesc, insertInto: context) as? EntityClass
-        } else if EntityClass.self == RunExerciseDataEntityClass.self {
-            return RunExerciseDataEntityClass(entity: dataEntityDesc, insertInto: context) as? EntityClass
-        } else if EntityClass.self == SetsExerciseDataEntityClass.self {
-            return SetsExerciseDataEntityClass(entity: dataEntityDesc, insertInto: context) as? EntityClass
-        }
-        
-        return nil
+        return EntityClass(entity: dataEntityDesc, insertInto: context)
     }
     
-    private func fetchEntity<EntityClass>(id: Int64) -> EntityClass? {
+    private func fetchEntity<EntityClass: CustomEntityClass>(id: Int64) -> EntityClass? {
         do {
-            let entityName: String = {
-                if EntityClass.self == ActivityDataEntityClass.self {
-                    return "ActivityData"
-                } else if EntityClass.self == RunExerciseDataEntityClass.self {
-                    return "RunExerciseData"
-                } else if EntityClass.self == SetsExerciseDataEntityClass.self {
-                    return "SetsExerciseData"
-                } else {
-                    fatalError("Incorrect entity class")
-                }
-            }()
-            
-            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: EntityClass.entityName)
             fetchRequest.predicate = NSPredicate(
                 format: "id == %@", String(id)
             )
@@ -250,39 +217,15 @@ class CoreDataRepository: NSObject, CoreDataRepositoryProtocol {
         let activityEntity: ActivityDataEntityClass? = fetchEntity(id: id)
         let runEntity: RunExerciseDataEntityClass? = fetchEntity(id: id)
         
-        if activityEntity != nil && runEntity != nil {
-            activityEntity?.setValue(data.duration, forKey: "duration")
-            
-            runEntity?.setValue(data.distance, forKey: "distance")
-            runEntity?.setValue(data.pace, forKey: "pace")
-            runEntity?.setValue(data.steps, forKey: "steps")
-            runEntity?.locations = data.locations
+        if let activityEntity, let runEntity {
+            activityEntity.setValue(data.duration, forKey: "duration")
+            runEntity.setValue(data.distance, forKey: "distance")
+            runEntity.setValue(data.pace, forKey: "pace")
+            runEntity.setValue(data.steps, forKey: "steps")
+            runEntity.locations = data.locations
 
             saveContext()
         }
-        
-        
-//        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "RunExerciseData")
-//        fetchRequest.predicate = NSPredicate(
-//            format: "id == %@", String(id)
-//        )
-//        do {
-//            let result = try context.fetch(fetchRequest)
-//        
-//            runEntity?.setValue(<#T##value: Any?##Any?#>, forKey: <#T##String#>)
-//            for obj in result {
-//                return (obj as? EntityClass)
-//            }
-//            
-//            runEntity?.distance = 5
-//            
-//            saveContext()
-//        }
-//        catch {
-//            
-//        }
-        
-//        saveContext()
         return nil
     }
     

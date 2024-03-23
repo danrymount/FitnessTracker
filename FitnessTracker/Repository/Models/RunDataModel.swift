@@ -30,4 +30,13 @@ class RunExerciseDataModel: ActivityDataModel {
     override var summary: String {
         "\(distance) km."
     }
+    
+    var paceStr: String {
+        // TODO convert
+        return "--'--''/km"
+    }
+    
+    var stepsStr: String {
+        return "\(steps) steps"
+    }
 }

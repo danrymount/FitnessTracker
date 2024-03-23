@@ -98,6 +98,8 @@
 		9666D1762B8FACFA008BCAD6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 96B87FE32B37527300E9BEAD /* Assets.xcassets */; };
 		9666D17E2B8FB890008BCAD6 /* StopwatchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9666D17D2B8FB890008BCAD6 /* StopwatchService.swift */; };
 		9666D17F2B8FBB5E008BCAD6 /* StopwatchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9666D17D2B8FB890008BCAD6 /* StopwatchService.swift */; };
+		967876402BAF0BE800194527 /* Entities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9678763F2BAF0BE800194527 /* Entities.swift */; };
+		967876412BAF0BE800194527 /* Entities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9678763F2BAF0BE800194527 /* Entities.swift */; };
 		96A203922B94EF9D002A0244 /* RunDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A203912B94EF9D002A0244 /* RunDataModel.swift */; };
 		96A203932B94EF9D002A0244 /* RunDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A203912B94EF9D002A0244 /* RunDataModel.swift */; };
 		96A203962B97BC53002A0244 /* ActivityDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A203952B97BC53002A0244 /* ActivityDataModel.swift */; };
@@ -162,6 +164,7 @@
 		96661EC82B4911B500546BF3 /* Auth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Auth.swift; sourceTree = "<group>"; };
 		9666D17A2B8FACFA008BCAD6 /* FitnessTracker(Simulator).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FitnessTracker(Simulator).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9666D17D2B8FB890008BCAD6 /* StopwatchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopwatchService.swift; sourceTree = "<group>"; };
+		9678763F2BAF0BE800194527 /* Entities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entities.swift; sourceTree = "<group>"; };
 		96A203912B94EF9D002A0244 /* RunDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunDataModel.swift; sourceTree = "<group>"; };
 		96A203952B97BC53002A0244 /* ActivityDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityDataModel.swift; sourceTree = "<group>"; };
 		96A203982B98DB7D002A0244 /* SetsExerciseDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetsExerciseDataModel.swift; sourceTree = "<group>"; };
@@ -528,6 +531,7 @@
 			isa = PBXGroup;
 			children = (
 				96A203C12B9E1C8C002A0244 /* LocationData.swift */,
+				9678763F2BAF0BE800194527 /* Entities.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -801,6 +805,7 @@
 				9666D1472B8FACFA008BCAD6 /* SecureStorage.swift in Sources */,
 				96A2039A2B98DB7D002A0244 /* SetsExerciseDataModel.swift in Sources */,
 				9666D1482B8FACFA008BCAD6 /* SetsExerciseController.swift in Sources */,
+				967876412BAF0BE800194527 /* Entities.swift in Sources */,
 				9666D1492B8FACFA008BCAD6 /* CommonDefines.swift in Sources */,
 				9666D14A2B8FACFA008BCAD6 /* ExerciseLocationManager.swift in Sources */,
 				9666D14B2B8FACFA008BCAD6 /* MapViewController.swift in Sources */,
@@ -862,6 +867,7 @@
 				962EBD122B38A16600C3866B /* SetsExerciseController.swift in Sources */,
 				96A203992B98DB7D002A0244 /* SetsExerciseDataModel.swift in Sources */,
 				962EBCF52B38757C00C3866B /* CommonDefines.swift in Sources */,
+				967876402BAF0BE800194527 /* Entities.swift in Sources */,
 				96AD1DA72B5F08D4000F9EF4 /* ExerciseLocationManager.swift in Sources */,
 				96FD941D2B5D4966005955D7 /* MapViewController.swift in Sources */,
 				96D8AA162B73E44C00B3071B /* ExerciseMotionManager.swift in Sources */,

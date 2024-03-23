@@ -9,8 +9,6 @@ enum ActionStatus {
 }
 
 protocol ActivitiesRepository {
-    
-    
     func getActivities() -> [ActivityDataModel]
     func getActivityById(id: Int) -> ActivityDataModel?
     

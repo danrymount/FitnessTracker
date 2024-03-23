@@ -1,9 +1,9 @@
 
+import Combine
 import CoreMotion
 import MapKit
 import OSLog
 import UIKit
-import Combine
 
 enum RunExerciseState: String, CustomStringConvertible {
     case initial
@@ -24,8 +24,7 @@ class RunExerciseController: UIViewController {
         case motion
         case all
     }
-    
-    
+
     private var dataAcqusition: DataAcquisitionType = .none
     
     private var _state: RunExerciseState = .initial
@@ -36,9 +35,11 @@ class RunExerciseController: UIViewController {
         
         if motionAvailable && !locationAvailable {
             dataAcqusition = .motion
-        } else if !motionAvailable && locationAvailable {
+        }
+        else if !motionAvailable && locationAvailable {
             dataAcqusition = .location
-        } else if motionAvailable && locationAvailable {
+        }
+        else if motionAvailable && locationAvailable {
             dataAcqusition = .all
         }
         else {
@@ -122,7 +123,6 @@ class RunExerciseController: UIViewController {
     }
     
     func saveActivityData() {
-        
         ActivitiesRepositoryImpl.shared.updateActivity(data: activityData)
     }
     
@@ -130,20 +130,20 @@ class RunExerciseController: UIViewController {
         activityData.datetime = Date(timeIntervalSinceNow: 0)
         ActivitiesRepositoryImpl.shared.createActivity(data: activityData)
         
-        activityData.$distance.sink{ dist in
+        activityData.$distance.sink { dist in
             self.exerciseInfoView.setDistance(dist)
 
         }.store(in: &subscriptions)
         
-        activityData.$pace.sink{ pace in
+        activityData.$pace.sink { pace in
             self.exerciseInfoView.setPace(pace)
         }.store(in: &subscriptions)
         
-        activityData.$steps.sink{ steps in
+        activityData.$steps.sink { steps in
             self.exerciseInfoView.setSteps(steps)
         }.store(in: &subscriptions)
         
-        activityData.$duration.sink{ duration in
+        activityData.$duration.sink { duration in
             self.exerciseInfoView.setDuration(duration)
         }.store(in: &subscriptions)
     }
@@ -284,7 +284,7 @@ extension RunExerciseController: ExerciseLocationDelegate {
         
         runRouteData.routeCoordinates.append(location)
         
-        activityData.locations.append(Location(location:location))
+        activityData.locations.append(Location(location: location))
         if dataAcqusition == .location {
             activityData.distance = runRouteData.totalDistance / 1000
         }
@@ -347,13 +347,13 @@ extension RunExerciseController: PopUpModalDelegate {
         stack.axis = .vertical
         
         let distanceLb = UILabel()
-        distanceLb.text = "Distance: \(motionData.getDistanceStr())"
+        distanceLb.text = "Distance: \(activityData.getDurationStr())"
         
         let paceLb = UILabel()
-        paceLb.text = "Pace: \(motionData.getPaceStr())"
+        paceLb.text = "Pace: \(activityData.paceStr)"
         
         let stepsLb = UILabel()
-        stepsLb.text = "Steps: \(motionData.getStepsStr())"
+        stepsLb.text = "Steps: \(activityData.stepsStr)"
         
         distanceLb.translatesAutoresizingMaskIntoConstraints = false
         paceLb.translatesAutoresizingMaskIntoConstraints = false
@@ -401,7 +401,7 @@ extension RunExerciseController: ExerciseMotionDelegate {
         self.motionData = data
         
         if let newDist = motionData.distance {
-            activityData.distance = newDist/1000
+            activityData.distance = newDist / 1000
         }
         
         if let newPace = motionData.avgPace {

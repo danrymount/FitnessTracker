@@ -118,3 +118,41 @@ extension MapViewController: MKMapViewDelegate {
         return nil
     }
 }
+
+
+import SwiftUI
+
+struct MapView: UIViewControllerRepresentable {
+    var locations: [Location]
+    
+    typealias UIViewControllerType = MapViewController
+    
+    let vc: MapViewController?
+    
+    func makeUIViewController(context: Context) -> MapViewController {
+        let vc = MapViewController()
+        
+        for (i, l) in locations.enumerated() {
+            let loc = CLLocationCoordinate2D(latitude: l.latitude, longitude: l.longtitude)
+            if i == 0 {
+                vc.setStartPoint(location: loc)
+            }
+            else
+            {
+                vc.appendNewRoutePoint(location: loc)
+            }
+            
+            if i == locations.count - 1 {
+                vc.centerMap(location: loc)
+            }
+            
+            
+        }
+        // Do some configurations here if needed.
+        return vc
+    }
+    
+    func updateUIViewController(_ uiViewController: MapViewController, context: Context) {
+        // Updates the state of the specified view controller with new information from SwiftUI.
+    }
+}

@@ -55,6 +55,10 @@ struct ActivityDetailsScreen: View
                 }
                 .padding(EdgeInsets(top: 16, leading: 0, bottom: 32, trailing: 0))
                 
+                if activityData.type == .Run {
+                    MapView(locations: (activityData as! RunExerciseDataModel).locations, vc: nil)
+                }
+                
                 
                 TextField("Comment",text: $comment)
                     .padding(EdgeInsets(top: 10, leading: 12, bottom: 10, trailing: 12))
