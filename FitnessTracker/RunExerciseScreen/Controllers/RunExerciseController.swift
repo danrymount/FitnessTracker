@@ -51,7 +51,9 @@ class RunExerciseController: UIViewController {
                 showWarningIcon(true)
             }
 
-            state = .readyToStart
+            if state != .inProgress {
+                state = .readyToStart
+            }
         }
     }
     
@@ -176,6 +178,8 @@ class RunExerciseController: UIViewController {
                     saveActivityData()
                     _ = navigationController?.popToRootViewController(animated: true)
             }
+            
+            Logger().info("New state \(newState)")
             
             _state = newState
         }

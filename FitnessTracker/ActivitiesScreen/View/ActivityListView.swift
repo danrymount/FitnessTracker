@@ -133,8 +133,7 @@ struct BottomInsetViewModifier<OverlayContent: View>: ViewModifier {
     }
 }
 
-
-fileprivate extension View
+extension View
 {
     func hideListSeparator() -> some View {
         if #available(iOS 15, *) {
