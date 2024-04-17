@@ -3,7 +3,7 @@
 Simple iOS application made during personal practice in order to get acquainted with iOS development (SwiftUI, UIKit, CoreData)
 
 ## Demonstration
-
+Note: video is outdated. Will be updated soon
 
 
 
