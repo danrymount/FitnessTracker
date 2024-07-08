@@ -75,7 +75,7 @@ class SetsExerciseViewModel {
     }
     
     func setDone() {
-        if let planReps = settings?.repsArr, var info = self.info {
+        if let planReps = settings?.repsArr, let info = self.info {
             self.info?.addRep(planReps[info.performedReps.count])
         }
     }

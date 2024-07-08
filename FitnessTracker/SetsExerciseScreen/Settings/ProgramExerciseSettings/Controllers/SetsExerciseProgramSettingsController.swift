@@ -30,7 +30,6 @@ class SetsExerciseProgramSettingsController: UIViewController, SetsExerciseSetti
         
         levelSettingsView.addButtonTapGesture(funcCb: {
             self.settingsModel.level.incValue()
-            
         }, dec: false)
         levelSettingsView.addButtonTapGesture(funcCb: {
             self.settingsModel.level.decValue()

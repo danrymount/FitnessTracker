@@ -39,6 +39,8 @@
 		9640334B2C3C3633009F0615 /* SetsExerciseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964033492C3C3633009F0615 /* SetsExerciseModel.swift */; };
 		9640334E2C3C3F75009F0615 /* SetsExerciseInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9640334D2C3C3F75009F0615 /* SetsExerciseInfo.swift */; };
 		9640334F2C3C3F75009F0615 /* SetsExerciseInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9640334D2C3C3F75009F0615 /* SetsExerciseInfo.swift */; };
+		964033522C3C5C6D009F0615 /* ViewControllerUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964033512C3C5C6D009F0615 /* ViewControllerUtils.swift */; };
+		964033532C3C5C6D009F0615 /* ViewControllerUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964033512C3C5C6D009F0615 /* ViewControllerUtils.swift */; };
 		96484A492C20D35D006187E0 /* SetsExerciseCustomSettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96484A482C20D35D006187E0 /* SetsExerciseCustomSettingsModel.swift */; };
 		96484A4A2C20D35D006187E0 /* SetsExerciseCustomSettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96484A482C20D35D006187E0 /* SetsExerciseCustomSettingsModel.swift */; };
 		96484A4C2C20D693006187E0 /* SettingsParamModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96484A4B2C20D693006187E0 /* SettingsParamModel.swift */; };
@@ -171,6 +173,7 @@
 		964033482C3C0729009F0615 /* SetsExerciseLadderSettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetsExerciseLadderSettingsController.swift; sourceTree = "<group>"; };
 		964033492C3C3633009F0615 /* SetsExerciseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetsExerciseModel.swift; sourceTree = "<group>"; };
 		9640334D2C3C3F75009F0615 /* SetsExerciseInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetsExerciseInfo.swift; sourceTree = "<group>"; };
+		964033512C3C5C6D009F0615 /* ViewControllerUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerUtils.swift; sourceTree = "<group>"; };
 		96484A482C20D35D006187E0 /* SetsExerciseCustomSettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetsExerciseCustomSettingsModel.swift; sourceTree = "<group>"; };
 		96484A4B2C20D693006187E0 /* SettingsParamModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsParamModel.swift; sourceTree = "<group>"; };
 		96484A522C22032B006187E0 /* SetsExerciseSettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetsExerciseSettingsController.swift; sourceTree = "<group>"; };
@@ -312,6 +315,7 @@
 				962EBD142B38A20900C3866B /* RoundTimer */,
 				962EBCD72B386F1C00C3866B /* View */,
 				962EBCF42B38757C00C3866B /* CommonDefines.swift */,
+				964033512C3C5C6D009F0615 /* ViewControllerUtils.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -970,6 +974,7 @@
 				9666D15F2B8FACFA008BCAD6 /* ActivityViewModel.swift in Sources */,
 				9666D1602B8FACFA008BCAD6 /* FitnessTrackerApp.swift in Sources */,
 				9666D1612B8FACFA008BCAD6 /* ActivityDetailsView.swift in Sources */,
+				964033532C3C5C6D009F0615 /* ViewControllerUtils.swift in Sources */,
 				96A203C32B9E1C8C002A0244 /* LocationData.swift in Sources */,
 				9666D1622B8FACFA008BCAD6 /* ActivitiesView.swift in Sources */,
 				9666D1632B8FACFA008BCAD6 /* RunRouteDataModel.swift in Sources */,
@@ -999,6 +1004,7 @@
 				962EBD0B2B38A05D00C3866B /* ExerciseParamView.swift in Sources */,
 				96C4B9C82B60538000973D6E /* RunExerciseInfoView.swift in Sources */,
 				96661EB82B4684AE00546BF3 /* LoginResponse.swift in Sources */,
+				964033522C3C5C6D009F0615 /* ViewControllerUtils.swift in Sources */,
 				962EBCFC2B387D3000C3866B /* ActivityDetailsViewModel.swift in Sources */,
 				962EBCC92B384E4A00C3866B /* RegistrationView.swift in Sources */,
 				96661EC52B490E2100546BF3 /* SecureStorage.swift in Sources */,

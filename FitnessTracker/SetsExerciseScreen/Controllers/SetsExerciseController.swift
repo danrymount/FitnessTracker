@@ -1,11 +1,6 @@
 import Foundation
 import UIKit
 
-struct ExerciseInfo {
-    var completedSets: UInt
-    var timeStart: Date
-}
-
 class SetsExerciseViewController: UIViewController, PopUpModalDelegate {
     enum ExerciseState {
         case initial
@@ -15,7 +10,7 @@ class SetsExerciseViewController: UIViewController, PopUpModalDelegate {
         case finished
     }
     
-    private var RoundTimerVC: RoundTimerViewController?
+    private var roundTimerVC: RoundTimerViewController?
     
     private var state: ExerciseState
     
@@ -125,9 +120,7 @@ class SetsExerciseViewController: UIViewController, PopUpModalDelegate {
             if settingsScreen == nil {
                 initViewWithSettings()
             }
-                
-                
-//            self.settings.resetValues()
+            
         case .inProgress:
             showInProgressView()
         case .timeout:
@@ -146,8 +139,8 @@ class SetsExerciseViewController: UIViewController, PopUpModalDelegate {
     }
     
     func showInProgressView() {
-        self.RoundTimerVC?.resetTimer()
-        self.RoundTimerVC?.view.isHidden = true
+        self.roundTimerVC?.resetTimer()
+        self.roundTimerVC?.view.isHidden = true
         
         if setsInfoView == nil {
             for v in mainActionView!.subviews {
@@ -184,26 +177,29 @@ class SetsExerciseViewController: UIViewController, PopUpModalDelegate {
     }
     
     func showTimeoutView() {
-        if RoundTimerVC == nil {
-
-            RoundTimerVC = RoundTimerViewController(duration: infoViewModel.currentTimeout, resolution: 1.0 / 120.0)
-            RoundTimerVC!.view.translatesAutoresizingMaskIntoConstraints = false
-            add(RoundTimerVC!)
+        if roundTimerVC == nil {
+            roundTimerVC = RoundTimerViewController(duration: infoViewModel.currentTimeout, resolution: 1.0 / 120.0)
+            guard let roundTimerVC = roundTimerVC, let mainActionView = mainActionView else {
+                return
+            }
+            roundTimerVC.view.translatesAutoresizingMaskIntoConstraints = false
+            add(roundTimerVC)
             NSLayoutConstraint.activate([
-                RoundTimerVC!.view.leadingAnchor.constraint(equalTo: mainActionView!.leadingAnchor, constant: 120),
-                RoundTimerVC!.view.trailingAnchor.constraint(equalTo: mainActionView!.trailingAnchor, constant: -120),
-                RoundTimerVC!.view.topAnchor.constraint(equalTo: mainActionView!.topAnchor, constant: 120),
-                RoundTimerVC!.view.bottomAnchor.constraint(equalTo: mainActionView!.bottomAnchor, constant: -120)
+                roundTimerVC.view.leadingAnchor.constraint(equalTo: mainActionView.leadingAnchor, constant: 120),
+                roundTimerVC.view.trailingAnchor.constraint(equalTo: mainActionView.trailingAnchor, constant: -120),
+                roundTimerVC.view.topAnchor.constraint(equalTo: mainActionView.topAnchor, constant: 120),
+                roundTimerVC.view.bottomAnchor.constraint(equalTo: mainActionView.bottomAnchor, constant: -120)
             ])
-            RoundTimerVC!.setOnFinishCb {
+            roundTimerVC.setOnFinishCb {
                 self.changeState()
             }
         }
-        RoundTimerVC!.startTimer()
-        self.RoundTimerVC!.view.isHidden = false
+        
+        if let roundTimerVC = roundTimerVC {
+            roundTimerVC.startTimer()
+            roundTimerVC.view.isHidden = false
+        }
     }
-    
-    
     
     let settingsController = SetsExerciseSettingsController()
 
@@ -265,8 +261,8 @@ class SetsExerciseViewController: UIViewController, PopUpModalDelegate {
         summaryLb.translatesAutoresizingMaskIntoConstraints = false
         
 //        summaryLb.text = """
-////        Total \(self.activityType.toString()): \(self.exerciseInfo.completedSets * self.settings.repeats.value)
-////        Duration: \((Date(timeIntervalSinceNow: TimeInterval()) - exerciseInfo.timeStart).stringFromTimeInterval())
+        ////        Total \(self.activityType.toString()): \(self.exerciseInfo.completedSets * self.settings.repeats.value)
+        ////        Duration: \((Date(timeIntervalSinceNow: TimeInterval()) - exerciseInfo.timeStart).stringFromTimeInterval())
 //        """
         
         summaryLb.numberOfLines = 2
@@ -285,36 +281,10 @@ class SetsExerciseViewController: UIViewController, PopUpModalDelegate {
     }
     
     func didTapAccept() {
-//        let exerciseDuration = Date(timeIntervalSinceNow: TimeInterval()) - exerciseInfo.timeStart
+        infoViewModel.save()
         
-//        ActivitiesRepositoryImpl.shared.insertActivityData(data: ActivityDataModel(id: 0, performedAmount: Double(completedAmount), duration: exerciseDuration, type: self.activityType, datetime: Date.init(timeIntervalSinceNow: TimeInterval())))
+        //TODO pop only in success
         _ = navigationController?.popToRootViewController(animated: true)
         self.dismiss(animated: true)
-    }
-}
-
-private extension UIViewController {
-    func add(_ child: UIViewController) {
-        addChild(child)
-        view.addSubview(child.view)
-        child.didMove(toParent: self)
-    }
-    
-    func remove() {
-        // Just to be safe, we check that this view controller
-        // is actually added to a parent before removing it.
-        guard parent != nil else {
-            return
-        }
-        
-        willMove(toParent: nil)
-        view.removeFromSuperview()
-        removeFromParent()
-    }
-}
-
-private extension Date {
-    static func - (lhs: Date, rhs: Date) -> TimeInterval {
-        return lhs.timeIntervalSinceReferenceDate - rhs.timeIntervalSinceReferenceDate
     }
 }
