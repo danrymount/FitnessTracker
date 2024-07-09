@@ -40,7 +40,7 @@ class SetsExerciseSettingsController: UIViewController {
         exerciseSettingsController = {
             switch exerciseTypeId {
                 case .ladder:
-                    return SesExerciseCustomSettingsController()
+                    return SetsExerciseLadderSettingsController()
                 case .program:
                     return SetsExerciseProgramSettingsController()
                 case .custom:
@@ -96,9 +96,9 @@ class SetsExerciseSettingsController: UIViewController {
             self.parent?.navigationItem.rightBarButtonItem?.title = self.exerciseTypeId.rawValue
         }
         
-        let barButtonMenu = UIMenu(title: "", children: Array(actions.keys))
+        let barButtonMenu = UIMenu(title: "", children: Array(actions.keys).sorted {$0.title < $1.title})
 
-        self.parent?.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Type", image: nil, primaryAction: nil, menu: barButtonMenu)
+        self.parent?.navigationItem.rightBarButtonItem = UIBarButtonItem(title: Array(actions.keys).sorted{$0.title < $1.title}[0].title, image: nil, primaryAction: nil, menu: barButtonMenu)
     }
     
     override func removeFromParent() {

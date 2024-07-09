@@ -18,30 +18,42 @@ protocol SetsExerciseSettingsProtocol {
 }
 
 final class SetsExerciseLadderSettings: SetsExerciseSettingsProtocol {
-    var repsArr: [UInt] {
-        return [1,2,3]
-    }
-    
     var type: SetsExerciseType = .ladder
     
-    
-    var timeoutsArr: [TimeInterval] {
-        [1,1]
+    var repsArr: [UInt] {
+        Array(stride(from: from, to: to + 1, by: UInt.Stride(steps)))
     }
     
-    var from: Int = 0
-    var to: Int = 1
-    var steps: Int = 1
+    var timeoutsArr: [TimeInterval] {
+        Array(repeating: timeout, count: repsArr.count)
+    }
+    
+    var from: UInt = 0
+    var to: UInt = 1
+    var steps: UInt = 1
     var timeout: TimeInterval = 0
 }
 
 final class SetsExerciseProgramSettings: SetsExerciseSettingsProtocol {
     var repsArr: [UInt] {
-        [1,2,3]
+        let levelsSteps: [Int: [UInt]] =
+        [
+            1:[1,2,3,4,5],
+            2:[5,6,7,8,9],
+            3:[10,11,12,13,14]
+        ]
+        
+        return levelsSteps[level] ?? [10]
     }
     
     var timeoutsArr: [TimeInterval] {
-        [1,1]
+        let levelsTimeout: [Int: TimeInterval] =
+        [
+            1:30,
+            2:45,
+            3:60
+        ]
+        return Array(repeating: levelsTimeout[level] ?? 0, count: repsArr.count)
     }
     
     var type: SetsExerciseType = .program

@@ -41,6 +41,11 @@
 		9640334F2C3C3F75009F0615 /* SetsExerciseInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9640334D2C3C3F75009F0615 /* SetsExerciseInfo.swift */; };
 		964033522C3C5C6D009F0615 /* ViewControllerUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964033512C3C5C6D009F0615 /* ViewControllerUtils.swift */; };
 		964033532C3C5C6D009F0615 /* ViewControllerUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964033512C3C5C6D009F0615 /* ViewControllerUtils.swift */; };
+		964033542C3DDFFA009F0615 /* SetsExerciseLadderSettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964033482C3C0729009F0615 /* SetsExerciseLadderSettingsController.swift */; };
+		964033552C3DDFFD009F0615 /* SetsExerciseLadderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964033462C3C0725009F0615 /* SetsExerciseLadderModel.swift */; };
+		964033562C3DE48F009F0615 /* SetsExerciseSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96EC6BDE2C0CE1B700E33EC9 /* SetsExerciseSettings.swift */; };
+		964033572C3DE49D009F0615 /* SetsExerciseLadderSettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964033482C3C0729009F0615 /* SetsExerciseLadderSettingsController.swift */; };
+		964033582C3DE49D009F0615 /* SetsExerciseLadderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964033462C3C0725009F0615 /* SetsExerciseLadderModel.swift */; };
 		96484A492C20D35D006187E0 /* SetsExerciseCustomSettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96484A482C20D35D006187E0 /* SetsExerciseCustomSettingsModel.swift */; };
 		96484A4A2C20D35D006187E0 /* SetsExerciseCustomSettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96484A482C20D35D006187E0 /* SetsExerciseCustomSettingsModel.swift */; };
 		96484A4C2C20D693006187E0 /* SettingsParamModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96484A4B2C20D693006187E0 /* SettingsParamModel.swift */; };
@@ -570,7 +575,6 @@
 			isa = PBXGroup;
 			children = (
 				964033462C3C0725009F0615 /* SetsExerciseLadderModel.swift */,
-				964033472C3C0729009F0615 /* Controllers */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -617,6 +621,7 @@
 		96484A462C20D252006187E0 /* LadderExerciseSettings */ = {
 			isa = PBXGroup;
 			children = (
+				964033472C3C0729009F0615 /* Controllers */,
 				964033452C3C05CB009F0615 /* Model */,
 			);
 			path = LadderExerciseSettings;
@@ -930,6 +935,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				964033572C3DE49D009F0615 /* SetsExerciseLadderSettingsController.swift in Sources */,
+				964033582C3DE49D009F0615 /* SetsExerciseLadderModel.swift in Sources */,
+				964033562C3DE48F009F0615 /* SetsExerciseSettings.swift in Sources */,
 				9666D17F2B8FBB5E008BCAD6 /* StopwatchService.swift in Sources */,
 				9666D1412B8FACFA008BCAD6 /* RoundTimerController.swift in Sources */,
 				96484A4A2C20D35D006187E0 /* SetsExerciseCustomSettingsModel.swift in Sources */,
@@ -1000,6 +1008,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				964033552C3DDFFD009F0615 /* SetsExerciseLadderModel.swift in Sources */,
+				964033542C3DDFFA009F0615 /* SetsExerciseLadderSettingsController.swift in Sources */,
 				962EBD192B38A23300C3866B /* RoundTimerController.swift in Sources */,
 				962EBD0B2B38A05D00C3866B /* ExerciseParamView.swift in Sources */,
 				96C4B9C82B60538000973D6E /* RunExerciseInfoView.swift in Sources */,
