@@ -5,69 +5,56 @@ import Foundation
 class SetsExerciseViewModel {
     let activityType: ActivityType
     var info: SetsExerciseInfo?
-    var settings: SetsExerciseSettingsProtocol? = nil {
+    var settings: SetsExerciseSettingsProtocol? {
         didSet {
             guard let settings = settings else {
                 return
             }
-            info = SetsExerciseInfo(type: settings.type, performedReps: [], startTime: Date(timeIntervalSinceNow: 0))
+            info = SetsExerciseInfo(type: settings.type, performedSets: [], startTime: Date(timeIntervalSinceNow: 0))
         }
     }
+
     var duration: TimeInterval {
-        get {
-            guard let info = info else {
-                return 0
-            }
-            return Date(timeIntervalSinceNow: 0) - info.startTime
+        guard let info = info else {
+            return 0
         }
+        return Date(timeIntervalSinceNow: 0) - info.startTime
     }
     
     var allRepsArr: [UInt] {
-        get {
-            guard let settings = settings else {
-                return []
-            }
-            
-            return settings.repsArr
+        guard let settings = settings else {
+            return []
         }
+            
+        return settings.repsArr
     }
     
-    var completedReps: Int {
-        get {
-            guard let info = info else {
-                return 0
-            }
-            
-            return info.performedReps.count
+    var completedSets: Int {
+        guard let info = info else {
+            return 0
         }
+            
+        return info.performedSets.count
     }
     
     var isLastSet: Bool {
-        get {
-            return allRepsArr.count == completedReps - 1
-        }
+        return allRepsArr.count == completedSets - 1
     }
     
     var isCompleted: Bool {
-        get {
-            return allRepsArr.count == completedReps
-        }
+        return allRepsArr.count == completedSets
     }
     
     var currentReps: UInt {
-        get {
-            return allRepsArr.count > 0 ? allRepsArr[completedReps] : 0
-        }
+        return allRepsArr.count > 0 ? allRepsArr[completedSets] : 0
     }
     
     var currentTimeout: TimeInterval {
-        get {
-            guard let settings = settings else {
-                return 0
-            }
-            
-            return settings.timeoutsArr[completedReps - 1]
+        guard let settings = settings else {
+            return 0
         }
+            
+        return settings.timeoutsArr[completedSets - 1]
     }
     
     init(activityType: ActivityType) {
@@ -76,28 +63,25 @@ class SetsExerciseViewModel {
     
     func setDone() {
         if let planReps = settings?.repsArr, let info = self.info {
-            self.info?.addRep(planReps[info.performedReps.count])
+            self.info?.addRep(planReps[info.performedSets.count])
         }
     }
-    
     
     func save() {
         if var info = info {
             let exerciseDuration: TimeInterval = Date(timeIntervalSinceNow: 0) - info.startTime
-            let dataModel = SetsExerciseDataModel(datetime: Date.init(timeIntervalSinceNow: exerciseDuration))
+            let dataModel = SetsExerciseDataModel(datetime: Date(timeIntervalSinceNow: exerciseDuration))
             dataModel.settings = settings
             dataModel.type = self.activityType
             dataModel.duration = exerciseDuration
-            dataModel.actualReps = info.performedReps
+            dataModel.actualReps = info.performedSets
             ActivitiesRepositoryImpl.shared.createActivity(data: dataModel)
         }
     }
 }
 
-fileprivate extension Date {
-    
+private extension Date {
     static func - (lhs: Date, rhs: Date) -> TimeInterval {
         return lhs.timeIntervalSinceReferenceDate - rhs.timeIntervalSinceReferenceDate
     }
-    
 }

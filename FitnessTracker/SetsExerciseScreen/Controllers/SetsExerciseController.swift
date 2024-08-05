@@ -173,7 +173,7 @@ class SetsExerciseViewController: UIViewController, PopUpModalDelegate {
             repeatsLabelView = lb
         }
         
-        setsInfoView?.markCompleted(amount: infoViewModel.completedReps)
+        setsInfoView?.markCompleted(amount: infoViewModel.completedSets)
     }
     
     func showTimeoutView() {
@@ -231,7 +231,7 @@ class SetsExerciseViewController: UIViewController, PopUpModalDelegate {
             newState = .inProgress
         case .inProgress:
             infoViewModel.setDone()
-            setsInfoView?.markCompleted(amount: infoViewModel.completedReps)
+            setsInfoView?.markCompleted(amount: infoViewModel.completedSets)
             if !infoViewModel.isCompleted {
                 newState = .timeout
             } else {
@@ -283,7 +283,7 @@ class SetsExerciseViewController: UIViewController, PopUpModalDelegate {
     func didTapAccept() {
         infoViewModel.save()
         
-        //TODO pop only in success
+        // TODO: pop only in success
         _ = navigationController?.popToRootViewController(animated: true)
         self.dismiss(animated: true)
     }
