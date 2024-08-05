@@ -4,9 +4,9 @@ import Foundation
 
 class SetsExerciseDataModel: ActivityDataModel {
 
-    override required init(datetime: Date) {
+    required override init(datetime: Date) {
         super.init(datetime: datetime)
-        self.type = .Push_ups
+        self.type = type
     }
     
     override var summary: String {
@@ -18,4 +18,6 @@ class SetsExerciseDataModel: ActivityDataModel {
     var planReps: [UInt] = []
     
     var timeout: TimeInterval = 0
+    
+    var settings: SetsExerciseSettingsProtocol?
 }

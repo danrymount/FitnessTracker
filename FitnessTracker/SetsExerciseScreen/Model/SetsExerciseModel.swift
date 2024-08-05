@@ -66,7 +66,7 @@ class SetsExerciseViewModel {
                 return 0
             }
             
-            return settings.timeoutsArr[completedReps]
+            return settings.timeoutsArr[completedReps - 1]
         }
     }
     
@@ -81,17 +81,15 @@ class SetsExerciseViewModel {
     }
     
     
-    
     func save() {
         if var info = info {
-//            let exerciseDuration: TimeInterval = Date(timeIntervalSinceNow: 0) - info.startTime
-            
-//            let dataModel = SetsExerciseDataModel(datetime: Date.init(timeIntervalSinceNow: exerciseDuration))
-//            dataModel.planReps = Array(0..<self.settings.sets.value).map( { _ in self.settings.repeats.value})
-//            dataModel.actualReps = Array(0..<self.exerciseInfo.completedSets).map( { _ in self.settings.repeats.value})
-//            dataModel.type = self.activityType
-//            dataModel.duration = exerciseDuration
-//            ActivitiesRepositoryImpl.shared.createActivity(data: dataModel)
+            let exerciseDuration: TimeInterval = Date(timeIntervalSinceNow: 0) - info.startTime
+            let dataModel = SetsExerciseDataModel(datetime: Date.init(timeIntervalSinceNow: exerciseDuration))
+            dataModel.settings = settings
+            dataModel.type = self.activityType
+            dataModel.duration = exerciseDuration
+            dataModel.actualReps = info.performedReps
+            ActivitiesRepositoryImpl.shared.createActivity(data: dataModel)
         }
     }
 }

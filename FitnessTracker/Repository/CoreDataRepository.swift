@@ -1,11 +1,9 @@
 
 import CoreData
 import Foundation
+import MapKit
 import OSLog
 import UIKit
-import MapKit
-
-
 
 private func log(message: String) {
     let msg = "[CoreDataRepository] " + message
@@ -29,11 +27,9 @@ protocol CoreDataRepositoryProtocol {
 
 class CoreDataRepository: NSObject, CoreDataRepositoryProtocol {
     public static let shared = CoreDataRepository()
-    var lastId: Int64 = 0
 
     override private init() {
         super.init()
-        lastId = getLastId()
     }
     
     private var context: NSManagedObjectContext {
@@ -44,13 +40,24 @@ class CoreDataRepository: NSObject, CoreDataRepositoryProtocol {
         let allActivitiesRequest = NSFetchRequest<NSFetchRequestResult>(entityName: ActivityDataEntityClass.entityName)
         let allRunExerciseRequest = NSFetchRequest<NSFetchRequestResult>(entityName: RunExerciseDataEntityClass.entityName)
         let allSetsExerciseRequest = NSFetchRequest<NSFetchRequestResult>(entityName: SetsExerciseDataEntityClass.entityName)
+        let allSetsExerciseCustomDataRequest = NSFetchRequest<NSFetchRequestResult>(entityName: SetsExerciseCustomEntityClass.entityName)
+        let allSetsExerciseLadderDataRequest = NSFetchRequest<NSFetchRequestResult>(entityName: SetsExerciseLadderEntityClass.entityName)
+        let allSetsExerciseProgramDataRequest = NSFetchRequest<NSFetchRequestResult>(entityName: SetsExerciseProgramEntityClass.entityName)
+        
         var result: [ActivityDataModel] = []
         do {
             let activities = try context.fetch(allActivitiesRequest) as! [ActivityDataEntityClass]
             
             let runExercises = try Dictionary(uniqueKeysWithValues: (context.fetch(allRunExerciseRequest) as! [RunExerciseDataEntityClass]).map { ($0.id, $0) })
             
-            let setsExercises = try Dictionary(uniqueKeysWithValues: (context.fetch(allSetsExerciseRequest) as! [SetsExerciseDataEntityClass]).map { ($0.id, $0) })
+            let setsExercises = try Dictionary(uniqueKeysWithValues: (context.fetch(allSetsExerciseRequest) as! [SetsExerciseDataEntityClass]).map { ($0.uid, $0) })
+            
+            let setsExercisesCustom = try Dictionary((context.fetch(allSetsExerciseCustomDataRequest) as! [SetsExerciseCustomEntityClass]).map { ($0.id, $0) }, uniquingKeysWith: {(first, _) in first})
+            
+            let setsExerciseLadder = try Dictionary((context.fetch(allSetsExerciseLadderDataRequest) as! [SetsExerciseLadderEntityClass]).map { ($0.id, $0) }, uniquingKeysWith: {(first, _) in first})
+            
+            let setsExerciseProgram = try Dictionary((context.fetch(allSetsExerciseProgramDataRequest) as! [SetsExerciseProgramEntityClass]).map { ($0.id, $0) }, uniquingKeysWith: {(first, _) in first})
+
             
             for act in activities {
                 let actType = ActivityType(val: act.type)
@@ -62,6 +69,14 @@ class CoreDataRepository: NSObject, CoreDataRepositoryProtocol {
                     newData.id = act.id
                     newData.actualReps = setsExercises[act.id]?.actualReps ?? []
                     newData.planReps = setsExercises[act.id]?.planReps ?? []
+                    var settingsId = setsExercises[act.id]?.settingsId ?? 0
+                    if let custom = setsExercisesCustom[settingsId] {
+                        newData.settings = SetsExerciseCustomSettings(custom)
+                    } else if let ladder = setsExerciseLadder[settingsId] {
+                        newData.settings = SetsExerciseLadderSettings(ladder)
+                    } else if let program = setsExerciseProgram[settingsId] {
+                        newData.settings = SetsExerciseProgramSettings(program)
+                    }
                     
                     result.append(newData)
                 } else if actType == .Run {
@@ -127,8 +142,8 @@ class CoreDataRepository: NSObject, CoreDataRepositoryProtocol {
         return true
     }
     
-    private func getLastId() -> Int64 {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: ActivityDataEntityClass.entityName)
+    private func getNextId<T: CustomEntityClass>(for obj: T) -> Int64 {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: T.entityName)
         let sort = NSSortDescriptor(key: "id", ascending: false)
         fetchRequest.sortDescriptors = [sort]
         fetchRequest.fetchLimit = 1
@@ -136,8 +151,8 @@ class CoreDataRepository: NSObject, CoreDataRepositoryProtocol {
         do {
             let lastData = try context.fetch(fetchRequest)
             
-            if lastData.count > 0 {
-                return (lastData[0] as! ActivityDataEntityClass).id
+            if lastData.count > 0, let data = (lastData[0] as? CustomEntityClass) {
+                return data.uid + 1
             }
         } catch {
             print(error.localizedDescription)
@@ -151,7 +166,9 @@ class CoreDataRepository: NSObject, CoreDataRepositoryProtocol {
             return nil
         }
         
-        return EntityClass(entity: dataEntityDesc, insertInto: context)
+        var new = EntityClass(entity: dataEntityDesc, insertInto: context)
+        new.uid = getNextId(for: new)
+        return new
     }
     
     private func fetchEntity<EntityClass: CustomEntityClass>(id: Int64) -> EntityClass? {
@@ -175,38 +192,36 @@ class CoreDataRepository: NSObject, CoreDataRepositoryProtocol {
     }
     
     func insertActivityData(data: ActivityDataModel) -> Int64 {
-        let id = Int64(lastId + 1)
-        
         if let entity: ActivityDataEntityClass = insertEntity() {
-            entity.id = id
             entity.date = data.datetime
             entity.type = Int16(data.type.rawValue)
             entity.duration = data.duration
             entity.username = data.username
 
             if saveContext() {
-                lastId += 1
+                data.id = entity.id
+                return entity.id
             }
-        } else {
-            return -1
         }
         
-        return id
+        return -1
     }
     
     func insertExerciseData(data: RunExerciseDataModel) -> RunExerciseDataModel? {
         let newActivityId = insertActivityData(data: data)
-        data.id = newActivityId
-        if let entity: RunExerciseDataEntityClass = insertEntity() {
-            entity.id = newActivityId
-            entity.distance = data.distance
-            entity.steps = data.steps
-            entity.pace = data.pace
-            entity.cdLocations = ""
-            
-            if saveContext() {
-                return data
-            }
+        
+        guard let entity: RunExerciseDataEntityClass = insertEntity() else {
+            return nil
+        }
+        
+        entity.id = newActivityId
+        entity.distance = data.distance
+        entity.steps = data.steps
+        entity.pace = data.pace
+        entity.cdLocations = ""
+        
+        if saveContext() {
+            return data
         }
         
         return nil
@@ -217,29 +232,64 @@ class CoreDataRepository: NSObject, CoreDataRepositoryProtocol {
         let activityEntity: ActivityDataEntityClass? = fetchEntity(id: id)
         let runEntity: RunExerciseDataEntityClass? = fetchEntity(id: id)
         
-        if let activityEntity, let runEntity {
-            activityEntity.setValue(data.duration, forKey: "duration")
-            runEntity.setValue(data.distance, forKey: "distance")
-            runEntity.setValue(data.pace, forKey: "pace")
-            runEntity.setValue(data.steps, forKey: "steps")
-            runEntity.locations = data.locations
-
-            saveContext()
+        guard let activityEntity, let runEntity else {
+            return nil
         }
+        
+        activityEntity.setValue(data.duration, forKey: "duration")
+        runEntity.setValue(data.distance, forKey: "distance")
+        runEntity.setValue(data.pace, forKey: "pace")
+        runEntity.setValue(data.steps, forKey: "steps")
+        runEntity.locations = data.locations
+
+        saveContext()
+        
+        return nil
+    }
+    
+    private func insertSettingsData(data: SetsExerciseSettingsProtocol) -> CustomEntityClass? {
+        switch data.type {
+        case .custom:
+            if let entity: SetsExerciseCustomEntityClass = insertEntity() {
+                entity.fill(data as! SetsExerciseCustomSettings)
+                return entity
+            }
+        case .ladder:
+            if let entity: SetsExerciseLadderEntityClass = insertEntity() {
+                entity.fill(data as! SetsExerciseLadderSettings)
+                return entity
+            }
+        case .program:
+            if let entity: SetsExerciseProgramEntityClass = insertEntity() {
+                entity.fill(data as! SetsExerciseProgramSettings)
+                return entity
+            }
+        }
+        
         return nil
     }
     
     func insertExerciseData(data: SetsExerciseDataModel) -> SetsExerciseDataModel? {
         let newActivityId = insertActivityData(data: data)
+        
+        guard let settings = data.settings else {
+            return nil
+        }
+        
+        guard let entity: SetsExerciseDataEntityClass = insertEntity() else {
+            return nil
+        }
+        guard let settingsEntity = insertSettingsData(data: settings) else {
+            return nil
+        }
+        
+        entity.id = newActivityId
+        entity.settingsId = settingsEntity.uid
+        entity.actualReps = data.actualReps
 
-        if let entity: SetsExerciseDataEntityClass = insertEntity() {
-            entity.id = newActivityId
-            entity.planReps = data.planReps
-            entity.actualReps = data.actualReps
-            
-            if saveContext() {
-                return data
-            }
+        if saveContext() {
+            data.id = newActivityId
+            return data
         }
         
         return nil

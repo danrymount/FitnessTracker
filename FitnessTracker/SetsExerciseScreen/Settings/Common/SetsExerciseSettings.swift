@@ -66,7 +66,7 @@ final class SetsExerciseCustomSettings: SetsExerciseSettingsProtocol {
     
     private(set) var timeoutsArr: [TimeInterval] = []
     
-    var type: SetsExerciseType = .custom
+    let type: SetsExerciseType = .custom
     
     var sets: Int = -1 {
         didSet {
