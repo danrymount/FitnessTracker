@@ -753,6 +753,7 @@
 			children = (
 				96B87FDE2B37527100E9BEAD /* FitnessTracker */,
 				96B87FDD2B37527100E9BEAD /* Products */,
+				96F460012C615FD7002508A4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -830,6 +831,13 @@
 				96C4B9C72B60538000973D6E /* RunExerciseInfoView.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		96F460012C615FD7002508A4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

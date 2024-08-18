@@ -215,8 +215,8 @@ class SetsExerciseViewController: UIViewController, PopUpModalDelegate {
         self.mainActionView?.addSubview(settingsScreen!)
         
         NSLayoutConstraint.activate([
-            settingsScreen!.leadingAnchor.constraint(equalTo: mainActionView!.leadingAnchor, constant: 96),
-            settingsScreen!.trailingAnchor.constraint(equalTo: mainActionView!.trailingAnchor, constant: -96),
+            settingsScreen!.leadingAnchor.constraint(equalTo: mainActionView!.leadingAnchor, constant: 60),
+            settingsScreen!.trailingAnchor.constraint(equalTo: mainActionView!.trailingAnchor, constant: -60),
             settingsScreen!.topAnchor.constraint(equalTo: mainActionView!.topAnchor),
             settingsScreen!.bottomAnchor.constraint(equalTo: mainActionView!.bottomAnchor)
         ])

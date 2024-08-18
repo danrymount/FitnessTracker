@@ -12,10 +12,13 @@ class SetsExerciseDataModel: ActivityDataModel {
     override var summary: String {
         "\(actualReps.reduce(0, +)) reps"
     }
-    
 
     var actualReps: [UInt] = []
-    var planReps: [UInt] = []
+    var planReps: [UInt] {
+        get {
+            return settings?.repsArr ?? []
+        }
+    }
     
     var timeout: TimeInterval = 0
     

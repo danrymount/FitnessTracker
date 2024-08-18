@@ -68,7 +68,6 @@ class CoreDataRepository: NSObject, CoreDataRepositoryProtocol {
                     newData.isCompleted = act.completed
                     newData.id = act.id
                     newData.actualReps = setsExercises[act.id]?.actualReps ?? []
-                    newData.planReps = setsExercises[act.id]?.planReps ?? []
                     var settingsId = setsExercises[act.id]?.settingsId ?? 0
                     if let custom = setsExercisesCustom[settingsId] {
                         newData.settings = SetsExerciseCustomSettings(custom)
