@@ -14,6 +14,12 @@ class SetsExerciseProgramView: UIView {
         return hStack
     }()
     
+    let timeoutLb: UILabel = {
+        let lb = UILabel()
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        return lb
+    }()
+    
     init() {
         super.init(frame: CGRect())
         
@@ -38,25 +44,46 @@ class SetsExerciseProgramView: UIView {
             vStack.bottomAnchor.constraint(equalTo: self.bottomAnchor),
         ])
         
-        let lbSets = {
+        let setsTitleLb = {
             let view = UILabel()
             view.text = "Sets"
             view.translatesAutoresizingMaskIntoConstraints = false
             return view
         }()
         
-        vStack.addSubview(lbSets)
+        let timeoutTitleLb = {
+            let view = UILabel()
+            view.text = "Timeout"
+            view.translatesAutoresizingMaskIntoConstraints = false
+            return view
+        }()
+        
+        vStack.addSubview(setsTitleLb)
         vStack.addSubview(repsStackView)
+        vStack.addSubview(timeoutTitleLb)
+        vStack.addSubview(timeoutLb)
         
         NSLayoutConstraint.activate([
-            lbSets.topAnchor.constraint(equalTo: vStack.topAnchor, constant: 8),
-            lbSets.centerXAnchor.constraint(equalTo: vStack.centerXAnchor),
-            lbSets.leadingAnchor.constraint(greaterThanOrEqualTo: vStack.leadingAnchor),
-            lbSets.trailingAnchor.constraint(lessThanOrEqualTo: vStack.trailingAnchor),
-            repsStackView.topAnchor.constraint(equalTo: lbSets.bottomAnchor, constant: 8),
+            setsTitleLb.topAnchor.constraint(equalTo: vStack.topAnchor, constant: 8),
+            setsTitleLb.centerXAnchor.constraint(equalTo: vStack.centerXAnchor),
+            setsTitleLb.leadingAnchor.constraint(greaterThanOrEqualTo: vStack.leadingAnchor),
+            setsTitleLb.trailingAnchor.constraint(lessThanOrEqualTo: vStack.trailingAnchor),
+            repsStackView.topAnchor.constraint(equalTo: setsTitleLb.bottomAnchor, constant: 8),
             repsStackView.leadingAnchor.constraint(equalTo: vStack.leadingAnchor, constant: 24),
             repsStackView.trailingAnchor.constraint(equalTo: vStack.trailingAnchor, constant: -24),
-            repsStackView.bottomAnchor.constraint(equalTo: vStack.bottomAnchor, constant: -8),
+
+            
+            timeoutTitleLb.topAnchor.constraint(equalTo: repsStackView.bottomAnchor, constant: 16),
+            timeoutTitleLb.centerXAnchor.constraint(equalTo: vStack.centerXAnchor),
+            timeoutTitleLb.leadingAnchor.constraint(greaterThanOrEqualTo: vStack.leadingAnchor),
+            timeoutTitleLb.trailingAnchor.constraint(lessThanOrEqualTo: vStack.trailingAnchor),
+            
+            timeoutLb.topAnchor.constraint(equalTo: timeoutTitleLb.bottomAnchor, constant: 8),
+            timeoutLb.centerXAnchor.constraint(equalTo: vStack.centerXAnchor),
+            timeoutLb.leadingAnchor.constraint(greaterThanOrEqualTo: vStack.leadingAnchor),
+            timeoutLb.trailingAnchor.constraint(lessThanOrEqualTo: vStack.trailingAnchor),
+            
+            timeoutLb.bottomAnchor.constraint(equalTo: vStack.bottomAnchor, constant: -8),
         ])
     }
     
@@ -82,6 +109,9 @@ class SetsExerciseProgramView: UIView {
             lb.sizeToFit()
             self.repsStackView.addArrangedSubview(lb)
         }
+        
+        timeoutLb.text = timeout.stringFromTimeInterval()
+        
         self.layoutSubviews()
         
         UIView.animate(withDuration: 1, delay: 0.0, usingSpringWithDamping: 1, initialSpringVelocity: 0.0, options: UIView.AnimationOptions.curveLinear, animations: { [self] in
