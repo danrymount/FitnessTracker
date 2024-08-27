@@ -46,6 +46,7 @@
 		964033562C3DE48F009F0615 /* SetsExerciseSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96EC6BDE2C0CE1B700E33EC9 /* SetsExerciseSettings.swift */; };
 		964033572C3DE49D009F0615 /* SetsExerciseLadderSettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964033482C3C0729009F0615 /* SetsExerciseLadderSettingsController.swift */; };
 		964033582C3DE49D009F0615 /* SetsExerciseLadderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964033462C3C0725009F0615 /* SetsExerciseLadderModel.swift */; };
+		964291B42C7E4FE400141949 /* SetsExerciseInfoPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964291B32C7E4FE400141949 /* SetsExerciseInfoPreviewView.swift */; };
 		96484A492C20D35D006187E0 /* SetsExerciseCustomSettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96484A482C20D35D006187E0 /* SetsExerciseCustomSettingsModel.swift */; };
 		96484A4A2C20D35D006187E0 /* SetsExerciseCustomSettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96484A482C20D35D006187E0 /* SetsExerciseCustomSettingsModel.swift */; };
 		96484A4C2C20D693006187E0 /* SettingsParamModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96484A4B2C20D693006187E0 /* SettingsParamModel.swift */; };
@@ -179,6 +180,7 @@
 		964033492C3C3633009F0615 /* SetsExerciseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetsExerciseModel.swift; sourceTree = "<group>"; };
 		9640334D2C3C3F75009F0615 /* SetsExerciseInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetsExerciseInfo.swift; sourceTree = "<group>"; };
 		964033512C3C5C6D009F0615 /* ViewControllerUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerUtils.swift; sourceTree = "<group>"; };
+		964291B32C7E4FE400141949 /* SetsExerciseInfoPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetsExerciseInfoPreviewView.swift; sourceTree = "<group>"; };
 		96484A482C20D35D006187E0 /* SetsExerciseCustomSettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetsExerciseCustomSettingsModel.swift; sourceTree = "<group>"; };
 		96484A4B2C20D693006187E0 /* SettingsParamModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsParamModel.swift; sourceTree = "<group>"; };
 		96484A522C22032B006187E0 /* SetsExerciseSettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetsExerciseSettingsController.swift; sourceTree = "<group>"; };
@@ -587,6 +589,14 @@
 			path = Controllers;
 			sourceTree = "<group>";
 		};
+		964291B22C7E4F0E00141949 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				964291B32C7E4FE400141949 /* SetsExerciseInfoPreviewView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		96484A432C20D210006187E0 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -612,6 +622,7 @@
 		96484A452C20D243006187E0 /* ProgramExerciseSettings */ = {
 			isa = PBXGroup;
 			children = (
+				964291B22C7E4F0E00141949 /* View */,
 				96484A592C236A4E006187E0 /* Models */,
 				96484A552C236980006187E0 /* Controllers */,
 			);
@@ -1017,6 +1028,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				964033552C3DDFFD009F0615 /* SetsExerciseLadderModel.swift in Sources */,
+				964291B42C7E4FE400141949 /* SetsExerciseInfoPreviewView.swift in Sources */,
 				964033542C3DDFFA009F0615 /* SetsExerciseLadderSettingsController.swift in Sources */,
 				962EBD192B38A23300C3866B /* RoundTimerController.swift in Sources */,
 				962EBD0B2B38A05D00C3866B /* ExerciseParamView.swift in Sources */,

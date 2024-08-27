@@ -43,7 +43,7 @@ final class SetsExerciseProgramSettings: SetsExerciseSettingsProtocol {
             3:[10,11,12,13,14]
         ]
         
-        return levelsSteps[level] ?? [10]
+        return levelsSteps[level] ?? []
     }
     
     var timeoutsArr: [TimeInterval] {
