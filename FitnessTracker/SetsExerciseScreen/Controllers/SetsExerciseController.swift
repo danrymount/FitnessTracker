@@ -51,8 +51,7 @@ class SetsExerciseViewController: UIViewController, PopUpModalDelegate {
     
     @objc func backButtonCb(sender: AnyObject) {
         if state != .initial {
-            self.state = .finished
-            changeState()
+            showSavePopupModal()
         } else {
             _ = navigationController?.popToRootViewController(animated: true)
         }
@@ -114,6 +113,14 @@ class SetsExerciseViewController: UIViewController, PopUpModalDelegate {
         actionButton?.setTitle(buttonLabel, for: .normal)
     }
     
+    func showSavePopupModal() {
+        let view = PopUpModalViewController(delegate: self)
+        view.delegate = self
+        view.modalPresentationStyle = .overFullScreen
+        view.modalTransitionStyle = .coverVertical
+        self.present(view, animated: true)
+    }
+    
     func showViewState() {
         switch self.state {
         case .initial:
@@ -126,11 +133,7 @@ class SetsExerciseViewController: UIViewController, PopUpModalDelegate {
         case .timeout:
             showTimeoutView()
         case .finished:
-            let view = PopUpModalViewController(delegate: self)
-            view.delegate = self
-            view.modalPresentationStyle = .overFullScreen
-            view.modalTransitionStyle = .coverVertical
-            self.present(view, animated: true)
+            showSavePopupModal()
         default:
             break
         }
@@ -256,23 +259,71 @@ class SetsExerciseViewController: UIViewController, PopUpModalDelegate {
     
     func getModalInfoView() -> UIView {
         let compositeView = UIView()
-        let summaryLb = UILabel()
-        compositeView.addSubview(summaryLb)
-        summaryLb.translatesAutoresizingMaskIntoConstraints = false
+        compositeView.translatesAutoresizingMaskIntoConstraints = false
+        let titlesStack = {
+            let stack = UIStackView()
+            stack.translatesAutoresizingMaskIntoConstraints = false
+            stack.axis = .vertical
+            stack.spacing = 16
+            
+            return stack
+        }()
         
-//        summaryLb.text = """
-        ////        Total \(self.activityType.toString()): \(self.exerciseInfo.completedSets * self.settings.repeats.value)
-        ////        Duration: \((Date(timeIntervalSinceNow: TimeInterval()) - exerciseInfo.timeStart).stringFromTimeInterval())
-//        """
+        let valuesStack = {
+            let stack = UIStackView()
+            stack.translatesAutoresizingMaskIntoConstraints = false
+            stack.axis = .vertical
+            stack.spacing = 16
+            
+            return stack
+        }()
         
-        summaryLb.numberOfLines = 2
+        _ = {
+            let lb = UILabel()
+            lb.translatesAutoresizingMaskIntoConstraints = false
+            lb.text = "Done:"
+            titlesStack.addArrangedSubview(lb)
+            return lb
+        }()
+        
+        _ = {
+            let lb = UILabel()
+            lb.translatesAutoresizingMaskIntoConstraints = false
+            lb.text = "\(self.infoViewModel.performedReps)"
+            valuesStack.addArrangedSubview(lb)
+            return lb
+        }()
+        
+        _ = {
+            let lb = UILabel()
+            lb.translatesAutoresizingMaskIntoConstraints = false
+            lb.text = "Duration:"
+            titlesStack.addArrangedSubview(lb)
+            return lb
+        }()
+        
+        _ = {
+            let lb = UILabel()
+            lb.translatesAutoresizingMaskIntoConstraints = false
+            lb.text = "\(self.infoViewModel.duration.stringFromTimeInterval())"
+            valuesStack.addArrangedSubview(lb)
+            return lb
+        }()
+        
+        compositeView.addSubview(titlesStack)
+        compositeView.addSubview(valuesStack)
+
         NSLayoutConstraint.activate([
-            summaryLb.topAnchor.constraint(equalTo: compositeView.topAnchor),
-            summaryLb.leadingAnchor.constraint(equalTo: compositeView.leadingAnchor),
-            summaryLb.bottomAnchor.constraint(lessThanOrEqualTo: compositeView.bottomAnchor),
-            summaryLb.trailingAnchor.constraint(lessThanOrEqualTo: compositeView.trailingAnchor)
+            titlesStack.topAnchor.constraint(equalTo: compositeView.topAnchor),
+            titlesStack.bottomAnchor.constraint(lessThanOrEqualTo: compositeView.bottomAnchor),
+            titlesStack.leadingAnchor.constraint(equalTo: compositeView.leadingAnchor),
+            titlesStack.widthAnchor.constraint(equalTo: compositeView.widthAnchor, multiplier: 0.3),
+            
+            valuesStack.leadingAnchor.constraint(equalTo: titlesStack.trailingAnchor),
+            valuesStack.trailingAnchor.constraint(equalTo: compositeView.trailingAnchor),
+            valuesStack.topAnchor.constraint(equalTo: compositeView.topAnchor),
+            valuesStack.bottomAnchor.constraint(lessThanOrEqualTo: compositeView.bottomAnchor),
         ])
-        summaryLb.backgroundColor = .clear
         return compositeView
     }
 

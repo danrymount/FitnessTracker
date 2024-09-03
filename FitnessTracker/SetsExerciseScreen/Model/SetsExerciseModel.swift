@@ -29,6 +29,14 @@ class SetsExerciseViewModel {
         return settings.repsArr
     }
     
+    var performedReps: Int {
+        guard let info = info else {
+            return 0
+        }
+        
+        return Int(info.performedSets.reduce(UInt(0), +))
+    }
+    
     var completedSets: Int {
         guard let info = info else {
             return 0
