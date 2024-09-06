@@ -2,7 +2,6 @@
 import Foundation
 import UIKit
 
-
 class SetsExerciseProgramSettingsController: UIViewController, SetsExerciseSettingsControllerProtocol {
     func getSettings() -> SetsExerciseSettingsProtocol {
         return settingsModel.settings
@@ -24,30 +23,36 @@ class SetsExerciseProgramSettingsController: UIViewController, SetsExerciseSetti
     private func initViewWithSettings() {
         let levelSettingsView = {
             var view = ExerciseParamView(settingName: "Level")
-            
-            view.addButtonTapGesture(funcCb: {
-                self.settingsModel.level.incValue()
-            }, dec: false)
-            view.addButtonTapGesture(funcCb: {
-                self.settingsModel.level.decValue()
-            }, dec: true)
-            
+
             view.translatesAutoresizingMaskIntoConstraints = false
             
             return view
         }()
-
-        settingsModel.setLevelObserving {
-            levelSettingsView.updateValue(s: self.settingsModel.level.toString())
+        
+        func linkModelWithView(paramModel: SettingsParamModel<some Numeric & Comparable>, settingView: ExerciseParamView) {
+            settingsModel.setLevelObserving {
+                settingView.updateValue(s: paramModel.toString())
+                settingView.setIncBtnEnable(!paramModel.isMaxReached)
+                settingView.setDecBtnEnable(!paramModel.isMinReached)
+                
+                // TODO: maybe move as additional cb for func
+                self.settingsProgramView.update(reps: self.settingsModel.settings.repsArr,
+                                                timeout: self.settingsModel.settings.timeoutsArr[0])
+            }
             
-            self.settingsProgramView.update(reps: self.settingsModel.settings.repsArr,
-                                            timeout: self.settingsModel.settings.timeoutsArr[0])
+            settingView.addButtonTapGesture(funcCb: {
+                paramModel.incValue()
+            }, dec: false)
+            settingView.addButtonTapGesture(funcCb: {
+                paramModel.decValue()
+            }, dec: true)
         }
+
+        linkModelWithView(paramModel: settingsModel.level, settingView: levelSettingsView)
         
         settingsModel.resetValues()
 
         settingsProgramView.translatesAutoresizingMaskIntoConstraints = false
-
 
         view.addSubview(levelSettingsView)
         view.addSubview(settingsProgramView)

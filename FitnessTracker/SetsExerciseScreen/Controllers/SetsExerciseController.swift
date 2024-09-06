@@ -32,6 +32,8 @@ class SetsExerciseViewController: UIViewController, PopUpModalDelegate {
         
         self.view.backgroundColor = UIColor.white
         self.title = self.activityType.toString()
+        
+        
     }
     
     @available(*, unavailable)
@@ -53,7 +55,7 @@ class SetsExerciseViewController: UIViewController, PopUpModalDelegate {
         if state != .initial {
             showSavePopupModal()
         } else {
-            _ = navigationController?.popToRootViewController(animated: true)
+            _ = navigationController?.popViewController(animated: true)
         }
     }
     
@@ -328,6 +330,7 @@ class SetsExerciseViewController: UIViewController, PopUpModalDelegate {
     }
 
     func didTapCancel() {
+        _ = navigationController?.popToRootViewController(animated: true)
         self.dismiss(animated: true)
     }
     

@@ -3,9 +3,8 @@
 import Foundation
 import UIKit
 
-
-
 class SetsExerciseSettingsController: UIViewController {
+    @available(*, unavailable)
     required init?(coder aDecoder: NSCoder) {
         fatalError("Storyboard is not supported")
     }
@@ -23,8 +22,6 @@ class SetsExerciseSettingsController: UIViewController {
             updateSettingsView()
         }
     }
-    
-    
     
     var settingsView = UIView()
     
@@ -49,16 +46,14 @@ class SetsExerciseSettingsController: UIViewController {
             
         }()
         
-        
         if let exController = exerciseSettingsController,
-           let subcontrollerView = exController.view {
-            
+           let subcontrollerView = exController.view
+        {
             onUpdateSettings?(exController.getSettings())
             
             add(exController)
             settingsView.translatesAutoresizingMaskIntoConstraints = false
             settingsView.addSubview(subcontrollerView)
-            
             
             NSLayoutConstraint.activate([
                 subcontrollerView.leadingAnchor.constraint(equalTo: settingsView.leadingAnchor),
@@ -74,31 +69,29 @@ class SetsExerciseSettingsController: UIViewController {
     }
     
     private func setupNavBar() {
-        var handle: (UIAction) -> () = { action in
-            
+        var handle: (UIAction) -> () = { _ in
         }
         
         var menuHandler: UIActionHandler = { action in
             print(action)
             handle(action)
-            
         }
         
-        let actions: [UIAction:SetsExerciseType] =
-        [
-            UIAction(title: NSLocalizedString("Program", comment: ""), handler: menuHandler): .program,
-            UIAction(title: NSLocalizedString("Ladder", comment: ""), handler: menuHandler): .ladder,
-            UIAction(title: NSLocalizedString("Custom", comment: ""), handler: menuHandler): .custom,
-        ]
+        let actions: [UIAction: SetsExerciseType] =
+            [
+                UIAction(title: NSLocalizedString("Program", comment: ""), handler: menuHandler): .program,
+                UIAction(title: NSLocalizedString("Ladder", comment: ""), handler: menuHandler): .ladder,
+                UIAction(title: NSLocalizedString("Custom", comment: ""), handler: menuHandler): .custom,
+            ]
         
         handle = { action in
             self.exerciseTypeId = actions[action] ?? .program
             self.parent?.navigationItem.rightBarButtonItem?.title = self.exerciseTypeId.rawValue
         }
         
-        let barButtonMenu = UIMenu(title: "", children: Array(actions.keys).sorted {$0.title < $1.title})
+        let barButtonMenu = UIMenu(title: "", children: Array(actions.keys).sorted { $0.title < $1.title })
 
-        self.parent?.navigationItem.rightBarButtonItem = UIBarButtonItem(title: Array(actions.keys).sorted{$0.title < $1.title}[0].title, image: nil, primaryAction: nil, menu: barButtonMenu)
+        self.parent?.navigationItem.rightBarButtonItem = UIBarButtonItem(title: Array(actions.keys).sorted { $0.title < $1.title }[0].title, image: nil, primaryAction: nil, menu: barButtonMenu)
     }
     
     override func removeFromParent() {
@@ -110,7 +103,6 @@ class SetsExerciseSettingsController: UIViewController {
         
         setupNavBar()
         
-        
         view.addSubview(settingsView)
         view.translatesAutoresizingMaskIntoConstraints = false
         
@@ -121,14 +113,11 @@ class SetsExerciseSettingsController: UIViewController {
             settingsView.topAnchor.constraint(equalTo: view.topAnchor),
         ])
         
-        
         updateSettingsView()
-        
     }
 }
 
 extension CaseIterable where Self: Equatable {
-    
     func previous() -> Self {
         let all = Self.allCases
         var idx = all.firstIndex(of: self)!
@@ -147,5 +136,4 @@ extension CaseIterable where Self: Equatable {
         let next = all.index(after: idx)
         return all[next == all.endIndex ? all.startIndex : next]
     }
-    
 }

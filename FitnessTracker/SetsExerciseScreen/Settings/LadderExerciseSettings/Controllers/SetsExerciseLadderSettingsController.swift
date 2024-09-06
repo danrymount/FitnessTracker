@@ -7,6 +7,7 @@ class SetsExerciseLadderSettingsController: UIViewController, SetsExerciseSettin
         return settingsModel.settings
     }
     
+    @available(*, unavailable)
     required init?(coder aDecoder: NSCoder) {
         fatalError("Storyboard is not supported")
     }
@@ -25,51 +26,28 @@ class SetsExerciseLadderSettingsController: UIViewController, SetsExerciseSettin
         let stepsSettingsView = ExerciseParamView(settingName: "Steps")
         let timeoutSettingsView = ExerciseParamView(settingName: "Timeout")
         
-        settingsModel.setObserving(forType: .from) {
-            fromSettingsView.updateValue(s: self.settingsModel.fromVal.toString())
+        func linkModelWithView(modelSettingType: SetsExerciseLadderSettingsModel.SettingType, paramModel: SettingsParamModel<some Numeric & Comparable>, settingView: ExerciseParamView) {
+            settingsModel.setObserving(forType: modelSettingType) {
+                settingView.updateValue(s: paramModel.toString())
+                settingView.setIncBtnEnable(!paramModel.isMaxReached)
+                settingView.setDecBtnEnable(!paramModel.isMinReached)
+            }
+            
+            settingView.addButtonTapGesture(funcCb: {
+                paramModel.incValue()
+            }, dec: false)
+            settingView.addButtonTapGesture(funcCb: {
+                paramModel.decValue()
+            }, dec: true)
         }
         
-        settingsModel.setObserving(forType: .to) {
-            toSettingsView.updateValue(s: self.settingsModel.toVal.toString())
-        }
+        linkModelWithView(modelSettingType: .from, paramModel: settingsModel.fromVal, settingView: fromSettingsView)
         
-        settingsModel.setObserving(forType: .steps) {
-            stepsSettingsView.updateValue(s: self.settingsModel.stepsVal.toString())
-        }
+        linkModelWithView(modelSettingType: .to, paramModel: settingsModel.toVal, settingView: toSettingsView)
         
-        settingsModel.setObserving(forType: .timeout) {
-            timeoutSettingsView.updateValue(s: self.settingsModel.timeoutVal.toString())
-        }
+        linkModelWithView(modelSettingType: .steps, paramModel: settingsModel.stepsVal, settingView: stepsSettingsView)
         
-       
-        fromSettingsView.addButtonTapGesture(funcCb: {
-            self.settingsModel.fromVal.incValue()
-        }, dec: false)
-        fromSettingsView.addButtonTapGesture(funcCb: {
-            self.settingsModel.fromVal.decValue()
-        }, dec: true)
-        
-        toSettingsView.addButtonTapGesture(funcCb: {
-            self.settingsModel.toVal.incValue()
-        }, dec: false)
-        toSettingsView.addButtonTapGesture(funcCb: {
-            self.settingsModel.toVal.decValue()
-        }, dec: true)
-        
-        
-        stepsSettingsView.addButtonTapGesture(funcCb: {
-            self.settingsModel.stepsVal.incValue()
-        }, dec: false)
-        stepsSettingsView.addButtonTapGesture(funcCb: {
-            self.settingsModel.stepsVal.decValue()
-        }, dec: true)
-        
-        timeoutSettingsView.addButtonTapGesture(funcCb: {
-            self.settingsModel.timeoutVal.incValue()
-        }, dec: false)
-        timeoutSettingsView.addButtonTapGesture(funcCb: {
-            self.settingsModel.timeoutVal.decValue()
-        }, dec: true)
+        linkModelWithView(modelSettingType: .timeout, paramModel: settingsModel.timeoutVal, settingView: timeoutSettingsView)
         
         settingsModel.resetValues()
         
@@ -78,7 +56,6 @@ class SetsExerciseLadderSettingsController: UIViewController, SetsExerciseSettin
         vStack.spacing = 16
         vStack.alignment = .fill
         vStack.distribution = .equalSpacing
-        
         
         vStack.addArrangedSubview(fromSettingsView)
         vStack.addArrangedSubview(toSettingsView)
@@ -109,7 +86,6 @@ class SetsExerciseLadderSettingsController: UIViewController, SetsExerciseSettin
             settingsView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             settingsView.bottomAnchor.constraint(lessThanOrEqualTo: view.bottomAnchor),
         ])
-        
         
         vStack.isUserInteractionEnabled = true
         settingsView.translatesAutoresizingMaskIntoConstraints = false

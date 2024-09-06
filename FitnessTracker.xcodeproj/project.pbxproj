@@ -51,7 +51,7 @@
 		96484A4A2C20D35D006187E0 /* SetsExerciseCustomSettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96484A482C20D35D006187E0 /* SetsExerciseCustomSettingsModel.swift */; };
 		96484A4C2C20D693006187E0 /* SettingsParamModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96484A4B2C20D693006187E0 /* SettingsParamModel.swift */; };
 		96484A4D2C20D693006187E0 /* SettingsParamModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96484A4B2C20D693006187E0 /* SettingsParamModel.swift */; };
-		96484A4E2C20D6D6006187E0 /* SetsExerciseSettingsControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96EC6BD82C0CDEC000E33EC9 /* SetsExerciseSettingsControllerProtocol.swift */; };
+		96484A4E2C20D6D6006187E0 /* SetsExerciseCustomSettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96EC6BD82C0CDEC000E33EC9 /* SetsExerciseCustomSettingsController.swift */; };
 		96484A532C22032B006187E0 /* SetsExerciseSettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96484A522C22032B006187E0 /* SetsExerciseSettingsController.swift */; };
 		96484A542C22032B006187E0 /* SetsExerciseSettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96484A522C22032B006187E0 /* SetsExerciseSettingsController.swift */; };
 		96484A572C2369A0006187E0 /* SetsExerciseProgramSettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96484A562C2369A0006187E0 /* SetsExerciseProgramSettingsController.swift */; };
@@ -141,7 +141,7 @@
 		96C4B9C82B60538000973D6E /* RunExerciseInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C4B9C72B60538000973D6E /* RunExerciseInfoView.swift */; };
 		96D8AA162B73E44C00B3071B /* ExerciseMotionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D8AA152B73E44C00B3071B /* ExerciseMotionManager.swift */; };
 		96D8AA182B73E6C500B3071B /* RunMotionDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D8AA172B73E6C500B3071B /* RunMotionDataModel.swift */; };
-		96EC6BD92C0CDEC000E33EC9 /* SetsExerciseSettingsControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96EC6BD82C0CDEC000E33EC9 /* SetsExerciseSettingsControllerProtocol.swift */; };
+		96EC6BD92C0CDEC000E33EC9 /* SetsExerciseCustomSettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96EC6BD82C0CDEC000E33EC9 /* SetsExerciseCustomSettingsController.swift */; };
 		96EC6BDF2C0CE1B700E33EC9 /* SetsExerciseSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96EC6BDE2C0CE1B700E33EC9 /* SetsExerciseSettings.swift */; };
 		96FD941D2B5D4966005955D7 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FD941C2B5D4966005955D7 /* MapViewController.swift */; };
 /* End PBXBuildFile section */
@@ -215,7 +215,7 @@
 		96C4B9C72B60538000973D6E /* RunExerciseInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunExerciseInfoView.swift; sourceTree = "<group>"; };
 		96D8AA152B73E44C00B3071B /* ExerciseMotionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseMotionManager.swift; sourceTree = "<group>"; };
 		96D8AA172B73E6C500B3071B /* RunMotionDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunMotionDataModel.swift; sourceTree = "<group>"; };
-		96EC6BD82C0CDEC000E33EC9 /* SetsExerciseSettingsControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetsExerciseSettingsControllerProtocol.swift; sourceTree = "<group>"; };
+		96EC6BD82C0CDEC000E33EC9 /* SetsExerciseCustomSettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetsExerciseCustomSettingsController.swift; sourceTree = "<group>"; };
 		96EC6BDE2C0CE1B700E33EC9 /* SetsExerciseSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetsExerciseSettings.swift; sourceTree = "<group>"; };
 		96FD941C2B5D4966005955D7 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -659,7 +659,7 @@
 		96484A502C20D6FA006187E0 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				96EC6BD82C0CDEC000E33EC9 /* SetsExerciseSettingsControllerProtocol.swift */,
+				96EC6BD82C0CDEC000E33EC9 /* SetsExerciseCustomSettingsController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -976,7 +976,7 @@
 				9666D14A2B8FACFA008BCAD6 /* ExerciseLocationManager.swift in Sources */,
 				9666D14B2B8FACFA008BCAD6 /* MapViewController.swift in Sources */,
 				96484A582C2369A0006187E0 /* SetsExerciseProgramSettingsController.swift in Sources */,
-				96484A4E2C20D6D6006187E0 /* SetsExerciseSettingsControllerProtocol.swift in Sources */,
+				96484A4E2C20D6D6006187E0 /* SetsExerciseCustomSettingsController.swift in Sources */,
 				9666D14C2B8FACFA008BCAD6 /* ExerciseMotionManager.swift in Sources */,
 				9666D14D2B8FACFA008BCAD6 /* MainView.swift in Sources */,
 				9666D14E2B8FACFA008BCAD6 /* RegistrationResponse.swift in Sources */,
@@ -1084,7 +1084,7 @@
 				96D8AA182B73E6C500B3071B /* RunMotionDataModel.swift in Sources */,
 				962EBD052B389C0D00C3866B /* ActivitySelectionViewController.swift in Sources */,
 				962EBD092B38A04F00C3866B /* SetsInfoView.swift in Sources */,
-				96EC6BD92C0CDEC000E33EC9 /* SetsExerciseSettingsControllerProtocol.swift in Sources */,
+				96EC6BD92C0CDEC000E33EC9 /* SetsExerciseCustomSettingsController.swift in Sources */,
 				962EBCD92B386F3700C3866B /* DefaultTextFieldView.swift in Sources */,
 				96A203962B97BC53002A0244 /* ActivityDataModel.swift in Sources */,
 				962EBCE72B3872AE00C3866B /* ProfileView.swift in Sources */,

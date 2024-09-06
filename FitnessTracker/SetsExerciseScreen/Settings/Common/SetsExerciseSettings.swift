@@ -10,7 +10,7 @@ enum SetsExerciseType: String, CaseIterable {
 
 protocol SetsExerciseSettingsProtocol {
     var repsArr: [UInt] { get }
-    var timeoutsArr: [TimeInterval] {get}
+    var timeoutsArr: [TimeInterval] { get }
     
     var type: SetsExerciseType { get }
     
@@ -35,30 +35,29 @@ final class SetsExerciseLadderSettings: SetsExerciseSettingsProtocol {
 }
 
 final class SetsExerciseProgramSettings: SetsExerciseSettingsProtocol {
+    private static var programInfo: [([UInt], [TimeInterval])] = [
+        ([1, 2, 3, 4, 5], [30, 30, 30, 30]),
+        ([5, 6, 7, 8, 9], [45, 45, 45, 45]),
+        ([10, 11, 12, 13, 14], [60, 60, 60, 60])
+    ]
+    
+    static var maxLevel: Int = programInfo.count
+    
     var repsArr: [UInt] {
-        let levelsSteps: [Int: [UInt]] =
-        [
-            1:[1,2,3,4,5],
-            2:[5,6,7,8,9],
-            3:[10,11,12,13,14]
-        ]
-        
-        return levelsSteps[level] ?? []
+        return SetsExerciseProgramSettings.programInfo[level - 1].0
     }
     
     var timeoutsArr: [TimeInterval] {
-        let levelsTimeout: [Int: TimeInterval] =
-        [
-            1:30,
-            2:45,
-            3:60
-        ]
-        return Array(repeating: levelsTimeout[level] ?? 0, count: repsArr.count)
+        return SetsExerciseProgramSettings.programInfo[level - 1].1
     }
     
     var type: SetsExerciseType = .program
     
-    var level: Int = -1
+    var level: Int = 1 {
+        didSet {
+            assert(level >= 1 && level <= SetsExerciseProgramSettings.maxLevel, "Level is out of range")
+        }
+    }
 }
 
 final class SetsExerciseCustomSettings: SetsExerciseSettingsProtocol {
@@ -73,11 +72,13 @@ final class SetsExerciseCustomSettings: SetsExerciseSettingsProtocol {
             recal()
         }
     }
+
     var reps: Int = -1 {
         didSet {
             recal()
         }
     }
+
     var timeout: TimeInterval = -1 {
         didSet {
             recal()
@@ -94,7 +95,7 @@ final class SetsExerciseCustomSettings: SetsExerciseSettingsProtocol {
     }
 }
 
-class SetsExerciseSettings<T:SetsExerciseSettingsProtocol> {
+class SetsExerciseSettings<T: SetsExerciseSettingsProtocol> {
     var exType: SetsExerciseType
     
     var settings: T

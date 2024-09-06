@@ -57,4 +57,12 @@ class SettingsParamModel<ValueType:Numeric & Comparable>
     {
         return toStr(self.value)
     }
+    
+    var isMaxReached: Bool {
+        return self.value == max
+    }
+    
+    var isMinReached: Bool {
+        return self.value == min
+    }
 }

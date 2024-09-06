@@ -3,8 +3,6 @@
 import Foundation
 import UIKit
 
-
-
 protocol SetsExerciseSettingsControllerProtocol: UIViewController {
     func loadView()
     
@@ -18,6 +16,7 @@ class SesExerciseCustomSettingsController: UIViewController, SetsExerciseSetting
         return settingsModel.settings
     }
     
+    @available(*, unavailable)
     required init?(coder aDecoder: NSCoder) {
         fatalError("Storyboard is not supported")
     }
@@ -35,43 +34,26 @@ class SesExerciseCustomSettingsController: UIViewController, SetsExerciseSetting
         let repsSettingsView = ExerciseParamView(settingName: "Repeats")
         let timeoutSettingsView = ExerciseParamView(settingName: "Timeout")
         
-        settingsModel.setObserving(forType: .Repeats) {
-            repsSettingsView.updateValue(s: self.settingsModel.repeats.toString())
-        }
-        
-        settingsModel.setObserving(forType: .Sets) {
-            setsSettingsView.updateValue(s: self.settingsModel.sets.toString())
-        }
-        
-        settingsModel.setObserving(forType: .Timeout) {
-            timeoutSettingsView.updateValue(s: self.settingsModel.timeout.toString())
-        }
-        
-        setsSettingsView.addButtonTapGesture(funcCb: {
-            self.settingsModel.sets.incValue()
+        func linkModelWithView(modelSettingType: SetsExerciseCustomSettingsModel.SettingType, paramModel: SettingsParamModel<some Numeric & Comparable>, settingView: ExerciseParamView) {
+            settingsModel.setObserving(forType: modelSettingType) {
+                settingView.updateValue(s: paramModel.toString())
+                settingView.setIncBtnEnable(!paramModel.isMaxReached)
+                settingView.setDecBtnEnable(!paramModel.isMinReached)
+            }
             
-        }, dec: false)
-        setsSettingsView.addButtonTapGesture(funcCb: {
-            self.settingsModel.sets.decValue()
-        }, dec: true)
+            settingView.addButtonTapGesture(funcCb: {
+                paramModel.incValue()
+            }, dec: false)
+            settingView.addButtonTapGesture(funcCb: {
+                paramModel.decValue()
+            }, dec: true)
+        }
         
-        repsSettingsView.addButtonTapGesture(funcCb: {
-            self.settingsModel.repeats.incValue()
-        }, dec: false)
+        linkModelWithView(modelSettingType: .Repeats, paramModel: settingsModel.repeats, settingView: repsSettingsView)
         
-        repsSettingsView.addButtonTapGesture(funcCb: {
-            self.settingsModel.repeats.decValue()
-        }, dec: true)
+        linkModelWithView(modelSettingType: .Sets, paramModel: settingsModel.sets, settingView: setsSettingsView)
         
-        
-        timeoutSettingsView.addButtonTapGesture(funcCb: {
-            self.settingsModel.timeout.incValue()
-        }, dec: false)
-        
-        timeoutSettingsView.addButtonTapGesture(funcCb: {
-            self.settingsModel.timeout.decValue()
-            
-        }, dec: true)
+        linkModelWithView(modelSettingType: .Timeout, paramModel: settingsModel.timeout, settingView: timeoutSettingsView)
         
         settingsModel.resetValues()
         
@@ -80,7 +62,6 @@ class SesExerciseCustomSettingsController: UIViewController, SetsExerciseSetting
         vStack.spacing = 16
         vStack.alignment = .fill
         vStack.distribution = .equalSpacing
-        
         
         vStack.addArrangedSubview(setsSettingsView)
         vStack.addArrangedSubview(repsSettingsView)
@@ -109,7 +90,6 @@ class SesExerciseCustomSettingsController: UIViewController, SetsExerciseSetting
             settingsView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             settingsView.bottomAnchor.constraint(lessThanOrEqualTo: view.bottomAnchor),
         ])
-        
         
         vStack.isUserInteractionEnabled = true
         settingsView.translatesAutoresizingMaskIntoConstraints = false
