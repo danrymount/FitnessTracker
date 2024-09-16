@@ -1,13 +1,6 @@
 import Foundation
 import UIKit
 
-
-struct ExerciseInfo {
-    var completedSets: UInt
-    var timeStart: Date
-}
-
-
 class SetsExerciseViewController: UIViewController, PopUpModalDelegate {
     enum ExerciseState {
         case initial
@@ -17,32 +10,33 @@ class SetsExerciseViewController: UIViewController, PopUpModalDelegate {
         case finished
     }
     
-    private var RoundTimerVC: RoundTimerViewController?
+    private var roundTimerVC: RoundTimerViewController?
     
     private var state: ExerciseState
-    private var settings: ExerciseSettings
     
     private var settingsScreen: UIView?
     private var actionButton: UIButton?
     private var mainActionView: UIView?
     private var setsInfoView: SetsInfoView?
     private var repeatsLabelView: UILabel?
-    private var exerciseInfo: ExerciseInfo
     private var activityType: ActivityType
     
+    private var infoViewModel: SetsExerciseViewModel
     
     init(activityType: ActivityType) {
-        settings = ExerciseSettings()
+        infoViewModel = SetsExerciseViewModel(activityType: activityType)
         state = .initial
-        exerciseInfo = ExerciseInfo(completedSets: 0, timeStart: Date.init(timeIntervalSinceNow: TimeInterval()))
+        
         self.activityType = activityType
         super.init(nibName: nil, bundle: nil)
         
         self.view.backgroundColor = UIColor.white
         self.title = self.activityType.toString()
+        
+        
     }
     
-    
+    @available(*, unavailable)
     required init?(coder aDecoder: NSCoder) {
         fatalError("Storyboard is not supported")
     }
@@ -58,19 +52,14 @@ class SetsExerciseViewController: UIViewController, PopUpModalDelegate {
     }
     
     @objc func backButtonCb(sender: AnyObject) {
-        if state != .initial
-        {
-            self.state = .finished
-            changeState()
-        }
-        else
-        {
-            _ = navigationController?.popToRootViewController(animated: true)
+        if state != .initial {
+            showSavePopupModal()
+        } else {
+            _ = navigationController?.popViewController(animated: true)
         }
     }
     
     func initScreen() {
-        
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .done, target: self, action: #selector(backButtonCb(sender:)))
         
         let mainActionView = UIView()
@@ -104,13 +93,12 @@ class SetsExerciseViewController: UIViewController, PopUpModalDelegate {
     }
     
     func configureActionButton(forState: ExerciseState) {
-        let buttonLabel: String =
-        {
+        let buttonLabel: String = {
             switch forState {
             case .initial:
                 return "Start"
             case .inProgress:
-                if exerciseInfo.completedSets == settings.sets.value {
+                if infoViewModel.isLastSet {
                     return "Finish"
                 } else {
                     return "Next"
@@ -127,50 +115,43 @@ class SetsExerciseViewController: UIViewController, PopUpModalDelegate {
         actionButton?.setTitle(buttonLabel, for: .normal)
     }
     
+    func showSavePopupModal() {
+        let view = PopUpModalViewController(delegate: self)
+        view.delegate = self
+        view.modalPresentationStyle = .overFullScreen
+        view.modalTransitionStyle = .coverVertical
+        self.present(view, animated: true)
+    }
+    
     func showViewState() {
         switch self.state {
         case .initial:
             if settingsScreen == nil {
                 initViewWithSettings()
             }
-            self.mainActionView?.addSubview(settingsScreen!)
             
-            NSLayoutConstraint.activate([
-                settingsScreen!.leadingAnchor.constraint(equalTo: mainActionView!.leadingAnchor),
-                settingsScreen!.trailingAnchor.constraint(equalTo: mainActionView!.trailingAnchor),
-                settingsScreen!.topAnchor.constraint(equalTo: mainActionView!.topAnchor),
-                settingsScreen!.bottomAnchor.constraint(equalTo: mainActionView!.bottomAnchor)
-            ])
-            self.settings.resetValues()
         case .inProgress:
             showInProgressView()
         case .timeout:
             showTimeoutView()
         case .finished:
-            let view = PopUpModalViewController(delegate: self)
-            view.delegate = self
-            view.modalPresentationStyle = .overFullScreen
-            view.modalTransitionStyle = .coverVertical
-            self.present(view, animated: true)
+            showSavePopupModal()
         default:
             break
         }
         
         configureActionButton(forState: self.state)
-        
     }
     
     func showInProgressView() {
-        self.RoundTimerVC?.resetTimer()
-        self.RoundTimerVC?.view.isHidden = true
+        self.roundTimerVC?.resetTimer()
+        self.roundTimerVC?.view.isHidden = true
         
         if setsInfoView == nil {
             for v in mainActionView!.subviews {
                 v.removeFromSuperview()
             }
-            setsInfoView = SetsInfoView(sets: (0..<settings.sets.value).map { _ in
-                settings.repeats.value
-            })
+            setsInfoView = SetsInfoView(sets: infoViewModel.allRepsArr)
             setsInfoView?.translatesAutoresizingMaskIntoConstraints = false
             mainActionView?.addSubview(setsInfoView!)
             NSLayoutConstraint.activate([
@@ -182,7 +163,7 @@ class SetsExerciseViewController: UIViewController, PopUpModalDelegate {
             ])
             
             let lb = UILabel()
-            lb.text = settings.repeats.toString()
+            lb.text = String(infoViewModel.currentReps)
             lb.textColor = .black
             lb.font = lb.font.withSize(32)
             lb.translatesAutoresizingMaskIntoConstraints = false
@@ -197,117 +178,53 @@ class SetsExerciseViewController: UIViewController, PopUpModalDelegate {
             repeatsLabelView = lb
         }
         
-        setsInfoView?.markCompleted(amount: Int(exerciseInfo.completedSets + 1))
+        setsInfoView?.markCompleted(amount: infoViewModel.completedSets)
     }
     
     func showTimeoutView() {
-        if RoundTimerVC == nil {
-            print(settings.timeout.value)
-            RoundTimerVC = RoundTimerViewController(duration: settings.timeout.value, resolution: 1.0/120.0)
-            RoundTimerVC!.view.translatesAutoresizingMaskIntoConstraints = false
-            add(RoundTimerVC!)
+        if roundTimerVC == nil {
+            roundTimerVC = RoundTimerViewController(duration: infoViewModel.currentTimeout, resolution: 1.0 / 120.0)
+            guard let roundTimerVC = roundTimerVC, let mainActionView = mainActionView else {
+                return
+            }
+            roundTimerVC.view.translatesAutoresizingMaskIntoConstraints = false
+            add(roundTimerVC)
             NSLayoutConstraint.activate([
-                RoundTimerVC!.view.leadingAnchor.constraint(equalTo: mainActionView!.leadingAnchor, constant: 120),
-                RoundTimerVC!.view.trailingAnchor.constraint(equalTo: mainActionView!.trailingAnchor, constant: -120),
-                RoundTimerVC!.view.topAnchor.constraint(equalTo: mainActionView!.topAnchor, constant: 120),
-                RoundTimerVC!.view.bottomAnchor.constraint(equalTo: mainActionView!.bottomAnchor, constant: -120)
+                roundTimerVC.view.leadingAnchor.constraint(equalTo: mainActionView.leadingAnchor, constant: 120),
+                roundTimerVC.view.trailingAnchor.constraint(equalTo: mainActionView.trailingAnchor, constant: -120),
+                roundTimerVC.view.topAnchor.constraint(equalTo: mainActionView.topAnchor, constant: 120),
+                roundTimerVC.view.bottomAnchor.constraint(equalTo: mainActionView.bottomAnchor, constant: -120)
             ])
-            RoundTimerVC!.setOnFinishCb {
+            roundTimerVC.setOnFinishCb {
                 self.changeState()
             }
         }
-        RoundTimerVC!.startTimer()
-        self.RoundTimerVC!.view.isHidden = false
+        
+        if let roundTimerVC = roundTimerVC {
+            roundTimerVC.startTimer()
+            roundTimerVC.view.isHidden = false
+        }
     }
     
-    
+    let settingsController = SetsExerciseSettingsController()
+
     func initViewWithSettings() {
-        let settingsView = UIView()
-        
-        settingsScreen = UIView()
-        
-        let setsSettingsView = ExerciseParamView(settingName: "Sets")
-        let repsSettingsView = ExerciseParamView(settingName: "Repeats")
-        let timeoutSettingsView = ExerciseParamView(settingName: "Timeout")
-        
-        settings.setObserving(forType: .Repeats) {
-            repsSettingsView.updateValue(s: self.settings.repeats.toString())
+        settingsController.onUpdateSettings = { settings in
+            self.infoViewModel.settings = settings
         }
+        add(settingsController)
         
-        settings.setObserving(forType: .Sets) {
-            setsSettingsView.updateValue(s: self.settings.sets.toString())
-        }
-        
-        settings.setObserving(forType: .Timeout) {
-            timeoutSettingsView.updateValue(s: self.settings.timeout.toString())
-        }
-        
-        setsSettingsView.addButtonTapGesture(funcCb: {
-            self.settings.sets.incValue()
-            
-        }, dec: false)
-        setsSettingsView.addButtonTapGesture(funcCb: {
-            self.settings.sets.decValue()
-        }, dec: true)
-        
-        repsSettingsView.addButtonTapGesture(funcCb: {
-            self.settings.repeats.incValue()
-        }, dec: false)
-        
-        repsSettingsView.addButtonTapGesture(funcCb: {
-            self.settings.repeats.decValue()
-        }, dec: true)
-        
-        
-        timeoutSettingsView.addButtonTapGesture(funcCb: {
-            self.settings.timeout.incValue()
-        }, dec: false)
-        
-        timeoutSettingsView.addButtonTapGesture(funcCb: {
-            self.settings.timeout.decValue()
-            
-        }, dec: true)
-        
-        settings.resetValues()
-        
-        let vStack = UIStackView()
-        vStack.axis = .vertical
-        vStack.spacing = 16
-        vStack.alignment = .fill
-        vStack.distribution = .equalSpacing
-        
-        
-        vStack.addArrangedSubview(setsSettingsView)
-        vStack.addArrangedSubview(repsSettingsView)
-        vStack.addArrangedSubview(timeoutSettingsView)
-        setsSettingsView.translatesAutoresizingMaskIntoConstraints = false
-        repsSettingsView.translatesAutoresizingMaskIntoConstraints = false
-        timeoutSettingsView.translatesAutoresizingMaskIntoConstraints = false
-        vStack.translatesAutoresizingMaskIntoConstraints = false
-        
-        settingsView.addSubview(vStack)
-        settingsView.layoutIfNeeded()
-        settingsView.isUserInteractionEnabled = true
-        
-        NSLayoutConstraint.activate([
-            vStack.leadingAnchor.constraint(equalTo: settingsView.leadingAnchor),
-            vStack.trailingAnchor.constraint(equalTo: settingsView.trailingAnchor),
-            vStack.topAnchor.constraint(equalTo: settingsView.topAnchor),
-            vStack.bottomAnchor.constraint(lessThanOrEqualTo: settingsView.bottomAnchor),
-        ])
-        
-        settingsScreen?.addSubview(settingsView)
+        settingsScreen = settingsController.view
         settingsScreen?.translatesAutoresizingMaskIntoConstraints = false
+        
+        self.mainActionView?.addSubview(settingsScreen!)
+        
         NSLayoutConstraint.activate([
-            settingsView.leadingAnchor.constraint(equalTo: settingsScreen!.leadingAnchor, constant: 96),
-            settingsView.trailingAnchor.constraint(equalTo: settingsScreen!.trailingAnchor, constant: -96),
-            settingsView.centerYAnchor.constraint(equalTo: settingsScreen!.centerYAnchor),
-            settingsView.bottomAnchor.constraint(lessThanOrEqualTo: settingsScreen!.bottomAnchor),
+            settingsScreen!.leadingAnchor.constraint(equalTo: mainActionView!.leadingAnchor, constant: 60),
+            settingsScreen!.trailingAnchor.constraint(equalTo: mainActionView!.trailingAnchor, constant: -60),
+            settingsScreen!.topAnchor.constraint(equalTo: mainActionView!.topAnchor),
+            settingsScreen!.bottomAnchor.constraint(equalTo: mainActionView!.bottomAnchor)
         ])
-        
-        
-        vStack.isUserInteractionEnabled = true
-        settingsView.translatesAutoresizingMaskIntoConstraints = false
     }
     
     @objc func changeState(_ sender: UITapGestureRecognizer? = nil) {
@@ -315,10 +232,12 @@ class SetsExerciseViewController: UIViewController, PopUpModalDelegate {
         
         switch self.state {
         case .initial:
+            settingsController.remove()
             newState = .inProgress
         case .inProgress:
-            exerciseInfo.completedSets += 1
-            if exerciseInfo.completedSets < settings.sets.value {
+            infoViewModel.setDone()
+            setsInfoView?.markCompleted(amount: infoViewModel.completedSets)
+            if !infoViewModel.isCompleted {
                 newState = .timeout
             } else {
                 newState = .finished
@@ -327,15 +246,11 @@ class SetsExerciseViewController: UIViewController, PopUpModalDelegate {
             newState = .inProgress
         default:
             newState = .finished
-            break
         }
         
-        if newState == .inProgress
-        {
+        if newState == .inProgress {
             repeatsLabelView?.isHidden = false
-        }
-        else
-        {
+        } else {
             repeatsLabelView?.isHidden = true
         }
         
@@ -344,74 +259,86 @@ class SetsExerciseViewController: UIViewController, PopUpModalDelegate {
         showViewState()
     }
     
-    
     func getModalInfoView() -> UIView {
         let compositeView = UIView()
-        let summaryLb = UILabel()
-        compositeView.addSubview(summaryLb)
-        summaryLb.translatesAutoresizingMaskIntoConstraints = false
+        compositeView.translatesAutoresizingMaskIntoConstraints = false
+        let titlesStack = {
+            let stack = UIStackView()
+            stack.translatesAutoresizingMaskIntoConstraints = false
+            stack.axis = .vertical
+            stack.spacing = 16
+            
+            return stack
+        }()
         
+        let valuesStack = {
+            let stack = UIStackView()
+            stack.translatesAutoresizingMaskIntoConstraints = false
+            stack.axis = .vertical
+            stack.spacing = 16
+            
+            return stack
+        }()
         
-        summaryLb.text = """
-        Total \(self.activityType.toString()): \(self.exerciseInfo.completedSets * self.settings.repeats.value)
-        Duration: \((Date(timeIntervalSinceNow: TimeInterval()) - exerciseInfo.timeStart).stringFromTimeInterval())
-        """
+        _ = {
+            let lb = UILabel()
+            lb.translatesAutoresizingMaskIntoConstraints = false
+            lb.text = "Done:"
+            titlesStack.addArrangedSubview(lb)
+            return lb
+        }()
         
-        summaryLb.numberOfLines = 2
+        _ = {
+            let lb = UILabel()
+            lb.translatesAutoresizingMaskIntoConstraints = false
+            lb.text = "\(self.infoViewModel.performedReps)"
+            valuesStack.addArrangedSubview(lb)
+            return lb
+        }()
+        
+        _ = {
+            let lb = UILabel()
+            lb.translatesAutoresizingMaskIntoConstraints = false
+            lb.text = "Duration:"
+            titlesStack.addArrangedSubview(lb)
+            return lb
+        }()
+        
+        _ = {
+            let lb = UILabel()
+            lb.translatesAutoresizingMaskIntoConstraints = false
+            lb.text = "\(self.infoViewModel.duration.stringFromTimeInterval())"
+            valuesStack.addArrangedSubview(lb)
+            return lb
+        }()
+        
+        compositeView.addSubview(titlesStack)
+        compositeView.addSubview(valuesStack)
+
         NSLayoutConstraint.activate([
-            summaryLb.topAnchor.constraint(equalTo: compositeView.topAnchor),
-            summaryLb.leadingAnchor.constraint(equalTo: compositeView.leadingAnchor),
-            summaryLb.bottomAnchor.constraint(lessThanOrEqualTo: compositeView.bottomAnchor),
-            summaryLb.trailingAnchor.constraint(lessThanOrEqualTo: compositeView.trailingAnchor),
+            titlesStack.topAnchor.constraint(equalTo: compositeView.topAnchor),
+            titlesStack.bottomAnchor.constraint(lessThanOrEqualTo: compositeView.bottomAnchor),
+            titlesStack.leadingAnchor.constraint(equalTo: compositeView.leadingAnchor),
+            titlesStack.widthAnchor.constraint(equalTo: compositeView.widthAnchor, multiplier: 0.3),
+            
+            valuesStack.leadingAnchor.constraint(equalTo: titlesStack.trailingAnchor),
+            valuesStack.trailingAnchor.constraint(equalTo: compositeView.trailingAnchor),
+            valuesStack.topAnchor.constraint(equalTo: compositeView.topAnchor),
+            valuesStack.bottomAnchor.constraint(lessThanOrEqualTo: compositeView.bottomAnchor),
         ])
-        summaryLb.backgroundColor = .clear
         return compositeView
     }
+
     func didTapCancel() {
+        _ = navigationController?.popToRootViewController(animated: true)
         self.dismiss(animated: true)
     }
     
     func didTapAccept() {
-        let exerciseDuration = Date(timeIntervalSinceNow: TimeInterval()) - exerciseInfo.timeStart
+        infoViewModel.save()
         
-        let dataModel = SetsExerciseDataModel(datetime: Date.init(timeIntervalSinceNow: exerciseDuration))
-        dataModel.planReps = Array(0..<self.settings.sets.value).map( { _ in self.settings.repeats.value})
-        dataModel.actualReps = Array(0..<self.exerciseInfo.completedSets).map( { _ in self.settings.repeats.value})
-        dataModel.type = self.activityType
-        dataModel.duration = exerciseDuration
-        ActivitiesRepositoryImpl.shared.createActivity(data: dataModel)
-        
-//        ActivitiesRepositoryImpl.shared.insertActivityData(data: ActivityDataModel(id: 0, performedAmount: Double(completedAmount), duration: exerciseDuration, type: self.activityType, datetime: Date.init(timeIntervalSinceNow: TimeInterval())))
+        // TODO: pop only in success
         _ = navigationController?.popToRootViewController(animated: true)
         self.dismiss(animated: true)
     }
-}
-
-
-fileprivate extension UIViewController {
-    func add(_ child: UIViewController) {
-        addChild(child)
-        view.addSubview(child.view)
-        child.didMove(toParent: self)
-    }
-    
-    func remove() {
-        // Just to be safe, we check that this view controller
-        // is actually added to a parent before removing it.
-        guard parent != nil else {
-            return
-        }
-        
-        willMove(toParent: nil)
-        view.removeFromSuperview()
-        removeFromParent()
-    }
-}
-
-fileprivate extension Date {
-    
-    static func - (lhs: Date, rhs: Date) -> TimeInterval {
-        return lhs.timeIntervalSinceReferenceDate - rhs.timeIntervalSinceReferenceDate
-    }
-    
 }

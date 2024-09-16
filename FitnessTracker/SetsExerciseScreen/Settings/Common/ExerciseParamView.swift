@@ -2,26 +2,33 @@
 import Foundation
 import UIKit
 
-
-public class ExerciseParamView: UIView {
+public class ExerciseParamView: UIView
+{
     private var valueLabel: UILabel
-    private var decCb : ()->Void
-    private var incCb : ()->Void
+    private var decCb: ()->Void
+    private var incCb: ()->Void
     
-    private var incButton : UIButton;
-    public var decButton : UIButton;
-    required public init?(coder aDecoder: NSCoder) {
+    private var incButton: UIButton
+    private var decButton: UIButton
+    @available(*, unavailable)
+    public required init?(coder aDecoder: NSCoder)
+    {
         fatalError()
     }
     
-    func updateValue(s:String)
+    func updateValue(s: String)
     {
         valueLabel.text = s
     }
     
-    func setName(string:String)
+    func setIncBtnEnable(_ enable: Bool)
     {
-        
+        incButton.isEnabled = enable
+    }
+    
+    func setDecBtnEnable(_ enable: Bool)
+    {
+        decButton.isEnabled = enable
     }
     
     @objc
@@ -36,7 +43,7 @@ public class ExerciseParamView: UIView {
         incCb()
     }
     
-    func addButtonTapGesture(funcCb: @escaping ()->Void, dec:Bool)
+    func addButtonTapGesture(funcCb: @escaping ()->Void, dec: Bool)
     {
         if dec
         {
@@ -48,7 +55,8 @@ public class ExerciseParamView: UIView {
         }
     }
     
-    init(settingName:String) {
+    init(settingName: String)
+    {
         decCb = {}
         incCb = {}
         incButton = UIButton()
@@ -65,7 +73,6 @@ public class ExerciseParamView: UIView {
         
         settingLabel.text = settingName
         settingLabel.textColor = .black
-        
         
         decButton.setImage(UIImage(systemName: "minus"), for: .normal)
         decButton.layer.borderColor = CGColor(red: 0, green: 0, blue: 0, alpha: 1)
@@ -90,8 +97,6 @@ public class ExerciseParamView: UIView {
         
         labelVal.textAlignment = .center
         
-        
-        
         hStack.axis = .horizontal
         hStack.distribution = .fillEqually
         hStack.alignment = .center
@@ -112,8 +117,6 @@ public class ExerciseParamView: UIView {
         vStack.addArrangedSubview(settingLabel)
         vStack.addArrangedSubview(hStack)
         
-        
-        
         addSubview(vStack)
         hStack.layoutIfNeeded()
         vStack.layoutIfNeeded()
@@ -127,17 +130,12 @@ public class ExerciseParamView: UIView {
             vStack.leadingAnchor.constraint(equalTo: leadingAnchor),
             vStack.trailingAnchor.constraint(equalTo: trailingAnchor),
             vStack.topAnchor.constraint(equalTo: topAnchor),
-            vStack.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor)
+            vStack.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor),
         ])
-        
-        
         
         incButton.isUserInteractionEnabled = true
         incButton.addTapGesture(tapNumber: 1, target: self, action: #selector(incOnTapGesture(_:)))
         decButton.isUserInteractionEnabled = true
         decButton.addTapGesture(tapNumber: 1, target: self, action: #selector(decOnTapGesture(_:)))
     }
-    
-    
 }
-
